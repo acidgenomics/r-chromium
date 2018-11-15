@@ -1,0 +1,108 @@
+Package: CellRanger
+Title: 10X Genomics Cell Ranger Utilities
+Description: Toolkit for 10X Genomics single-cell RNA-seq data.
+Version: 0.3.2
+Date: 2018-11-15
+Authors@R: person(
+    given = "Michael",
+    family = "Steinbaugh",
+    email = "mike@steinbaugh.com",
+    role = c("aut", "cre"),
+    comment = c(ORCID = "0000-0002-2403-2221"))
+URL:
+    https://steinbaugh.com/CellRanger,
+    https://github.com/steinbaugh/CellRanger
+BugReports: https://github.com/steinbaugh/CellRanger/issues
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: false
+Depends:
+    R (>= 3.5),
+    SingleCellExperiment,
+    basejump (>= 0.8)
+Imports:
+    Biobase,
+    BiocGenerics,
+    BiocParallel,
+    DropletUtils,
+    Matrix,
+    Matrix.utils,
+    R.utils,
+    S4Vectors,
+    SummarizedExperiment,
+    assertive.base,
+    assertive.files,
+    assertive.numbers,
+    assertive.properties,
+    assertive.sets,
+    assertive.strings,
+    assertive.types,
+    assertthat,
+    bcbioBase (>= 0.5),
+    cowplot (>= 0.9),
+    dplyr (>= 0.7),
+    ggplot2 (>= 3.0),
+    ggridges (>= 0.5),
+    graphics,
+    magrittr (>= 1.5),
+    methods,
+    purrr (>= 0.2),
+    readr (>= 1.1),
+    rhdf5 (>= 2.2),
+    rlang (>= 0.3),
+    rmarkdown,
+    scales,
+    sessioninfo,
+    stats,
+    stringr (>= 1.3),
+    tibble (>= 1.4),
+    tidyverse (>= 1.2),
+    utils
+Suggests:
+    BiocStyle,
+    EnsDb.Hsapiens.v75,
+    patrick,
+    roxygen2,
+    testthat (>= 2.0)
+Remotes:
+    steinbaugh/basejump@develop,
+    steinbaugh/goalie@develop
+biocViews:
+    DataImport,
+    DataRepresentation,
+    QualityControl,
+    ReportWriting,
+    RNASeq,
+    SingleCell
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
+Collate: 
+    'AllClasses.R'
+    'AllGenerics.R'
+    'CellRanger.R'
+    'assert-internal.R'
+    'barcodeRanksPerSample-methods.R'
+    'barcodes-internal.R'
+    'bcbioSingleCell.R'
+    'cellranger-internal.R'
+    'data.R'
+    'deprecated.R'
+    'extract-methods.R'
+    'filterCells-methods.R'
+    'globals.R'
+    'import-internal.R'
+    'metrics-methods.R'
+    'package.R'
+    'plotBarcodeRanks-methods.R'
+    'plotCellCounts-methods.R'
+    'plotGenesPerCell-methods.R'
+    'plotMitoRatio-methods.R'
+    'plotMitoVsCoding-methods.R'
+    'plotNovelty-methods.R'
+    'plotQC-methods.R'
+    'plotReadsPerCell-methods.R'
+    'plotUMIsPerCell-methods.R'
+    'plotUMIsVsGenes-methods.R'
+    'prepareSingleCellTemplate.R'
+    'show-methods.R'
+    'updateObject-methods.R'
