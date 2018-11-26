@@ -62,11 +62,13 @@ Imports:
     utils
 Suggests:
     BiocStyle,
+    bcbioBase,
     bcbioSingleCell,
     patrick,
     roxygen2,
     testthat (>= 2.0)
 Remotes:
+    hbc/bcbioBase@develop,
     hbc/bcbioSingleCell@develop,
     steinbaugh/basejump@develop,
     steinbaugh/goalie@develop
