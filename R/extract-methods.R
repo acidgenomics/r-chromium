@@ -78,7 +78,8 @@ extract.CellRanger <-  # nolint
         
         # Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
-        metadata <- .updateMetadata(metadata)
+        # FIXME Need to export this in basejump??
+        metadata <- bcbioSingleCell:::.updateMetadata(metadata)
         metadata[["subset"]] <- TRUE
         
         # Drop unfiltered cellular barcode list.
