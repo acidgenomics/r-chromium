@@ -121,6 +121,7 @@ CellRanger <- function(  # nolint
 
     if (is_a_string(sampleMetadataFile)) {
         # FIXME Can use a simpler approach to sample metadata here.
+        requireNamespace("bcbioBase")
         sampleData <- bcbioBase::readSampleData(sampleMetadataFile)
         # Allow sample selection by with this file.
         if (nrow(sampleData) < length(sampleFiles)) {
@@ -205,6 +206,7 @@ CellRanger <- function(  # nolint
     # Always prefilter, removing very low quality cells with no UMIs or genes.
     # FIXME Consider how we want to handle this.
     # Should we import bcbioSingleCell here?
+    requireNamespace("bcbioSingleCell")
     colData <- bcbioSingleCell::calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
