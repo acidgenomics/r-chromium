@@ -112,8 +112,9 @@ object_size(sce)
 stopifnot(object_size(sce) < limit)
 stopifnot(validObject(sce))
 
-cellranger <- sce
-usethis::use_data(cellranger, compress = "xz", overwrite = TRUE)
+# "cr" is short for "CellRanger" class.
+cr <- sce
+usethis::use_data(cr, compress = "xz", overwrite = TRUE)
 
 
 
