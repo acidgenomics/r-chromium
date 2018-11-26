@@ -1,4 +1,4 @@
-.import.cellranger <-  # nolint
+.import <-  # nolint
     function(sampleFiles) {
         assert_all_are_existing_files(sampleFiles)
         assert_has_names(sampleFiles)
@@ -6,9 +6,9 @@
         message("Importing counts.")
 
         if (all(grepl("\\.mtx$", sampleFiles))) {
-            fun <- .import.cellranger.mtx
+            fun <- .import.mtx
         } else if (all(grepl("\\.h5$", sampleFiles))) {
-            fun <- .import.cellranger.h5
+            fun <- .import.h5
         }
 
         list <- mapply(
@@ -55,7 +55,7 @@
 
 # Import Cell Ranger HDF5 Counts
 # @seealso `cellrangerRkit::get_matrix_from_h5()`
-.import.cellranger.h5 <-  # nolint
+.import.h5 <-  # nolint
     function(file) {
         assert_is_a_string(file)
         assert_all_are_existing_files(file)
@@ -92,7 +92,7 @@
 
 # Import Cell Ranger Sparse Counts
 # Matrix Market Exchange (MEX/MTX) format.
-.import.cellranger.mtx <-  # nolint
+.import.mtx <-  # nolint
     function(file) {
         assert_is_a_string(file)
         assert_all_are_existing_files(file)
