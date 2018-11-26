@@ -2,6 +2,7 @@
 #' 
 #' Toolkit for 10X Genomics single-cell RNA-seq data.
 #' 
+#' @aliases NULL
 #' @keywords internal
 #' 
 #' @importFrom Matrix readMM sparseMatrix
@@ -33,3 +34,4 @@ globalVariables(".")
 # - .updateMetadata
 # - calculateMetrics
 # - readSampleData
+# Look for `requireNamespace()` calls and improve...

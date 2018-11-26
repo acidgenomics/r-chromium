@@ -4,14 +4,14 @@
 \alias{CellRanger}
 \title{10X Genomics Cell Ranger Data Set}
 \usage{
-CellRanger(uploadDir, format = c("mtx", "hdf5"), filtered = TRUE,
+CellRanger(dir, format = c("mtx", "hdf5"), filtered = TRUE,
   sampleMetadataFile = NULL, organism = NULL, ensemblRelease = NULL,
   genomeBuild = NULL, refdataDir = NULL, gffFile = NULL,
   transgeneNames = NULL, spikeNames = NULL,
   interestingGroups = "sampleName")
 }
 \arguments{
-\item{uploadDir}{\code{string}. Path to Cell Ranger output directory
+\item{dir}{\code{string}. Path to Cell Ranger output directory
 (final upload). This directory path must contain
 \code{filtered_gene_bc_matrices*} as a child directory.}
 
@@ -50,7 +50,7 @@ contain a single sample:
 
 \preformatted{
 file.path(
-    "<uploadDir>",
+    "<dir>",
     "<sampleName>",
     "outs",
     "filtered_gene_bc_matrices*",
@@ -78,8 +78,8 @@ match, due to deprecation in the current Ensembl release.
 }
 
 \examples{
-uploadDir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
-x <- CellRanger(uploadDir)
+dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
+x <- CellRanger(dir)
 print(x)
 }
 \seealso{
