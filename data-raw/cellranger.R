@@ -12,16 +12,16 @@ library(Matrix)
 limit <- structure(1e6, class = "object_size")
 
 # Complete dataset =============================================================
-upload_dir <- initDir("data-raw/cellranger")
+dir <- initDir("data-raw/cellranger")
 # Example dataset contains a single sample ("pbmc4k").
-outs_dir <- initDir(file.path(upload_dir, "pbmc", "outs"))
+outs_dir <- initDir(file.path(dir, "pbmc", "outs"))
 
 # Directory structure:
 # - pbmc
 # - outs
 # - filtered_gene_bc_matrices
 # - GRCh38
-tar_file <- file.path(upload_dir, "pbmc.tar.gz")
+tar_file <- file.path(dir, "pbmc.tar.gz")
 if (!file.exists(tar_file)) {
     download.file(
         url = paste(
@@ -40,7 +40,7 @@ untar(tarfile = tar_file, exdir = outs_dir)
 stopifnot(identical(dir(outs_dir), "filtered_gene_bc_matrices"))
 
 # Using Ensembl 84 GTF annotations.
-gtf_file <- file.path(upload_dir, "genes.gtf")
+gtf_file <- file.path(dir, "genes.gtf")
 if (!file.exists(gtf_file)) {
     download.file(
         url = paste(
@@ -57,16 +57,12 @@ if (!file.exists(gtf_file)) {
 }
 
 # Note that this blows up in memory too much to run on RStudio AMI.
-sce <- CellRanger(
-    uploadDir = upload_dir,
-    organism = "Homo sapiens",
-    gffFile = gtf_file
-)
-object_size(sce)
-assignAndSaveData(name = "pbmc", object = sce, dir = "data-raw")
+cr <- CellRanger(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
+object_size(cr)
+assignAndSaveData(name = "pbmc", object = cr, dir = "data-raw")
 
-# cellranger =============================================================
-counts <- counts(sce)
+# CellRanger ===================================================================
+counts <- counts(cr)
 
 # Subset the matrix to include only the top genes and cells.
 top_genes <- Matrix::rowSums(counts) %>%
@@ -80,10 +76,10 @@ top_cells <- Matrix::colSums(counts) %>%
 cells <- sort(names(top_cells))
 
 # Subset the original pbmc dataset to contain only top genes and cells.
-sce <- sce[genes, cells]
+cr <- cr[genes, cells]
 
 # Include only minimal metadata columns in rowRanges.
-mcols <- mcols(rowRanges(sce))
+mcols <- mcols(rowRanges(cr))
 mcols <- mcols[, c("broadClass", "geneBiotype", "geneID", "geneName")]
 # TODO Consider making this Rle factor level step a function in basejump.
 mcols <- DataFrame(lapply(
@@ -100,27 +96,25 @@ mcols <- DataFrame(lapply(
         }
     }
 ))
-mcols(rowRanges(sce)) <- mcols
+mcols(rowRanges(cr)) <- mcols
 
 # Report the size of each slot in bytes.
 vapply(
-    X = coerceS4ToList(sce),
+    X = coerceS4ToList(cr),
     FUN = object_size,
     FUN.VALUE = numeric(1L)
 )
-object_size(sce)
-stopifnot(object_size(sce) < limit)
-stopifnot(validObject(sce))
+object_size(cr)
+stopifnot(object_size(cr) < limit)
+stopifnot(validObject(cr))
 
-# "cr" is short for "CellRanger" class.
-cr <- sce
 usethis::use_data(cr, compress = "xz", overwrite = TRUE)
 
 
 
 # Minimal example cellranger directory =========================================
 input_dir <- file.path(
-    upload_dir,
+    dir,
     "pbmc",
     "outs",
     "filtered_gene_bc_matrices",
