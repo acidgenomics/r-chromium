@@ -2,8 +2,6 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{CellRanger-package}
-\alias{CellRanger}
-\alias{CellRanger-package}
 \title{CellRanger}
 \description{
 Toolkit for 10X Genomics single-cell RNA-seq data.
