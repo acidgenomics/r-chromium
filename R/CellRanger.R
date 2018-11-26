@@ -5,6 +5,11 @@
 # FIXME Allow this function to work if the user points at dir containing matrix.
 # FIXME Add documentation about simple mode.
 
+# FIXME Consolidate with bcbioSingleCell
+# Undocumented arguments in documentation object 'CellRanger'
+# ‘sampleMetadataFile’ ‘genomeBuild’ ‘gffFile’ ‘transgeneNames’
+# ‘spikeNames’
+
 
 
 #' @inherit CellRanger-class
@@ -21,7 +26,7 @@
 #'
 #' \preformatted{
 #' file.path(
-#'     "<uploadDir>",
+#'     "<dir>",
 #'     "<sampleName>",
 #'     "outs",
 #'     "filtered_gene_bc_matrices*",
@@ -47,7 +52,7 @@
 #' @inheritParams basejump::params
 #' @export
 #'
-#' @param uploadDir `string`. Path to Cell Ranger output directory
+#' @param dir `string`. Path to Cell Ranger output directory
 #'   (final upload). This directory path must contain
 #'   `filtered_gene_bc_matrices*` as a child directory.
 #' @param filtered `boolean`. Use filtered (recommended) or raw counts. Note
@@ -60,11 +65,11 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' uploadDir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
-#' x <- CellRanger(uploadDir)
+#' dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
+#' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- function(  # nolint
-    uploadDir,
+    dir,
     format = c("mtx", "hdf5"),
     filtered = TRUE,
     sampleMetadataFile = NULL,
@@ -77,9 +82,9 @@ CellRanger <- function(  # nolint
     spikeNames = NULL,
     interestingGroups = "sampleName"
 ) {
-    assert_is_a_string(uploadDir)
-    assert_all_are_dirs(uploadDir)
-    uploadDir <- realpath(uploadDir)
+    assert_is_a_string(dir)
+    assert_all_are_dirs(dir)
+    dir <- realpath(dir)
     format <- match.arg(format)
     assert_is_a_bool(filtered)
     assertIsStringOrNULL(sampleMetadataFile)
@@ -101,7 +106,11 @@ CellRanger <- function(  # nolint
     umiType <- "chromium"
 
     # Sample files -------------------------------------------------------------
-    sampleFiles <- .sampleFiles.cellranger(uploadDir)
+    sampleFiles <- .sampleFiles(
+        dir = dir,
+        format = format,
+        filtered = filtered
+    )
 
     # Sequencing lanes ---------------------------------------------------------
     lanes <- detectLanes(sampleFiles)
@@ -111,7 +120,8 @@ CellRanger <- function(  # nolint
     sampleData <- NULL
 
     if (is_a_string(sampleMetadataFile)) {
-        sampleData <- readSampleData(sampleMetadataFile)
+        # FIXME Can use a simpler approach to sample metadata here.
+        sampleData <- bcbioBase::readSampleData(sampleMetadataFile)
         # Allow sample selection by with this file.
         if (nrow(sampleData) < length(sampleFiles)) {
             message("Loading a subset of samples, defined by the metadata.")
@@ -122,7 +132,7 @@ CellRanger <- function(  # nolint
     }
 
     # Counts -------------------------------------------------------------------
-    counts <- .import.cellranger(sampleFiles)
+    counts <- .import(sampleFiles)
 
     # Row data -----------------------------------------------------------------
     refJSON <- NULL
@@ -193,8 +203,10 @@ CellRanger <- function(  # nolint
     }
 
     # Always prefilter, removing very low quality cells with no UMIs or genes.
-    colData <- metrics.matrix(
-        object = counts,
+    # FIXME Consider how we want to handle this.
+    # Should we import bcbioSingleCell here?
+    colData <- bcbioSingleCell::calculateMetrics(
+        counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
     )
@@ -222,8 +234,7 @@ CellRanger <- function(  # nolint
         version = packageVersion,
         pipeline = pipeline,
         level = level,
-        uploadDir = uploadDir,
-        sampleDirs = sampleDirs,
+        dir = dir,
         sampleMetadataFile = as.character(sampleMetadataFile),
         interestingGroups = interestingGroups,
         organism = organism,
