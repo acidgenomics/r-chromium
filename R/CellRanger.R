@@ -44,13 +44,12 @@
 #' match, due to deprecation in the current Ensembl release.
 #'
 #' @author Michael Steinbaugh
+#' @inheritParams basejump::params
 #' @export
 #'
-#' @inheritParams basejump::params
-#' @inheritParams bcbioSingleCell
-#' @param uploadDir `string`. Path to Cell Ranger output directory. This
-#'   directory path must contain `filtered_gene_bc_matrices*` as a child
-#'   directory.
+#' @param uploadDir `string`. Path to Cell Ranger output directory
+#'   (final upload). This directory path must contain
+#'   `filtered_gene_bc_matrices*` as a child directory.
 #' @param filtered `boolean`. Use filtered (recommended) or raw counts. Note
 #'   that raw counts still contain only whitelisted cellular barcodes.
 #' @param format `string`. Output format, either MatrixMarket ("`mtx`") or HDF5
@@ -254,8 +253,5 @@ CellRanger <- function(  # nolint
 
 .new.CellRanger <-  # nolint
     function(...) {
-        new(
-            Class = "CellRanger",
-            makeSingleCellExperiment(...)
-        )
+        new(Class = "CellRanger", makeSingleCellExperiment(...))
     }

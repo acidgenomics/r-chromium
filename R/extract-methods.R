@@ -1,12 +1,127 @@
+# FIXME Need to improve Rle levels in rowRanges (see bcbioRNASeq).
+
+
+
+#' @name extract
+#' @inherit base::Extract title params references
+#' @author Michael Steinbaugh
+#'
+#' @description Extract genes by row and cells by column.
+#'
+#' @details
+#' Refer to `basejump::cell2sample()` and `basejump::selectSamples()` if
+#' sample-level extraction is desired. Note that `sampleID` is slotted into
+#' `SummarizedExperiment::colData()` and defines the cell-to-sample mappings.
+#'
+#' Unfiltered cellular barcode distributions for the entire dataset, including
+#' cells not kept in the matrix will be dropped in favor of the `nCount` column
+#' of `colData`.
+#'
+#' @inheritParams basejump::params
+#'
+#' @return `CellRanger`.
+#'
+#' @examples
+#' data(cr)
+#'
+#' cells <- head(colnames(cr), 100L)
+#' head(cells)
+#' genes <- head(rownames(cr), 100L)
+#' head(genes)
+#'
+#' ## Subset by cell identifiers.
+#' cr[, cells]
+#'
+#' ## Subset by genes.
+#' cr[genes, ]
+#'
+#' ## Subset by both genes and cells.
+#' cr[genes, cells]
+NULL
+
+
+
+extract.CellRanger <-  # nolint
+    function(x, i, j, ..., drop = FALSE) {
+        validObject(x)
+        
+        # Genes
+        if (missing(i)) {
+            i <- 1L:nrow(x)
+        }
+        # Cells
+        if (missing(j)) {
+            j <- 1L:ncol(x)
+        }
+        
+        if (identical(
+            x = c(length(i), length(j)),
+            y = dim(x)
+        )) {
+            return(x)
+        }
+        
+        # Subset using SCE method.
+        sce <- as(x, "SingleCellExperiment")
+        sce <- sce[i, j, drop = drop]
+        
+        genes <- rownames(sce)
+        cells <- colnames(sce)
+        
+        # Column data ----------------------------------------------------------
+        # Ensure factors get releveled.
+        colData <- colData(sce) %>%
+            as("tbl_df") %>%
+            mutate_if(is.character, as.factor) %>%
+            mutate_if(is.factor, droplevels) %>%
+            as("DataFrame")
+        
+        # Metadata -------------------------------------------------------------
+        metadata <- metadata(sce)
+        metadata <- .updateMetadata(metadata)
+        metadata[["subset"]] <- TRUE
+        
+        # Drop unfiltered cellular barcode list.
+        metadata[["cellularBarcodes"]] <- NULL
+        
+        # filterCells
+        filterCells <- metadata[["filterCells"]]
+        if (!is.null(filterCells)) {
+            filterCells <- intersect(filterCells, cells)
+            metadata[["filterCells"]] <- filterCells
+        }
+        
+        # filterGenes
+        filterGenes <- metadata[["filterGenes"]]
+        if (!is.null(filterGenes)) {
+            filterGenes <- intersect(filterGenes, genes)
+            metadata[["filterGenes"]] <- filterGenes
+        }
+        
+        # Return ---------------------------------------------------------------
+        new(
+            Class = class(x)[[1L]],
+            makeSingleCellExperiment(
+                assays = assays(sce),
+                rowRanges <- rowRanges(sce),
+                colData <- colData,
+                metadata = metadata,
+                spikeNames = rownames(sce)[isSpike(sce)]
+            )
+        )
+    }
+
+
+
 #' @rdname extract
 #' @export
 setMethod(
-    "[",
-    signature(
+    f = "[",
+    signature = signature(
         x = "CellRanger",
         i = "ANY",
         j = "ANY",
         drop = "ANY"
     ),
-    definition = extract.SingleCellExperiment
+    definition = extract.CellRanger
 )
