@@ -1,7 +1,7 @@
 Package: CellRanger
 Title: 10X Genomics Cell Ranger Utilities
 Description: Toolkit for 10X Genomics single-cell RNA-seq data.
-Version: 0.1.0
+Version: 0.0.1
 Date: 2018-11-26
 Authors@R:
     person(
@@ -44,6 +44,7 @@ Imports:
     dplyr (>= 0.7),
     ggplot2 (>= 3.0),
     ggridges (>= 0.5),
+    goalie (>= 0.1.1),
     graphics,
     magrittr (>= 1.5),
     methods,
@@ -61,11 +62,12 @@ Imports:
     utils
 Suggests:
     BiocStyle,
-    EnsDb.Hsapiens.v75,
+    bcbioSingleCell,
     patrick,
     roxygen2,
     testthat (>= 2.0)
 Remotes:
+    hbc/bcbioSingleCell@develop,
     steinbaugh/basejump@develop,
     steinbaugh/goalie@develop
 biocViews:
