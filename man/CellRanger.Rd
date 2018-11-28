@@ -90,7 +90,7 @@ minimal sample data will be used, based on the directory names.
 We strongly recommend supplying the corresponding reference data required for
 Cell Ranger with the \code{refdataDir} argument. It will convert the gene
 annotations defined in the GTF file into a \code{GRanges} object, which get
-slotted in \code{\link[=rowRanges]{rowRanges()}}. Otherwise, the function will attempt to use the
+slotted in \code{rowRanges()}. Otherwise, the function will attempt to use the
 most current annotations available from Ensembl, and some gene IDs may not
 match, due to deprecation in the current Ensembl release.
 }
@@ -101,7 +101,7 @@ x <- CellRanger(dir)
 print(x)
 }
 \seealso{
-\code{\link[=CellRanger]{CellRanger()}}.
+\code{CellRanger()}.
 }
 \author{
 Michael Steinbaugh

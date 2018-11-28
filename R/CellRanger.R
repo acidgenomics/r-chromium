@@ -44,7 +44,7 @@
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
-#' slotted in [rowRanges()]. Otherwise, the function will attempt to use the
+#' slotted in `rowRanges()`. Otherwise, the function will attempt to use the
 #' most current annotations available from Ensembl, and some gene IDs may not
 #' match, due to deprecation in the current Ensembl release.
 #'

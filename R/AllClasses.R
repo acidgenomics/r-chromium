@@ -7,7 +7,7 @@
 #' @author Michael Steinbaugh
 #' @export
 #'
-#' @seealso [CellRanger()].
+#' @seealso `CellRanger()`.
 setClass(
     Class = "CellRanger",
     contains = "SingleCellExperiment"
