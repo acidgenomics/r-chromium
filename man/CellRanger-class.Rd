@@ -9,7 +9,7 @@ Extends \code{SingleCellExperiment}, with additional validity checks on the
 \code{metadata()} slot.
 }
 \seealso{
-\code{\link[=CellRanger]{CellRanger()}}.
+\code{CellRanger()}.
 }
 \author{
 Michael Steinbaugh
