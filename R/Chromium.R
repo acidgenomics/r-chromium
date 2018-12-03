@@ -117,8 +117,7 @@ Chromium <- function(  # nolint
 
     if (is_a_string(sampleMetadataFile)) {
         # FIXME Can use a simpler approach to sample metadata here.
-        requireNamespace("bcbioBase")
-        sampleData <- bcbioBase::readSampleData(sampleMetadataFile)
+        stop("NEED TO REWORK SAMPLE METADATA LOADING")
         # Allow sample selection by with this file.
         if (nrow(sampleData) < length(sampleFiles)) {
             message("Loading a subset of samples, defined by the metadata.")
@@ -200,10 +199,9 @@ Chromium <- function(  # nolint
     }
 
     # Always prefilter, removing very low quality cells with no UMIs or genes.
-    # FIXME Consider how we want to handle this.
-    # Should we import bcbioSingleCell here?
-    requireNamespace("bcbioSingleCell")
-    colData <- bcbioSingleCell::calculateMetrics(
+    # FIXME Work on moving `calculateMetrics()` to basejump? Not sure we want
+    # to import bcbioSingleCell here, as a revdep...
+    colData <- calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
