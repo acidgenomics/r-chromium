@@ -3,10 +3,10 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{[,CellRanger,ANY,ANY,ANY-method}
+\alias{[,Chromium,ANY,ANY,ANY-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{CellRanger,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{Chromium,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
 \item{x}{
@@ -68,7 +68,7 @@
   }
 }
 \value{
-\code{CellRanger}.
+\code{Chromium}.
 }
 \description{
 Extract genes by row and cells by column.

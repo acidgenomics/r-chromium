@@ -1,15 +1,19 @@
-# Cell Ranger example data
-# 2018-11-26
-# 4k PBMCs from a Healthy Donor
+# FIXME Work on loading a v3 dataset and using as example.
+
+
+
+# 10X Chromium Cell Ranger example output.
+# 4k PBMCs from a healthy donor.
 # https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
+# 2018-12-03
 
 library(pryr)
 library(tidyverse)
 library(Matrix)
 
-# Restrict to 1 MB.
+# Restrict to 2 MB.
 # Use `pryr::object_size()` instead of `utils::object.size()`.
-limit <- structure(1e6, class = "object_size")
+limit <- structure(2e6, class = "object_size")
 
 # Complete dataset =============================================================
 dir <- initDir("data-raw/cellranger")
@@ -21,7 +25,7 @@ outs_dir <- initDir(file.path(dir, "pbmc", "outs"))
 # - outs
 # - filtered_gene_bc_matrices
 # - GRCh38
-tar_file <- file.path(dir, "pbmc.tar.gz")
+tar_file <- "data-raw/pbmc.tar.gz"
 if (!file.exists(tar_file)) {
     download.file(
         url = paste(
@@ -57,17 +61,18 @@ if (!file.exists(gtf_file)) {
 }
 
 # Note that this blows up in memory too much to run on RStudio AMI.
-cr <- CellRanger(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
-object_size(cr)
-assignAndSaveData(name = "pbmc", object = cr, dir = "data-raw")
+pbmc <- Chromium(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
+# We're using a subset of this object for our working example (see below).
+object_size(pbmc)
+assignAndSaveData(name = "pbmc", object = pbmc, dir = "data-raw")
 
-# CellRanger ===================================================================
-counts <- counts(cr)
+# Example object ===============================================================
+counts <- counts(pbmc)
 
 # Subset the matrix to include only the top genes and cells.
 top_genes <- Matrix::rowSums(counts) %>%
     sort(decreasing = TRUE) %>%
-    head(n = 50L)
+    head(n = 500L)
 genes <- sort(names(top_genes))
 
 top_cells <- Matrix::colSums(counts) %>%
@@ -76,43 +81,28 @@ top_cells <- Matrix::colSums(counts) %>%
 cells <- sort(names(top_cells))
 
 # Subset the original pbmc dataset to contain only top genes and cells.
-cr <- cr[genes, cells]
+pbmc <- pbmc[genes, cells]
 
 # Include only minimal metadata columns in rowRanges.
-mcols <- mcols(rowRanges(cr))
-mcols <- mcols[, c("broadClass", "geneBiotype", "geneID", "geneName")]
-# TODO Consider making this Rle factor level step a function in basejump.
-mcols <- DataFrame(lapply(
-    X = mcols,
-    FUN = function(x) {
-        if (is(x, "Rle")) {
-            x <- decode(x)
-            if (is.factor(x)) {
-                x <- droplevels(x)
-            }
-            Rle(x)
-        } else {
-            I(x)
-        }
-    }
-))
-mcols(rowRanges(cr)) <- mcols
+rowRanges(pbmc) <- rowRanges(pbmc) %>%
+    .[, c("broadClass", "geneBiotype", "geneID", "geneName")] %>%
+    relevelRowRanges()
 
 # Report the size of each slot in bytes.
 vapply(
-    X = coerceS4ToList(cr),
+    X = coerceS4ToList(pbmc),
     FUN = object_size,
     FUN.VALUE = numeric(1L)
 )
-object_size(cr)
-stopifnot(object_size(cr) < limit)
-stopifnot(validObject(cr))
+object_size(pbmc)
+stopifnot(object_size(pbmc) < limit)
+stopifnot(validObject(pbmc))
 
-usethis::use_data(cr, compress = "xz", overwrite = TRUE)
+usethis::use_data(pbmc, compress = "xz", overwrite = TRUE)
 
 
 
-# Minimal example cellranger directory =========================================
+# Example Cell Ranger output ===================================================
 input_dir <- file.path(
     dir,
     "pbmc",
