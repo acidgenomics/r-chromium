@@ -17,6 +17,7 @@
 #' @importFrom basejump camel detectLanes emptyRanges import makeDimnames
 #'   makeGRangesFromEnsembl makeGRangesFromGFF makeNames
 #'   makeSingleCellExperiment mapCellsToSamples minimalSampleData realpath
+#' @importFrom bcbioSingleCell calculateMetrics
 #' @importFrom dplyr mutate_if pull
 #' @importFrom goalie assertIsAnImplicitIntegerOrNULL assertIsStringOrNULL
 #' @importFrom magrittr %>%
