@@ -1,6 +1,6 @@
-#' CellRanger
+#' Chromium
 #' 
-#' Toolkit for 10X Genomics single-cell RNA-seq data.
+#' Toolkit for 10X Genomics Chromium single-cell RNA-seq data.
 #' 
 #' @aliases NULL
 #' @keywords internal

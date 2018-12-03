@@ -166,7 +166,7 @@ Chromium <- function(  # nolint
         message("Using `makeGRangesFromEnsembl()` for annotations.")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
-            level = level,
+            level = "genes",
             genomeBuild = genomeBuild,
             release = ensemblRelease
         )

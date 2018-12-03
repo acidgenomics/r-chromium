@@ -1,6 +1,6 @@
 Package: Chromium
-Title: 10X Genomics Cell Ranger Utilities
-Description: Toolkit for 10X Genomics single-cell RNA-seq data.
+Title: 10X Genomics Chromium
+Description: Toolkit for 10X Genomics Chromium single-cell RNA-seq data.
 Version: 0.0.2
 Date: 2018-12-03
 Authors@R:

@@ -83,21 +83,21 @@ cells not kept in the matrix will be dropped in favor of the \code{nCount} colum
 of \code{colData}.
 }
 \examples{
-data(cr)
+data(pbmc)
 
-cells <- head(colnames(cr), 100L)
+cells <- head(colnames(pbmc), 100L)
 head(cells)
-genes <- head(rownames(cr), 100L)
+genes <- head(rownames(pbmc), 100L)
 head(genes)
 
 ## Subset by cell identifiers.
-cr[, cells]
+pbmc[, cells]
 
 ## Subset by genes.
-cr[genes, ]
+pbmc[genes, ]
 
 ## Subset by both genes and cells.
-cr[genes, cells]
+pbmc[genes, cells]
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
