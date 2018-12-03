@@ -1,4 +1,6 @@
-#' 10X Genomics Cell Ranger Data Set
+#' 10X Genomics Chromium Single-Cell RNA-Seq Data Set
+#' 
+#' Contains single-cell RNA-seq counts processed by the Cell Ranger pipeline.
 #'
 #' Extends `SingleCellExperiment`, with additional validity checks on the
 #' `metadata()` slot.
@@ -7,13 +9,14 @@
 #' @author Michael Steinbaugh
 #' @export
 #'
-#' @seealso `CellRanger()`.
+#' @seealso `Chromium()`.
 setClass(
-    Class = "CellRanger",
+    Class = "Chromium",
     contains = "SingleCellExperiment"
 )
+# FIXME Work on setting actual validity checks here.
 setValidity(
-    Class = "CellRanger",
+    Class = "Chromium",
     method = function(object) {
         TRUE
     }

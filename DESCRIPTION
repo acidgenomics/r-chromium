@@ -1,8 +1,8 @@
-Package: CellRanger
+Package: Chromium
 Title: 10X Genomics Cell Ranger Utilities
 Description: Toolkit for 10X Genomics single-cell RNA-seq data.
-Version: 0.0.1
-Date: 2018-11-26
+Version: 0.0.2
+Date: 2018-12-03
 Authors@R:
     person(
         given = "Michael",
@@ -12,16 +12,16 @@ Authors@R:
         comment = c(ORCID = "0000-0002-2403-2221")
     )
 URL:
-    https://steinbaugh.com/CellRanger/,
-    https://github.com/steinbaugh/CellRanger/
-BugReports: https://github.com/steinbaugh/CellRanger/issues/
+    https://steinbaugh.com/Chromium/,
+    https://github.com/steinbaugh/Chromium/
+BugReports: https://github.com/steinbaugh/Chromium/issues/
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 3.5),
     SingleCellExperiment (>= 1.2),
-    basejump (>= 0.8.3)
+    basejump (>= 0.8.7)
 Imports:
     Biobase,
     BiocGenerics,
@@ -71,7 +71,7 @@ Remotes:
     hbc/bcbioBase@develop,
     hbc/bcbioSingleCell@develop,
     steinbaugh/basejump@develop,
-    steinbaugh/goalie@develop
+    steinbaugh/goalie
 biocViews:
     DataImport,
     RNASeq,

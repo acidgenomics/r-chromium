@@ -1,18 +1,18 @@
 # FIXME Break these back out into separate files.
 # FIXME Either make `sampleName` required or strip it from minimal examples.
 # TODO Check to see if we can import tx2gene.csv
-# FIXME Can we parse the CellRanger `runDate` from the refData YAML?
+# FIXME Can we parse the Cell Ranger `runDate` from the refData YAML?
 # FIXME Allow this function to work if the user points at dir containing matrix.
 # FIXME Add documentation about simple mode.
 
 # FIXME Consolidate with bcbioSingleCell
-# Undocumented arguments in documentation object 'CellRanger'
+# Undocumented arguments in documentation object 'Chromium'
 # ‘sampleMetadataFile’ ‘genomeBuild’ ‘gffFile’ ‘transgeneNames’
 # ‘spikeNames’
 
 
 
-#' @inherit CellRanger-class
+#' @inherit Chromium-class
 #' @export
 #'
 #' @details
@@ -62,13 +62,13 @@
 #' @param refdataDir `string` or `NULL`. Directory path to Cell Ranger reference
 #'   annotation data.
 #'
-#' @return `CellRanger`.
+#' @return `Chromium`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
-#' x <- CellRanger(dir)
+#' dir <- system.file("extdata/cellranger", package = "Chromium")
+#' x <- Chromium(dir)
 #' print(x)
-CellRanger <- function(  # nolint
+Chromium <- function(  # nolint
     dir,
     format = c("mtx", "hdf5"),
     filtered = TRUE,
@@ -100,10 +100,6 @@ CellRanger <- function(  # nolint
     assert_is_any_of(transgeneNames, c("character", "NULL"))
     assert_is_any_of(spikeNames, c("character", "NULL"))
     assert_is_character(interestingGroups)
-
-    pipeline <- "cellranger"
-    level <- "genes"
-    umiType <- "chromium"
 
     # Sample files -------------------------------------------------------------
     sampleFiles <- .sampleFiles(
@@ -162,7 +158,7 @@ CellRanger <- function(  # nolint
     } else if (is_a_string(gffFile)) {
         rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
     } else if (is_a_string(organism)) {
-        # CellRanger uses Ensembl refdata internally. Here we're fetching the
+        # Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         # annotations with AnnotationHub rather than pulling from the GTF file
         # in the refdata directory. It will also drop genes that are now dead in
         # the current Ensembl release. Don't warn about old Ensembl release
@@ -234,25 +230,21 @@ CellRanger <- function(  # nolint
 
     metadata <- list(
         version = packageVersion,
-        pipeline = pipeline,
-        level = level,
         dir = dir,
         sampleMetadataFile = as.character(sampleMetadataFile),
         interestingGroups = interestingGroups,
         organism = organism,
         genomeBuild = as.character(genomeBuild),
         ensemblRelease = as.integer(ensemblRelease),
-        umiType = umiType,
         allSamples = allSamples,
         lanes = lanes,
-        # cellranger-specific --------------------------------------------------
         refdataDir = refdataDir,
         refJSON = refJSON,
         call = match.call()
     )
 
     # Return -------------------------------------------------------------------
-    .new.CellRanger(
+    .new.Chromium(
         assays = list(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
@@ -264,7 +256,7 @@ CellRanger <- function(  # nolint
 
 
 
-.new.CellRanger <-  # nolint
+.new.Chromium <-  # nolint
     function(...) {
-        new(Class = "CellRanger", makeSingleCellExperiment(...))
+        new(Class = "Chromium", makeSingleCellExperiment(...))
     }

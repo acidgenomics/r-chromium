@@ -19,7 +19,7 @@
 #'
 #' @inheritParams basejump::params
 #'
-#' @return `CellRanger`.
+#' @return `Chromium`.
 #'
 #' @examples
 #' data(cr)
@@ -41,7 +41,7 @@ NULL
 
 
 
-extract.CellRanger <-  # nolint
+extract.Chromium <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
@@ -120,10 +120,10 @@ extract.CellRanger <-  # nolint
 setMethod(
     f = "[",
     signature = signature(
-        x = "CellRanger",
+        x = "Chromium",
         i = "ANY",
         j = "ANY",
         drop = "ANY"
     ),
-    definition = extract.CellRanger
+    definition = extract.Chromium
 )
