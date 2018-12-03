@@ -2,9 +2,9 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{Chromium-package}
-\title{CellRanger}
+\title{Chromium}
 \description{
-Toolkit for 10X Genomics single-cell RNA-seq data.
+Toolkit for 10X Genomics Chromium single-cell RNA-seq data.
 }
 \seealso{
 Useful links:
