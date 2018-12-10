@@ -23,7 +23,6 @@
 #' @importFrom methods as new validObject
 #' @importFrom readr read_lines read_tsv
 #' @importFrom rhdf5 h5dump h5read
-#' @importFrom rlang has_length
 #' @importFrom stringr str_match str_split
 #' @importFrom utils globalVariables packageVersion
 "_PACKAGE"

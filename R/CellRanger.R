@@ -197,7 +197,7 @@ CellRanger <- function(  # nolint
                 pattern = pattern
             )
             samples <- unique(match[, 2L, drop = TRUE])
-        } else if (has_length(sampleFiles, n = 1L)) {
+        } else if (length(sampleFiles) == 1L) {
             samples <- names(sampleFiles)
         }
         sampleData <- minimalSampleData(samples)
@@ -218,7 +218,7 @@ CellRanger <- function(  # nolint
     counts <- counts[, rownames(colData), drop = FALSE]
 
     # Join `sampleData` into cell-level `colData`.
-    if (has_length(nrow(sampleData), n = 1L)) {
+    if (length(nrow(sampleData)) == 1L) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
     } else {
         colData[["sampleID"]] <- mapCellsToSamples(
