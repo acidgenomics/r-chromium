@@ -106,7 +106,7 @@ vapply(
 )
 object_size(cr)
 stopifnot(object_size(cr) < limit)
-stopifnot(validObject(cr))
+validObject(cr)
 
 usethis::use_data(cr, compress = "xz", overwrite = TRUE)
 
