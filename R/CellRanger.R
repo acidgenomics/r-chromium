@@ -44,7 +44,7 @@
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
-#' slotted in `rowRanges()`. Otherwise, the function will attempt to use the
+#' slotted in `rowRanges`. Otherwise, the function will attempt to use the
 #' most current annotations available from Ensembl, and some gene IDs may not
 #' match, due to deprecation in the current Ensembl release.
 #'
@@ -52,14 +52,14 @@
 #' @inheritParams basejump::params
 #' @export
 #'
-#' @param dir `string`. Path to Cell Ranger output directory
+#' @param dir `character(1)`. Path to Cell Ranger output directory
 #'   (final upload). This directory path must contain
 #'   `filtered_gene_bc_matrices*` as a child directory.
-#' @param filtered `boolean`. Use filtered (recommended) or raw counts. Note
+#' @param filtered `logical(1)`. Use filtered (recommended) or raw counts. Note
 #'   that raw counts still contain only whitelisted cellular barcodes.
-#' @param format `string`. Output format, either MatrixMarket ("`mtx`") or HDF5
+#' @param format `character(1)`. Output format, either MatrixMarket ("`mtx`") or HDF5
 #'   ("`hdf5`").
-#' @param refdataDir `string` or `NULL`. Directory path to Cell Ranger reference
+#' @param refdataDir `character(1)` or `NULL`. Directory path to Cell Ranger reference
 #'   annotation data.
 #'
 #' @return `CellRanger`.
@@ -167,7 +167,7 @@ CellRanger <- function(  # nolint
         # in the refdata directory. It will also drop genes that are now dead in
         # the current Ensembl release. Don't warn about old Ensembl release
         # version.
-        message("Using `makeGRangesFromEnsembl()` for annotations.")
+        message("Using `makeGRangesFromEnsembl` for annotations.")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
