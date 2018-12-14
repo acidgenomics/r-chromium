@@ -54,7 +54,7 @@
 
 
 # Import Cell Ranger HDF5 Counts
-# @seealso `cellrangerRkit::get_matrix_from_h5()`
+# @seealso `cellrangerRkit::get_matrix_from_h5`
 .import.h5 <-  # nolint
     function(file) {
         assert_is_a_string(file)
