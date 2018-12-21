@@ -69,7 +69,7 @@ Suggests:
 Remotes:
     hbc/bcbioSingleCell@develop,
     steinbaugh/basejump@develop,
-    steinbaugh/goalie
+    steinbaugh/goalie@develop
 biocViews:
     DataImport,
     RNASeq,
