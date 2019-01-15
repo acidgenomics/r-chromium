@@ -1,20 +1,16 @@
-#' 10X Genomics Chromium Single-Cell RNA-Seq Data Set
-#' 
-#' Contains single-cell RNA-seq counts processed by the Cell Ranger pipeline.
+#' 10X Genomics Chromium data set
 #'
 #' Extends `SingleCellExperiment`, with additional validity checks on the
-#' `metadata()` slot.
+#' [`metadata()`][S4Vectors::metadata] slot.
 #'
-#' @family S4 classes
 #' @author Michael Steinbaugh
 #' @export
 #'
-#' @seealso `Chromium()`.
+#' @seealso `Chromium`.
 setClass(
     Class = "Chromium",
     contains = "SingleCellExperiment"
 )
-# FIXME Work on setting actual validity checks here.
 setValidity(
     Class = "Chromium",
     method = function(object) {

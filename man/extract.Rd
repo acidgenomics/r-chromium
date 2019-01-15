@@ -74,30 +74,32 @@
 Extract genes by row and cells by column.
 }
 \details{
-Refer to \code{basejump::cell2sample()} and \code{basejump::selectSamples()} if
-sample-level extraction is desired. Note that \code{sampleID} is slotted into
-\code{SummarizedExperiment::colData()} and defines the cell-to-sample mappings.
+Refer to \code{\link[basejump:cell2sample]{cell2sample()}} and
+\code{\link[basejump:selectSamples]{selectSamples()}} if sample-level extraction is
+desired. Note that \code{sampleID} is slotted into
+\code{\link[SummarizedExperiment:colData]{colData()}} and defines the cell-to-sample
+mappings.
 
 Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column
 of \code{colData}.
 }
 \examples{
-data(pbmc)
+data(cr)
 
-cells <- head(colnames(pbmc), 100L)
+cells <- head(colnames(cr), 100L)
 head(cells)
-genes <- head(rownames(pbmc), 100L)
+genes <- head(rownames(cr), 100L)
 head(genes)
 
 ## Subset by cell identifiers.
-pbmc[, cells]
+cr[, cells]
 
 ## Subset by genes.
-pbmc[genes, ]
+cr[genes, ]
 
 ## Subset by both genes and cells.
-pbmc[genes, cells]
+cr[genes, cells]
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)

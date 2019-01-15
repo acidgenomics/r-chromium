@@ -3,14 +3,12 @@
 \docType{data}
 \name{pbmc}
 \alias{pbmc}
-\title{10X Genomics Chromium Example Data Set
-Peripheral blood mononuclear cells (PBMCs).}
+\title{10X Genomics Chromium example data set}
 \format{An object of class \code{Chromium} with 500 rows and 100 columns.}
 \usage{
 pbmc
 }
 \description{
-10X Genomics Chromium Example Data Set
 Peripheral blood mononuclear cells (PBMCs).
 }
 \examples{
