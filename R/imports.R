@@ -4,6 +4,8 @@
 #' @importFrom basejump camel detectLanes emptyRanges import makeDimnames
 #'   makeGRangesFromEnsembl makeGRangesFromGFF makeNames
 #'   makeSingleCellExperiment mapCellsToSamples minimalSampleData realpath
+#' @importFrom bcbioBase readSampleData
+#' @importFrom bcbioSingleCell calculateMetrics
 #' @importFrom dplyr mutate_if pull
 #' @importFrom goalie assert isADirectory
 #' @importFrom magrittr %>%
