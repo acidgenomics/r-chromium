@@ -7,9 +7,10 @@
 #' @importFrom bcbioBase readSampleData
 #' @importFrom bcbioSingleCell calculateMetrics
 #' @importFrom dplyr mutate_if pull
-#' @importFrom goalie assert isADirectory
+#' @importFrom goalie allAreDirectories allAreFiles assert hasNames isADirectory
+#'   isAFile isCharacter isFlag isInt isNonEmpty isString isSubset
 #' @importFrom magrittr %>%
-#' @importFrom methods as new validObject
+#' @importFrom methods as is new validObject
 #' @importFrom readr read_lines read_tsv
 #' @importFrom rhdf5 h5dump h5read
 #' @importFrom stringr str_match str_split
