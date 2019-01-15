@@ -111,7 +111,7 @@ match, due to deprecation in the current Ensembl release.
 }
 
 \examples{
-dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
+dir <- system.file("extdata/cellranger", package = "Chromium")
 x <- Chromium(dir)
 print(x)
 }
