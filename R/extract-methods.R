@@ -3,21 +3,22 @@
 
 
 #' @name extract
-#' @inherit base::Extract title params references
 #' @author Michael Steinbaugh
+#' @inherit base::Extract title params references
+#' @inheritParams basejump::params
 #'
 #' @description Extract genes by row and cells by column.
 #'
 #' @details
-#' Refer to `basejump::cell2sample` and `basejump::selectSamples` if
-#' sample-level extraction is desired. Note that `sampleID` is slotted into
-#' `SummarizedExperiment::colData` and defines the cell-to-sample mappings.
+#' Refer to [`cell2sample()`][basejump::cell2sample] and
+#' [`selectSamples()`][basejump::selectSamples] if sample-level extraction is
+#' desired. Note that `sampleID` is slotted into
+#' [`colData()`][SummarizedExperiment::colData] and defines the cell-to-sample
+#' mappings.
 #'
 #' Unfiltered cellular barcode distributions for the entire dataset, including
 #' cells not kept in the matrix will be dropped in favor of the `nCount` column
 #' of `colData`.
-#'
-#' @inheritParams basejump::params
 #'
 #' @return `Chromium`.
 #'

@@ -74,9 +74,11 @@
 Extract genes by row and cells by column.
 }
 \details{
-Refer to \code{basejump::cell2sample} and \code{basejump::selectSamples} if
-sample-level extraction is desired. Note that \code{sampleID} is slotted into
-\code{SummarizedExperiment::colData} and defines the cell-to-sample mappings.
+Refer to \code{\link[basejump:cell2sample]{cell2sample()}} and
+\code{\link[basejump:selectSamples]{selectSamples()}} if sample-level extraction is
+desired. Note that \code{sampleID} is slotted into
+\code{\link[SummarizedExperiment:colData]{colData()}} and defines the cell-to-sample
+mappings.
 
 Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column
