@@ -57,11 +57,11 @@ if (!file.exists(gtf_file)) {
 }
 
 # Note that this blows up in memory too much to run on RStudio AMI.
-cr <- CellRanger(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
+cr <- Chromium(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
 object_size(cr)
 assignAndSaveData(name = "pbmc", object = cr, dir = "data-raw")
 
-# CellRanger ===================================================================
+# Cell Ranger ==================================================================
 counts <- counts(cr)
 
 # Subset the matrix to include only the top genes and cells.
@@ -81,7 +81,7 @@ cr <- cr[genes, cells]
 # Include only minimal metadata columns in rowRanges.
 mcols <- mcols(rowRanges(cr))
 mcols <- mcols[, c("broadClass", "geneBiotype", "geneID", "geneName")]
-# TODO Consider making this Rle factor level step a function in basejump.
+# FIXME Consider making this Rle factor level step a function in basejump.
 mcols <- DataFrame(lapply(
     X = mcols,
     FUN = function(x) {
