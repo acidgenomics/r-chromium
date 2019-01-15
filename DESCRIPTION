@@ -23,7 +23,7 @@ Depends:
     SingleCellExperiment (>= 1.4),
     basejump (>= 0.9.4)
 Imports:
-    bcbioBase (>= 0.5.9), bcbioSingleCell (>= 0.3.6), goalie (>= 0.1.1),
+    bcbioBase (>= 0.5.9), bcbioSingleCell (>= 0.3.6), goalie (>= 0.2.5),
     Biobase, BiocGenerics, BiocParallel, DropletUtils, S4Vectors,
         SummarizedExperiment,
     Matrix, Matrix.utils, R.utils, assertive.base, assertive.files,
