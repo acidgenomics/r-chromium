@@ -1,22 +1,3 @@
-# FIXME Break these back out into separate files.
-
-# FIXME Either make `sampleName` required or strip it from minimal examples.
-
-# FIXME Check to see if we can import tx2gene.csv
-
-# FIXME Can we parse the Cell Ranger `runDate` from the refData YAML?
-
-# FIXME Allow this function to work if the user points at dir containing matrix.
-
-# FIXME Add documentation about simple mode.
-
-# FIXME Consolidate with bcbioSingleCell
-# Undocumented arguments in documentation object 'Chromium'
-# ‘sampleMetadataFile’ ‘genomeBuild’ ‘gffFile’ ‘transgeneNames’
-# ‘spikeNames’
-
-
-
 #' @rdname Chromium-class
 #' @export
 #'
@@ -74,7 +55,7 @@
 #' @return `Chromium`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
+#' dir <- system.file("extdata/cellranger", package = "Chromium")
 #' x <- Chromium(dir)
 #' print(x)
 Chromium <- function(  # nolint
