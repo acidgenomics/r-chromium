@@ -1,6 +1,9 @@
-#' 10X Genomics Chromium Example Data Set
+#' 10X Genomics Chromium example data set
+#' 
 #' Peripheral blood mononuclear cells (PBMCs).
+#' 
 #' @author Michael Steinbaugh
+#' 
 #' @examples
 #' data(pbmc)
 #' pbmc

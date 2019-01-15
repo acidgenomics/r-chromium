@@ -4,14 +4,14 @@
 \name{Chromium-package}
 \title{Chromium}
 \description{
-Toolkit for 10X Genomics Chromium single-cell RNA-seq data.
+Toolkit for 10X Genomics single-cell RNA-seq data.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://steinbaugh.com/Chromium/}
-  \item \url{https://github.com/steinbaugh/Chromium/}
-  \item Report bugs at \url{https://github.com/steinbaugh/Chromium/issues/}
+  \item \url{https://steinbaugh.com/CellRanger/}
+  \item \url{https://github.com/steinbaugh/CellRanger/}
+  \item Report bugs at \url{https://github.com/steinbaugh/CellRanger/issues/}
 }
 
 }

@@ -1,11 +1,7 @@
-# FIXME Work on loading a v3 dataset and using as example.
-
-
-
-# 10X Chromium Cell Ranger example output.
+# 10X Chromium Cell Ranger v2 example output.
 # 4k PBMCs from a healthy donor.
 # https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
-# 2018-12-03
+# 2019-01-15
 
 library(pryr)
 library(tidyverse)
