@@ -3,13 +3,13 @@
 \docType{data}
 \name{cr}
 \alias{cr}
-\title{10X Genomics Cell Ranger Example Data Set}
+\title{10X Genomics Cell Ranger example data set}
 \format{An object of class \code{numeric} of length 1.}
 \usage{
 cr
 }
 \description{
-10X Genomics Cell Ranger Example Data Set
+10X Genomics Cell Ranger example data set
 }
 \examples{
 data(cr)
