@@ -1,7 +1,9 @@
 .import <-  # nolint
     function(sampleFiles) {
-        assert_all_are_existing_files(sampleFiles)
-        assert_has_names(sampleFiles)
+        assert(
+            allAreFiles(sampleFiles),
+            hasNames(sampleFiles)
+        )
 
         message("Importing counts.")
 
@@ -57,12 +59,11 @@
 # @seealso `cellrangerRkit::get_matrix_from_h5`
 .import.h5 <-  # nolint
     function(file) {
-        assert_is_a_string(file)
-        assert_all_are_existing_files(file)
+        assert(isAFile(file))
 
         # Get the genome build, which we need to pass as "name".
         genomeBuild <- names(h5dump(file, load = FALSE))
-        assert_is_a_string(genomeBuild)
+        assert(isString(genomeBuild))
 
         # Use genome build name (e.g. "/GRCh38/data").
         h5 <- h5read(file = file, name = genomeBuild)
@@ -79,8 +80,10 @@
         rownames <- h5[["genes"]]
         colnames <- h5[["barcodes"]]
 
-        assert_are_identical(length(rownames), nrow(counts))
-        assert_are_identical(length(colnames), ncol(counts))
+        assert(
+            identical(length(rownames), nrow(counts)),
+            identical(length(colnames), ncol(counts))
+        )
 
         rownames(counts) <- rownames
         colnames(counts) <- colnames
@@ -94,13 +97,12 @@
 # Matrix Market Exchange (MEX/MTX) format.
 .import.mtx <-  # nolint
     function(file) {
-        assert_is_a_string(file)
-        assert_all_are_existing_files(file)
+        assert(isAFile(file))
 
         # Locate required sidecar files.
         barcodesFile <- file.path(dirname(file), "barcodes.tsv")
         genesFile <- file.path(dirname(file), "genes.tsv")
-        assert_all_are_existing_files(c(barcodesFile, genesFile))
+        assert(allAreFiles(c(barcodesFile, genesFile)))
 
         # `genes.tsv` is tab delimited.
         rownames <- read_tsv(
@@ -115,8 +117,10 @@
 
         counts <- readMM(file)
 
-        assert_are_identical(length(rownames), nrow(counts))
-        assert_are_identical(length(colnames), ncol(counts))
+        assert(
+            identical(length(rownames), nrow(counts)),
+            identical(length(colnames), ncol(counts))
+        )
 
         rownames(counts) <- rownames
         colnames(counts) <- colnames

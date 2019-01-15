@@ -5,10 +5,11 @@
         format = c("mtx", "hdf5"),
         filtered = TRUE
     ) {
-        assert_is_a_string(dir)
-        assert_all_are_dirs(dir)
+        assert(
+            isADirectory(dir),
+            isFlag(filtered)
+        )
         format <- match.arg(format)
-        assert_is_a_bool(filtered)
 
         # Look for simple upload structure.
         if ("matrix.mtx" %in% list.files(dir)) {
@@ -19,7 +20,7 @@
         }
 
         subdirs <- list.dirs(dir, recursive = FALSE)
-        assert_is_non_empty(subdirs)
+        assert(isNonEmpty(subdirs))
 
         # Sample directories must contain `outs/` subdirectory.
         hasOuts <- vapply(
@@ -30,7 +31,7 @@
             FUN.VALUE = logical(1L)
         )
         subdirs <- subdirs[hasOuts]
-        assert_is_non_empty(subdirs)
+        assert(isNonEmpty(subdirs))
 
         if (isTRUE(filtered)) {
             prefix <- "filtered"
@@ -46,14 +47,14 @@
                 "outs",
                 paste0(prefix, "_gene_bc_matrices")
             )
-            assert_all_are_dirs(subdirs)
+            assert(allAreDirectories(subdirs))
             # Get the genome build from the first sample directory.
             genomeBuild <- list.dirs(
                 path = subdirs[[1L]],
                 full.names = FALSE,
                 recursive = FALSE
             )
-            assert_is_a_string(genomeBuild)
+            assert(isString(genomeBuild))
             files <- file.path(subdirs, genomeBuild, "matrix.mtx")
         } else if (format == "hdf5") {
             files <- file.path(
@@ -63,7 +64,7 @@
             )
         }
 
-        assert_all_are_existing_files(files)
+        assert(allAreFiles(files))
         names(files) <- makeNames(basename(subdirs))
 
         files
