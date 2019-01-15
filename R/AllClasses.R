@@ -1,19 +1,18 @@
-#' 10X Genomics Cell Ranger Data Set
+#' 10X Genomics Chromium data set
 #'
 #' Extends `SingleCellExperiment`, with additional validity checks on the
-#' `metadata` slot.
+#' [`metadata()`][S4Vectors::metadata] slot.
 #'
-#' @family S4 classes
 #' @author Michael Steinbaugh
 #' @export
 #'
-#' @seealso `CellRanger`.
+#' @seealso `Chromium`.
 setClass(
-    Class = "CellRanger",
+    Class = "Chromium",
     contains = "SingleCellExperiment"
 )
 setValidity(
-    Class = "CellRanger",
+    Class = "Chromium",
     method = function(object) {
         TRUE
     }

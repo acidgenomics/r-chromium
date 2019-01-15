@@ -1,25 +1,31 @@
 # FIXME Break these back out into separate files.
+
 # FIXME Either make `sampleName` required or strip it from minimal examples.
-# TODO Check to see if we can import tx2gene.csv
-# FIXME Can we parse the CellRanger `runDate` from the refData YAML?
+
+# FIXME Check to see if we can import tx2gene.csv
+
+# FIXME Can we parse the Cell Ranger `runDate` from the refData YAML?
+
 # FIXME Allow this function to work if the user points at dir containing matrix.
+
 # FIXME Add documentation about simple mode.
 
 # FIXME Consolidate with bcbioSingleCell
-# Undocumented arguments in documentation object 'CellRanger'
+# Undocumented arguments in documentation object 'Chromium'
 # ‘sampleMetadataFile’ ‘genomeBuild’ ‘gffFile’ ‘transgeneNames’
 # ‘spikeNames’
 
 
 
-#' @inherit CellRanger-class
+#' @rdname Chromium-class
 #' @export
 #'
 #' @details
-#' Read [10x Genomics Cell Ranger](https://www.10xgenomics.com/software/)
-#' counts into a `SingleCellExperiment` object.
+#' Read [10x Genomics Cell Ranger](https://www.10xgenomics.com/software/) output
+#' for a Chromium data set into a `SingleCellExperiment` object.
 #'
 #' @section Directory structure:
+#' 
 #' Cell Ranger can vary in its output directory structure, but we're requiring a
 #' single, consistent directory structure for all datasets, even those that only
 #' contain a single sample:
@@ -36,11 +42,13 @@
 #' }
 #'
 #' @section Sample metadata:
+#' 
 #' A user-supplied sample metadata file defined by `sampleMetadataFile` is
 #' required for multiplexed datasets. Otherwise this can be left `NULL`, and
 #' minimal sample data will be used, based on the directory names.
 #'
 #' @section Reference data:
+#' 
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
@@ -49,26 +57,27 @@
 #' match, due to deprecation in the current Ensembl release.
 #'
 #' @author Michael Steinbaugh
-#' @inheritParams basejump::params
 #' @export
+#' @inheritParams basejump::params
 #'
-#' @param dir `character(1)`. Path to Cell Ranger output directory
-#'   (final upload). This directory path must contain
-#'   `filtered_gene_bc_matrices*` as a child directory.
-#' @param filtered `logical(1)`. Use filtered (recommended) or raw counts. Note
-#'   that raw counts still contain only whitelisted cellular barcodes.
-#' @param format `character(1)`. Output format, either MatrixMarket ("`mtx`") or HDF5
-#'   ("`hdf5`").
-#' @param refdataDir `character(1)` or `NULL`. Directory path to Cell Ranger reference
-#'   annotation data.
+#' @param dir `character(1)`.
+#'   Path to Cell Ranger output directory (final upload). This directory path
+#'   must contain `filtered_gene_bc_matrices*` as a child directory.
+#' @param filtered `logical(1)`.
+#'   Use filtered (recommended) or raw counts. Note that raw counts still
+#'   contain only whitelisted cellular barcodes.
+#' @param format `character(1)`.
+#'   Output format, either MatrixMarket ("`mtx`") or HDF5 ("`hdf5`").
+#' @param refdataDir `character(1)` or `NULL`.
+#'   Directory path to Cell Ranger reference annotation data.
 #'
-#' @return `CellRanger`.
+#' @return `Chromium`.
 #'
 #' @examples
 #' dir <- system.file("extdata/cellranger", package = "bcbioSingleCell")
-#' x <- CellRanger(dir)
+#' x <- Chromium(dir)
 #' print(x)
-CellRanger <- function(  # nolint
+Chromium <- function(  # nolint
     dir,
     format = c("mtx", "hdf5"),
     filtered = TRUE,
@@ -82,35 +91,31 @@ CellRanger <- function(  # nolint
     spikeNames = NULL,
     interestingGroups = "sampleName"
 ) {
-    assert_is_a_string(dir)
-    assert_all_are_dirs(dir)
+    assert(
+        isADirectory(dir),
+        isFlag(filtered),
+        isAFile(sampleMetadataFile, nullOK = TRUE),
+        isString(organism, nullOK = TRUE),
+        isInt(ensemblRelease, nullOK = TRUE),
+        isString(genomeBuild, nullOK = TRUE),
+        isADirectory(refdataDir, nullOK = TRUE),
+        isAFile(gffFile, nullOK = TRUE),
+        isCharacter(transgeneNames, nullOK = TRUE),
+        isCharacter(spikeNames, nullOK = TRUE),
+        isCharacter(interestingGroups)
+    )
     dir <- realpath(dir)
     format <- match.arg(format)
-    assert_is_a_bool(filtered)
-    assertIsStringOrNULL(sampleMetadataFile)
-    assertIsStringOrNULL(organism)
-    assertIsAnImplicitIntegerOrNULL(ensemblRelease)
-    assertIsStringOrNULL(genomeBuild)
-    assertIsStringOrNULL(refdataDir)
-    if (is_a_string(refdataDir)) {
-        assert_all_are_dirs(refdataDir)
+    if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
-    assertIsStringOrNULL(gffFile)
-    assert_is_any_of(transgeneNames, c("character", "NULL"))
-    assert_is_any_of(spikeNames, c("character", "NULL"))
-    assert_is_character(interestingGroups)
 
     pipeline <- "cellranger"
     level <- "genes"
     umiType <- "chromium"
 
     # Sample files -------------------------------------------------------------
-    sampleFiles <- .sampleFiles(
-        dir = dir,
-        format = format,
-        filtered = filtered
-    )
+    sampleFiles <- .sampleFiles(dir = dir, format = format, filtered = filtered)
 
     # Sequencing lanes ---------------------------------------------------------
     lanes <- detectLanes(sampleFiles)
@@ -119,8 +124,9 @@ CellRanger <- function(  # nolint
     allSamples <- TRUE
     sampleData <- NULL
 
-    if (is_a_string(sampleMetadataFile)) {
-        # FIXME Can use a simpler approach to sample metadata here.
+    if (isAFile(sampleMetadataFile)) {
+        # FIXME Work on a simpler approach to sample metadata here that doesn't
+        # depend on bcbioBase package.
         requireNamespace("bcbioBase")
         sampleData <- bcbioBase::readSampleData(sampleMetadataFile)
         # Allow sample selection by with this file.
@@ -139,19 +145,19 @@ CellRanger <- function(  # nolint
     refJSON <- NULL
 
     # Prepare gene annotations as GRanges.
-    if (is_a_string(refdataDir)) {
+    if (isADirectory(refdataDir)) {
         message("Using 10X Genomics reference data for annotations.")
         message(paste("refdataDir:", refdataDir))
         # JSON data.
         refJSONFile <- file.path(refdataDir, "reference.json")
-        assert_all_are_existing_files(refJSONFile)
+        assert(allAreFiles(refJSONFile))
         refJSON <- import(refJSONFile)
         # Get the genome build from JSON metadata.
         genomeBuild <- unlist(refJSON[["genomes"]])
-        assert_is_a_string(genomeBuild)
+        assert(isString(genomeBuild))
         # Convert the GTF file to GRanges.
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
-        assert_is_a_string(gffFile)
+        assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
         # Get the Ensembl version from the GTF file name.
         # Example: "Homo_sapiens.GRCh37.82.filtered.gtf"
@@ -159,15 +165,16 @@ CellRanger <- function(  # nolint
             str_split("\\.", simplify = TRUE) %>%
             .[1L, 3L] %>%
             as.integer()
-    } else if (is_a_string(gffFile)) {
+    } else if (isString(gffFile)) {
+        # Note that this works with a remote URL.
         rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
-    } else if (is_a_string(organism)) {
-        # CellRanger uses Ensembl refdata internally. Here we're fetching the
+    } else if (isString(organism)) {
+        # Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         # annotations with AnnotationHub rather than pulling from the GTF file
         # in the refdata directory. It will also drop genes that are now dead in
         # the current Ensembl release. Don't warn about old Ensembl release
         # version.
-        message("Using `makeGRangesFromEnsembl` for annotations.")
+        message("Using makeGRangesFromEnsembl() for annotations.")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
@@ -184,7 +191,7 @@ CellRanger <- function(  # nolint
         message("Unknown organism. Skipping annotations.")
         rowRanges <- emptyRanges(rownames(counts))
     }
-    assert_is_all_of(rowRanges, "GRanges")
+    assert(is(rowRanges, "GRanges"))
 
     # Column data --------------------------------------------------------------
     # Automatic sample metadata.
@@ -205,7 +212,7 @@ CellRanger <- function(  # nolint
 
     # Always prefilter, removing very low quality cells with no UMIs or genes.
     # FIXME Consider how we want to handle this.
-    # Should we import bcbioSingleCell here?
+    # Ideally, want to eliminate bcbioSingleCell dependency here.
     requireNamespace("bcbioSingleCell")
     colData <- bcbioSingleCell::calculateMetrics(
         counts = counts,
@@ -214,7 +221,7 @@ CellRanger <- function(  # nolint
     )
 
     # Subset the counts to match the prefiltered metrics.
-    assert_is_subset(rownames(colData), colnames(counts))
+    assert(isSubset(rownames(colData), colnames(counts)))
     counts <- counts[, rownames(colData), drop = FALSE]
 
     # Join `sampleData` into cell-level `colData`.
@@ -230,7 +237,7 @@ CellRanger <- function(  # nolint
     # Metadata -----------------------------------------------------------------
     # Interesting groups.
     interestingGroups <- camel(interestingGroups)
-    assert_is_subset(interestingGroups, colnames(sampleData))
+    assert(isSubset(interestingGroups, colnames(sampleData)))
 
     metadata <- list(
         version = packageVersion,
@@ -252,7 +259,7 @@ CellRanger <- function(  # nolint
     )
 
     # Return -------------------------------------------------------------------
-    .new.CellRanger(
+    .new.Chromium(
         assays = list(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
@@ -264,7 +271,7 @@ CellRanger <- function(  # nolint
 
 
 
-.new.CellRanger <-  # nolint
+.new.Chromium <-  # nolint
     function(...) {
-        new(Class = "CellRanger", makeSingleCellExperiment(...))
+        new(Class = "Chromium", makeSingleCellExperiment(...))
     }

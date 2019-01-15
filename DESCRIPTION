@@ -1,8 +1,8 @@
-Package: CellRanger
-Title: 10X Genomics Cell Ranger Utilities
+Package: Chromium
+Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics single-cell RNA-seq data.
-Version: 0.0.1
-Date: 2018-11-26
+Version: 0.0.2
+Date: 2019-01-16
 Authors@R:
     person(
         given = "Michael",
@@ -20,58 +20,29 @@ Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 3.5),
-    SingleCellExperiment (>= 1.2),
-    basejump (>= 0.8.3)
+    SingleCellExperiment (>= 1.4),
+    basejump (>= 0.9.4)
 Imports:
-    Biobase,
-    BiocGenerics,
-    BiocParallel,
-    DropletUtils,
-    Matrix,
-    Matrix.utils,
-    R.utils,
-    S4Vectors,
-    SummarizedExperiment,
-    assertive.base,
-    assertive.files,
-    assertive.numbers,
-    assertive.properties,
-    assertive.sets,
-    assertive.strings,
-    assertive.types,
-    assertthat,
-    cowplot (>= 0.9),
-    dplyr (>= 0.7),
-    ggplot2 (>= 3.0),
-    ggridges (>= 0.5),
     goalie (>= 0.1.1),
-    graphics,
-    magrittr (>= 1.5),
-    methods,
-    purrr (>= 0.2),
-    readr (>= 1.1),
-    rhdf5 (>= 2.2),
-    rlang (>= 0.3),
-    rmarkdown,
-    scales,
-    sessioninfo,
-    stats,
-    stringr (>= 1.3),
-    tibble (>= 1.4),
-    tidyverse (>= 1.2),
-    utils
+    Biobase, BiocGenerics, BiocParallel, DropletUtils, S4Vectors,
+        SummarizedExperiment,
+    Matrix, Matrix.utils, R.utils, assertive.base, assertive.files,
+        assertive.numbers, assertive.properties, assertive.sets,
+        assertive.strings, assertive.types, assertthat, cowplot (>= 0.9),
+        dplyr (>= 0.7), ggplot2 (>= 3.0), ggridges (>= 0.5), magrittr (>= 1.5),
+        purrr (>= 0.2), readr (>= 1.1), rhdf5 (>= 2.2), rlang (>= 0.3),
+        rmarkdown, scales, sessioninfo, stringr (>= 1.3), tibble (>= 2.0),
+        tidyverse (>= 1.2),
+    graphics, methods, stats, utils
 Suggests:
+    bcbioBase, bcbioSingleCell,
     BiocStyle,
-    bcbioBase,
-    bcbioSingleCell,
-    patrick,
-    roxygen2,
-    testthat (>= 2.0)
+    patrick, roxygen2, testthat
 Remotes:
-    hbc/bcbioBase@develop,
-    hbc/bcbioSingleCell@develop,
-    steinbaugh/basejump@develop,
-    steinbaugh/goalie@develop
+    steinbaugh/basejump,
+    steinbaugh/bcbioBase,
+    steinbaugh/bcbioSingleCell,
+    steinbaugh/goalie
 biocViews:
     DataImport,
     RNASeq,

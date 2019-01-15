@@ -3,10 +3,10 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{[,CellRanger,ANY,ANY,ANY-method}
+\alias{[,Chromium,ANY,ANY,ANY-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{CellRanger,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{Chromium,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
 \item{x}{
@@ -68,15 +68,15 @@
   }
 }
 \value{
-\code{CellRanger}.
+\code{Chromium}.
 }
 \description{
 Extract genes by row and cells by column.
 }
 \details{
-Refer to \code{basejump::cell2sample()} and \code{basejump::selectSamples()} if
+Refer to \code{basejump::cell2sample} and \code{basejump::selectSamples} if
 sample-level extraction is desired. Note that \code{sampleID} is slotted into
-\code{SummarizedExperiment::colData()} and defines the cell-to-sample mappings.
+\code{SummarizedExperiment::colData} and defines the cell-to-sample mappings.
 
 Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column

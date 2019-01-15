@@ -4,7 +4,7 @@
 \name{cr}
 \alias{cr}
 \title{10X Genomics Cell Ranger Example Data Set}
-\format{An object of class \code{CellRanger} with 50 rows and 100 columns.}
+\format{An object of class \code{numeric} of length 1.}
 \usage{
 cr
 }
