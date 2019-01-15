@@ -12,3 +12,4 @@
 #' @importFrom rhdf5 h5dump h5read
 #' @importFrom stringr str_match str_split
 #' @importFrom utils globalVariables packageVersion
+NULL
