@@ -109,26 +109,23 @@ Chromium <- function(  # nolint
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
-
+    
     pipeline <- "cellranger"
     level <- "genes"
     umiType <- "chromium"
-
+    
     # Sample files -------------------------------------------------------------
     sampleFiles <- .sampleFiles(dir = dir, format = format, filtered = filtered)
-
+    
     # Sequencing lanes ---------------------------------------------------------
     lanes <- detectLanes(sampleFiles)
-
+    
     # Sample metadata ----------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
-
+    
     if (isAFile(sampleMetadataFile)) {
-        # FIXME Work on a simpler approach to sample metadata here that doesn't
-        # depend on bcbioBase package.
-        requireNamespace("bcbioBase")
-        sampleData <- bcbioBase::readSampleData(sampleMetadataFile)
+        sampleData <- readSampleData(sampleMetadataFile)
         # Allow sample selection by with this file.
         if (nrow(sampleData) < length(sampleFiles)) {
             message("Loading a subset of samples, defined by the metadata.")
@@ -137,13 +134,13 @@ Chromium <- function(  # nolint
             message(paste(length(sampleFiles), "samples matched by metadata."))
         }
     }
-
+    
     # Counts -------------------------------------------------------------------
     counts <- .import(sampleFiles)
-
+    
     # Row data -----------------------------------------------------------------
     refJSON <- NULL
-
+    
     # Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         message("Using 10X Genomics reference data for annotations.")
@@ -192,7 +189,7 @@ Chromium <- function(  # nolint
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
-
+    
     # Column data --------------------------------------------------------------
     # Automatic sample metadata.
     if (is.null(sampleData)) {
@@ -209,21 +206,18 @@ Chromium <- function(  # nolint
         }
         sampleData <- minimalSampleData(samples)
     }
-
+    
     # Always prefilter, removing very low quality cells with no UMIs or genes.
-    # FIXME Consider how we want to handle this.
-    # Ideally, want to eliminate bcbioSingleCell dependency here.
-    requireNamespace("bcbioSingleCell")
-    colData <- bcbioSingleCell::calculateMetrics(
+    colData <- calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
     )
-
+    
     # Subset the counts to match the prefiltered metrics.
     assert(isSubset(rownames(colData), colnames(counts)))
     counts <- counts[, rownames(colData), drop = FALSE]
-
+    
     # Join `sampleData` into cell-level `colData`.
     if (length(nrow(sampleData)) == 1L) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
@@ -233,12 +227,12 @@ Chromium <- function(  # nolint
             samples = rownames(sampleData)
         )
     }
-
+    
     # Metadata -----------------------------------------------------------------
     # Interesting groups.
     interestingGroups <- camel(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
-
+    
     metadata <- list(
         version = packageVersion,
         pipeline = pipeline,
@@ -257,7 +251,7 @@ Chromium <- function(  # nolint
         refJSON = refJSON,
         call = match.call()
     )
-
+    
     # Return -------------------------------------------------------------------
     .new.Chromium(
         assays = list(counts = counts),

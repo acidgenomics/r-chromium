@@ -1,6 +1,10 @@
-#' 10X Genomics Cell Ranger example data set
+#' 10X Genomics Chromium example data set
+#' 
+#' Peripheral blood mononuclear cells (PBMCs).
+#' 
 #' @author Michael Steinbaugh
+#' 
 #' @examples
-#' data(cr)
-#' cr
-"cr"
+#' data(pbmc)
+#' pbmc
+"pbmc"
