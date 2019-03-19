@@ -6,15 +6,14 @@ cache: packages
 
 matrix:
   include:
-  - os: linux
-    r: bioc-release
-  - os: osx
-    r: bioc-release
-  fast_finish: true
+    - os: linux
+      r: bioc-release
+    - os: osx
+      r: bioc-release
 
 branches:
   only:
-  - master
+    - master
 
 env:
   global:
@@ -28,7 +27,7 @@ bioc_packages:
   - S4Vectors
   - EnsDb.Hsapiens.v75
 r_github_packages:
-  - mjsteinbaugh/lintr
+  - steinbaugh/lintr
 
 after_success:
   - Rscript -e 'lintr::lint_package()'
