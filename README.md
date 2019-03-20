@@ -4,6 +4,8 @@
 
 Toolkit for 10X Genomics single-cell RNA-seq data.
 
+🚨🚨🚨 NOT YET COMPATIBLE WITH CELLRANGER 3 🚨🚨🚨
+
 ## Installation
 
 This is an [R][] package.
