@@ -30,7 +30,7 @@ bioc_packages:
   - S4Vectors
   - EnsDb.Hsapiens.v75
 r_github_packages:
-  - steinbaugh/lintr
+  - acidgenomics/lintr
 
 after_success:
   - R CMD BiocCheck .
