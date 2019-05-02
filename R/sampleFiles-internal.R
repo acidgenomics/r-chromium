@@ -12,7 +12,7 @@
         format <- match.arg(format)
 
         # Look for simple upload structure.
-        if ("matrix.mtx" %in% list.files(dir)) {
+        if ("matrix.mtx" %in% sort(list.files(dir))) {
             message("Simple mode enabled.")
             file <- file.path(dir, "matrix.mtx")
             names(file) <- basename(dir)
