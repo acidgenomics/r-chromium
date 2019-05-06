@@ -1,9 +1,8 @@
-^.*\.Rproj$
-^\.Rproj\.user$
-^\.lintr$
-^\.travis\.yml$
-^_pkgdown\.yml$
-^appveyor\.yml$
+^CONTRIBUTING\.md$
+^Meta$
+^[-._a-zA-Z0-9]+\.(R|html|pdf|png|sh|txt|yaml|yml)$
+^[._][-._a-zA-Z0-9]+$
 ^data-raw$
-^docs$
+^doc(s)?$
 ^pkgdown$
+^vignettes/\.$
