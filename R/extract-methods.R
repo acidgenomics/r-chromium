@@ -67,20 +67,20 @@ extract.Chromium <-  # nolint
         
         # Row data -------------------------------------------------------------
         # Ensure factors get releveled, if necessary.
-        rowRanges <- rowRanges(rse)
+        rowRanges <- rowRanges(sce)
         if (
             ncol(mcols(rowRanges)) > 0L &&
-            !identical(rownames(rse), rownames(x))
+            !identical(rownames(sce), rownames(x))
         ) {
             rowRanges <- relevelRowRanges(rowRanges)
         }
         
         # Column data ----------------------------------------------------------
         # Ensure factors get releveled, if necessary.
-        colData <- colData(rse)
+        colData <- colData(sce)
         if (
             ncol(colData) > 0L &&
-            !identical(colnames(rse), colnames(x))
+            !identical(colnames(sce), colnames(x))
         ) {
             colData <- relevelColData(colData)
         }

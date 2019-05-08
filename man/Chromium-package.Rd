@@ -9,14 +9,19 @@ Toolkit for 10X Genomics single-cell RNA-seq data.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://steinbaugh.com/Chromium/}
-  \item \url{https://github.com/steinbaugh/Chromium/}
-  \item Report bugs at \url{https://github.com/steinbaugh/Chromium/issues/}
+  \item \url{https://chromium.acidgenomics.com/}
+  \item \url{https://github.com/acidgenomics/Chromium/}
+  \item Report bugs at \url{https://github.com/acidgenomics/Chromium/issues/}
 }
 
 }
 \author{
 \strong{Maintainer}: Michael Steinbaugh \email{mike@steinbaugh.com} (0000-0002-2403-2221)
+
+Other contributors:
+\itemize{
+  \item Acid Genomics [copyright holder, funder]
+}
 
 }
 \keyword{internal}
