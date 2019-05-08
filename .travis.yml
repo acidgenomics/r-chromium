@@ -1,45 +1,36 @@
-language: r
-cache: packages
+language: general
 
-script: true
-
-matrix:
-  include:
-    - os: linux
-      r: bioc-release
-    - os: linux
-      r: bioc-devel
-    - os: osx
-      r: bioc-release
-  allow_failures:
-    - os: osx
-    - r: bioc-devel
-  fast_finish: true
+services:
+  - docker
 
 branches:
   only:
     - master
 
-env:
-  global:
-    - LINTR_COMMENT_BOT=true
+before_script:
+  - chmod +x *.sh
 
-r_packages:
-  - covr
-bioc_packages:
-  - BiocCheck
-  - GenomeInfoDbData
-  - S4Vectors
-  - EnsDb.Hsapiens.v75
-r_github_packages:
-  - acidgenomics/lintr
+jobs:
+  include:
+    - stage: test
+      name: "Docker: Bioconductor 3.9"
+      script: image="singlecell" tag="bioc-3.9" ./docker.sh
+    - stage: test
+      name: "Docker: Bioconductor 3.8"
+      script: image="singlecell" tag="bioc-3.8" ./docker.sh
+    - stage: test
+      name: "Docker: Bioconductor 3.7"
+      script: image="singlecell" tag="bioc-3.7" ./docker.sh
 
-after_success:
-  - R CMD BiocCheck .
-  - Rscript -e 'lintr::lint_package()'
-  - Rscript -e 'covr::codecov()'
+matrix:
+  fast_finish: true
+
+after_failure:
+  - ./docker-failure.sh
 
 notifications:
   email:
+    recipients:
+      - mike@steinbaugh.com
     on_success: change
     on_failure: change
