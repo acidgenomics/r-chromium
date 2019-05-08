@@ -1,7 +1,3 @@
-# FIXME Need to improve Rle levels in rowRanges (see bcbioRNASeq).
-
-
-
 #' @name extract
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
@@ -69,19 +65,28 @@ extract.Chromium <-  # nolint
         genes <- rownames(sce)
         cells <- colnames(sce)
         
+        # Row data -------------------------------------------------------------
+        # Ensure factors get releveled, if necessary.
+        rowRanges <- rowRanges(sce)
+        if (
+            ncol(mcols(rowRanges)) > 0L &&
+            !identical(rownames(sce), rownames(x))
+        ) {
+            rowRanges <- relevelRowRanges(rowRanges)
+        }
+        
         # Column data ----------------------------------------------------------
-        # Ensure factors get releveled.
-        colData <- colData(sce) %>%
-            as("tbl_df") %>%
-            mutate_if(is.character, as.factor) %>%
-            mutate_if(is.factor, droplevels) %>%
-            as("DataFrame")
+        # Ensure factors get releveled, if necessary.
+        colData <- colData(sce)
+        if (
+            ncol(colData) > 0L &&
+            !identical(colnames(sce), colnames(x))
+        ) {
+            colData <- relevelColData(colData)
+        }
         
         # Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
-        # FIXME Need to export this in basejump??
-        requireNamespace("bcbioSingleCell")
-        metadata <- bcbioSingleCell:::.updateMetadata(metadata)
         metadata[["subset"]] <- TRUE
         
         # Drop unfiltered cellular barcode list.
