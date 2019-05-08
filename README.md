@@ -19,7 +19,7 @@ if (!require("BiocManager")) {
     install.packages("BiocManager")
 }
 BiocManager::install("remotes")
-BiocManager::install("steinbaugh/Chromium")
+BiocManager::install("acidgenomics/Chromium")
 ```
 
 [BiocManager]: https://cran.r-project.org/package=BiocManager
