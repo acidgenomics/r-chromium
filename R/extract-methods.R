@@ -79,9 +79,6 @@ extract.Chromium <-  # nolint
         
         # Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
-        # FIXME Need to export this in basejump??
-        requireNamespace("bcbioSingleCell")
-        metadata <- bcbioSingleCell:::.updateMetadata(metadata)
         metadata[["subset"]] <- TRUE
         
         # Drop unfiltered cellular barcode list.
