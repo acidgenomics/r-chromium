@@ -1,6 +1,7 @@
 #' @importFrom Matrix readMM sparseMatrix
 #' @importFrom SingleCellExperiment isSpike
 #' @importFrom SummarizedExperiment assays
+#' @importFrom S4Vectors mcols
 #' @importFrom basejump camel detectLanes emptyRanges import makeDimnames
 #'   makeGRangesFromEnsembl makeGRangesFromGFF makeNames
 #'   makeSingleCellExperiment mapCellsToSamples minimalSampleData realpath

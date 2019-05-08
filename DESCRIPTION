@@ -30,6 +30,7 @@ Imports:
     bcbioSingleCell (>= 0.3.13),
     goalie (>= 0.2.16),
     SummarizedExperiment,
+    S4Vectors,
     Matrix,
     dplyr (>= 0.8),
     magrittr (>= 1.5),
