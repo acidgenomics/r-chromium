@@ -219,9 +219,31 @@ of <code>colData</code>.</p>
 #&gt; reducedDimNames(0):
 #&gt; spikeNames(0):</div><div class='input'>
 <span class='co'>## Subset by genes.</span>
-<span class='no'>pbmc</span>[<span class='no'>genes</span>, ]</div><div class='output co'>#&gt; <span class='error'>Error in rowRanges(rse): object 'rse' not found</span></div><div class='input'>
+<span class='no'>pbmc</span>[<span class='no'>genes</span>, ]</div><div class='output co'>#&gt; <span class='message'>Releveling factors in rowRanges.</span></div><div class='output co'>#&gt; class: Chromium 
+#&gt; dim: 100 100 
+#&gt; metadata(18): version pipeline ... originalVersion subset
+#&gt; assays(1): counts
+#&gt; rownames(100): ENSG00000002586 ENSG00000005022 ... ENSG00000108298
+#&gt;   ENSG00000108518
+#&gt; rowData names(4): broadClass geneBiotype geneID geneName
+#&gt; colnames(100): AAACCTGCAGGCGATA AAAGCAATCTGCCCTA ... TTGCGTCAGCTAAACA
+#&gt;   TTGTAGGCACCATCCT
+#&gt; colData names(7): nUMI nGene ... mitoRatio sampleID
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):</div><div class='input'>
 <span class='co'>## Subset by both genes and cells.</span>
-<span class='no'>pbmc</span>[<span class='no'>genes</span>, <span class='no'>cells</span>]</div><div class='output co'>#&gt; <span class='error'>Error in rowRanges(rse): object 'rse' not found</span></div></pre>
+<span class='no'>pbmc</span>[<span class='no'>genes</span>, <span class='no'>cells</span>]</div><div class='output co'>#&gt; <span class='message'>Releveling factors in rowRanges.</span></div><div class='output co'>#&gt; class: Chromium 
+#&gt; dim: 100 100 
+#&gt; metadata(18): version pipeline ... originalVersion subset
+#&gt; assays(1): counts
+#&gt; rownames(100): ENSG00000002586 ENSG00000005022 ... ENSG00000108298
+#&gt;   ENSG00000108518
+#&gt; rowData names(4): broadClass geneBiotype geneID geneName
+#&gt; colnames(100): AAACCTGCAGGCGATA AAAGCAATCTGCCCTA ... TTGCGTCAGCTAAACA
+#&gt;   TTGTAGGCACCATCCT
+#&gt; colData names(7): nUMI nGene ... mitoRatio sampleID
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
