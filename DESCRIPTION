@@ -23,7 +23,7 @@ Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 3.5),
-    SingleCellExperiment,
+    SingleCellExperiment (>= 1.4),
     basejump (>= 0.10.8)
 Imports:
     bcbioBase (>= 0.6.3),
