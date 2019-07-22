@@ -42,11 +42,11 @@ extract.Chromium <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
-        # Genes
+        ## Genes
         if (missing(i)) {
             i <- 1L:nrow(x)
         }
-        # Cells
+        ## Cells
         if (missing(j)) {
             j <- 1L:ncol(x)
         }
@@ -58,15 +58,15 @@ extract.Chromium <-  # nolint
             return(x)
         }
         
-        # Subset using SCE method.
+        ## Subset using SCE method.
         sce <- as(x, "SingleCellExperiment")
         sce <- sce[i, j, drop = drop]
         
         genes <- rownames(sce)
         cells <- colnames(sce)
         
-        # Row data -------------------------------------------------------------
-        # Ensure factors get releveled, if necessary.
+        ## Row data -------------------------------------------------------------
+        ## Ensure factors get releveled, if necessary.
         rowRanges <- rowRanges(sce)
         if (
             ncol(mcols(rowRanges)) > 0L &&
@@ -75,8 +75,8 @@ extract.Chromium <-  # nolint
             rowRanges <- relevelRowRanges(rowRanges)
         }
         
-        # Column data ----------------------------------------------------------
-        # Ensure factors get releveled, if necessary.
+        ## Column data ----------------------------------------------------------
+        ## Ensure factors get releveled, if necessary.
         colData <- colData(sce)
         if (
             ncol(colData) > 0L &&
@@ -85,28 +85,28 @@ extract.Chromium <-  # nolint
             colData <- relevelColData(colData)
         }
         
-        # Metadata -------------------------------------------------------------
+        ## Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
         metadata[["subset"]] <- TRUE
         
-        # Drop unfiltered cellular barcode list.
+        ## Drop unfiltered cellular barcode list.
         metadata[["cellularBarcodes"]] <- NULL
         
-        # filterCells
+        ## filterCells
         filterCells <- metadata[["filterCells"]]
         if (!is.null(filterCells)) {
             filterCells <- intersect(filterCells, cells)
             metadata[["filterCells"]] <- filterCells
         }
         
-        # filterGenes
+        ## filterGenes
         filterGenes <- metadata[["filterGenes"]]
         if (!is.null(filterGenes)) {
             filterGenes <- intersect(filterGenes, genes)
             metadata[["filterGenes"]] <- filterGenes
         }
         
-        # Return ---------------------------------------------------------------
+        ## Return ---------------------------------------------------------------
         new(
             Class = class(x)[[1L]],
             makeSingleCellExperiment(

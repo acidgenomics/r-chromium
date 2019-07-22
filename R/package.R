@@ -8,8 +8,8 @@
 
 globalVariables(".")
 
-# FIXME Need to fix these functions shared with bcbioSingleCell:
-# - .updateMetadata
-# - calculateMetrics
-# - readSampleData
-# Look for `requireNamespace` calls and improve...
+## FIXME Need to fix these functions shared with bcbioSingleCell:
+## - .updateMetadata
+## - calculateMetrics
+## - readSampleData
+## Look for `requireNamespace` calls and improve...
