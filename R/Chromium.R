@@ -95,19 +95,19 @@ Chromium <- function(  # nolint
     level <- "genes"
     umiType <- "chromium"
     
-    # Sample files -------------------------------------------------------------
+    ## Sample files -------------------------------------------------------------
     sampleFiles <- .sampleFiles(dir = dir, format = format, filtered = filtered)
     
-    # Sequencing lanes ---------------------------------------------------------
+    ## Sequencing lanes ---------------------------------------------------------
     lanes <- detectLanes(sampleFiles)
     
-    # Sample metadata ----------------------------------------------------------
+    ## Sample metadata ----------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
     
     if (isAFile(sampleMetadataFile)) {
         sampleData <- readSampleData(sampleMetadataFile)
-        # Allow sample selection by with this file.
+        ## Allow sample selection by with this file.
         if (nrow(sampleData) < length(sampleFiles)) {
             message("Loading a subset of samples, defined by the metadata.")
             allSamples <- FALSE
@@ -116,42 +116,42 @@ Chromium <- function(  # nolint
         }
     }
     
-    # Counts -------------------------------------------------------------------
+    ## Counts -------------------------------------------------------------------
     counts <- .import(sampleFiles)
     
-    # Row data -----------------------------------------------------------------
+    ## Row data -----------------------------------------------------------------
     refJSON <- NULL
     
-    # Prepare gene annotations as GRanges.
+    ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         message("Using 10X Genomics reference data for annotations.")
         message(paste("refdataDir:", refdataDir))
-        # JSON data.
+        ## JSON data.
         refJSONFile <- file.path(refdataDir, "reference.json")
         assert(allAreFiles(refJSONFile))
         refJSON <- import(refJSONFile)
-        # Get the genome build from JSON metadata.
+        ## Get the genome build from JSON metadata.
         genomeBuild <- unlist(refJSON[["genomes"]])
         assert(isString(genomeBuild))
-        # Convert the GTF file to GRanges.
+        ## Convert the GTF file to GRanges.
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
         assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
-        # Get the Ensembl version from the GTF file name.
-        # Example: "Homo_sapiens.GRCh37.82.filtered.gtf"
+        ## Get the Ensembl version from the GTF file name.
+        ## Example: "Homo_sapiens.GRCh37.82.filtered.gtf"
         ensemblRelease <- gffFile %>%
             str_split("\\.", simplify = TRUE) %>%
             .[1L, 3L] %>%
             as.integer()
     } else if (isString(gffFile)) {
-        # Note that this works with a remote URL.
+        ## Note that this works with a remote URL.
         rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
     } else if (isString(organism)) {
-        # Cell Ranger uses Ensembl refdata internally. Here we're fetching the
-        # annotations with AnnotationHub rather than pulling from the GTF file
-        # in the refdata directory. It will also drop genes that are now dead in
-        # the current Ensembl release. Don't warn about old Ensembl release
-        # version.
+        ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
+        ## annotations with AnnotationHub rather than pulling from the GTF file
+        ## in the refdata directory. It will also drop genes that are now dead in
+        ## the current Ensembl release. Don't warn about old Ensembl release
+        ## version.
         message("Using makeGRangesFromEnsembl() for annotations.")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
@@ -171,10 +171,10 @@ Chromium <- function(  # nolint
     }
     assert(is(rowRanges, "GRanges"))
     
-    # Column data --------------------------------------------------------------
-    # Automatic sample metadata.
+    ## Column data --------------------------------------------------------------
+    ## Automatic sample metadata.
     if (is.null(sampleData)) {
-        # Define the grep pattern to use for sample ID extraction.
+        ## Define the grep pattern to use for sample ID extraction.
         pattern <- "^(.+)_[ACGT]+$"
         if (all(grepl(pattern, colnames(counts)))) {
             match <- str_match(
@@ -188,18 +188,18 @@ Chromium <- function(  # nolint
         sampleData <- minimalSampleData(samples)
     }
     
-    # Always prefilter, removing very low quality cells with no UMIs or genes.
+    ## Always prefilter, removing very low quality cells with no UMIs or genes.
     colData <- calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
     )
     
-    # Subset the counts to match the prefiltered metrics.
+    ## Subset the counts to match the prefiltered metrics.
     assert(isSubset(rownames(colData), colnames(counts)))
     counts <- counts[, rownames(colData), drop = FALSE]
     
-    # Join `sampleData` into cell-level `colData`.
+    ## Join `sampleData` into cell-level `colData`.
     if (length(nrow(sampleData)) == 1L) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
     } else {
@@ -209,8 +209,8 @@ Chromium <- function(  # nolint
         )
     }
     
-    # Metadata -----------------------------------------------------------------
-    # Interesting groups.
+    ## Metadata -----------------------------------------------------------------
+    ## Interesting groups.
     interestingGroups <- camel(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     
@@ -227,13 +227,13 @@ Chromium <- function(  # nolint
         umiType = umiType,
         allSamples = allSamples,
         lanes = lanes,
-        # cellranger-specific --------------------------------------------------
+        ## cellranger-specific --------------------------------------------------
         refdataDir = refdataDir,
         refJSON = refJSON,
         call = match.call()
     )
     
-    # Return -------------------------------------------------------------------
+    ## Return -------------------------------------------------------------------
     .new.Chromium(
         assays = list(counts = counts),
         rowRanges = rowRanges,

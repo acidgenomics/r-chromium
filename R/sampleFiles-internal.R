@@ -1,4 +1,4 @@
-# Get the MEX sparse matrix or HDF5 files inside the upload directory.
+## Get the MEX sparse matrix or HDF5 files inside the upload directory.
 .sampleFiles <-  # nolint
     function(
         dir,
@@ -11,7 +11,7 @@
         )
         format <- match.arg(format)
 
-        # Look for simple upload structure.
+        ## Look for simple upload structure.
         if ("matrix.mtx" %in% sort(list.files(dir))) {
             message("Simple mode enabled.")
             file <- file.path(dir, "matrix.mtx")
@@ -22,7 +22,7 @@
         subdirs <- list.dirs(dir, recursive = FALSE)
         assert(isNonEmpty(subdirs))
 
-        # Sample directories must contain `outs/` subdirectory.
+        ## Sample directories must contain `outs/` subdirectory.
         hasOuts <- vapply(
             X = subdirs,
             FUN = function(dir) {
@@ -40,15 +40,15 @@
         }
 
         if (format == "mtx") {
-            # We need to parse the subdirs, which contain the sample matrix
-            # nested in a genome build directory (e.g. GRCh38, hg19).
+            ## We need to parse the subdirs, which contain the sample matrix
+            ## nested in a genome build directory (e.g. GRCh38, hg19).
             subdirs <- file.path(
                 subdirs,
                 "outs",
                 paste0(prefix, "_gene_bc_matrices")
             )
             assert(allAreDirectories(subdirs))
-            # Get the genome build from the first sample directory.
+            ## Get the genome build from the first sample directory.
             genomeBuild <- list.dirs(
                 path = subdirs[[1L]],
                 full.names = FALSE,
