@@ -1,7 +1,9 @@
-#' Import Cell Ranger HDF5 count matrix
+#' Import Cell Ranger count matrix from HDF5 file
 #' 
 #' @note Updated 2019-07-31.
 #' @export
+#' 
+#' @inheritParams basejump::params
 #' 
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
 #' 
@@ -9,13 +11,13 @@
 #'   Cell barcodes in the columns, features (i.e. genes) in the rows.
 #'   
 #' @examples
-#' ## > x <- importHDF5Matrix(file = "filtered_feature_bc_matrix.h5")
+#' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
-importHDF5Matrix <-  # nolint
+importCountsHDF5 <-  # nolint
     function(file) {
         assert(
             isAFile(file),
-            grepl(pattern = "\\.h5", x = file, ignore.case = TRUE)
+            grepl(pattern = "\\.H5", x = file, ignore.case = TRUE)
         )
         
         name <- names(h5dump(file, load = FALSE))
