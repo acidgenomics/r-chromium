@@ -38,7 +38,8 @@ NULL
 
 
 
-extract.Chromium <-  # nolint
+## Updated 2019-08-01.
+`extract,Chromium` <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
@@ -131,5 +132,5 @@ setMethod(
         j = "ANY",
         drop = "ANY"
     ),
-    definition = extract.Chromium
+    definition = `extract,Chromium`
 )

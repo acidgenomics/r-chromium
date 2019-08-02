@@ -1,24 +1,71 @@
-#' @rdname Chromium-class
+## FIXME Add support for single sample mode.
+## FIXME Consider moving calculate metrics to basejump?
+## Make calculateMetrics an S4 generic...
+## FIXME Consider using HDF5Array here instead
+
+## FIXME Check for single genome.
+
+
+
+#' @rdname CellRangerRNASeq-class
 #' @export
 #'
 #' @details
 #' Read [10x Genomics Cell Ranger](https://www.10xgenomics.com/software/) output
 #' for a Chromium data set into a `SingleCellExperiment` object.
 #'
-#' @section Directory structure:
+#' @section Directory structure for multiple samples:
 #' 
 #' Cell Ranger can vary in its output directory structure, but we're requiring a
-#' single, consistent directory structure for all datasets, even those that only
-#' contain a single sample:
+#' single, consistent directory structure for datasets containing multiple
+#' samples that have not been aggregated into a single matrix with `aggr`.
+#'
+#' Cell Ranger v3 output:
+#' 
+#' \preformatted{
+#' | <dir>/
+#' |-- <sampleName>/
+#' |---- outs/
+#' |------ filtered_feature_bc_matrix/
+#' |-------- barcodes.tsv.gz
+#' |-------- features.tsv.gz
+#' |-------- matrix.mtx.gz
+#' |------ filtered_feature_bc_matrix.h5
+#' |------ metrics_summary.csv
+#' |------ molecule_info.h5
+#' |------ possorted_genome_bam.bam
+#' |------ possorted_genome_bam.bam.bai
+#' |------ raw_feature_bc_matrix/
+#' |-------- barcodes.tsv.gz
+#' |-------- features.tsv.gz
+#' |-------- matrix.mtx.gz
+#' |------ raw_feature_bc_matrix.h5
+#' |------ web_summary.html
+#' )
+#' }
+#'
+#' Cell Ranger v2 output:
 #'
 #' \preformatted{
-#' file.path(
-#'     "<dir>",
-#'     "<sampleName>",
-#'     "outs",
-#'     "filtered_gene_bc_matrices*",
-#'     "<genomeBuild>",
-#'     "matrix.mtx"
+#' | <dir>/
+#' |-- <sampleName>/
+#' |---- outs/
+#' |------ filtered_gene_bc_matrices/
+#' |-------- <genomeBuild>/
+#' |---------- barcodes.tsv
+#' |---------- genes.tsv
+#' |---------- matrix.mtx
+#' |------ filtered_gene_bc_matrices_h5.h5
+#' |------ metrics_summary.csv
+#' |------ molecule_info.h5
+#' |------ possorted_genome_bam.bam
+#' |------ possorted_genome_bam.bam.bai
+#' |------ raw_gene_bc_matrices/
+#' |-------- <genomeBuild>/
+#' |---------- barcodes.tsv
+#' |---------- genes.tsv
+#' |---------- matrix.mtx
+#' |------ raw_gene_bc_matrices_h5.h5
 #' )
 #' }
 #'
@@ -38,29 +85,27 @@
 #' match, due to deprecation in the current Ensembl release.
 #'
 #' @author Michael Steinbaugh
+#' @note Updated 2019-08-01.
 #' @export
+#' 
 #' @inheritParams basejump::params
-#'
 #' @param dir `character(1)`.
 #'   Path to Cell Ranger output directory (final upload). This directory path
 #'   must contain `filtered_gene_bc_matrices*` as a child directory.
 #' @param filtered `logical(1)`.
 #'   Use filtered (recommended) or raw counts. Note that raw counts still
 #'   contain only whitelisted cellular barcodes.
-#' @param format `character(1)`.
-#'   Output format, either MatrixMarket ("`mtx`") or HDF5 ("`hdf5`").
 #' @param refdataDir `character(1)` or `NULL`.
 #'   Directory path to Cell Ranger reference annotation data.
 #'
-#' @return `Chromium`.
+#' @return `CellRanger`.
 #'
 #' @examples
 #' dir <- system.file("extdata/cellranger", package = "Chromium")
-#' x <- Chromium(dir)
+#' x <- CellRangerRNASeq(dir)
 #' print(x)
-Chromium <- function(  # nolint
+CellRangerRNASeq <- function(
     dir,
-    format = c("mtx", "hdf5"),
     filtered = TRUE,
     sampleMetadataFile = NULL,
     organism = NULL,
@@ -86,22 +131,23 @@ Chromium <- function(  # nolint
         isCharacter(interestingGroups)
     )
     dir <- realpath(dir)
-    format <- match.arg(format)
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
-    
-    pipeline <- "cellranger"
     level <- "genes"
-    umiType <- "chromium"
     
-    ## Sample files -------------------------------------------------------------
-    sampleFiles <- .sampleFiles(dir = dir, format = format, filtered = filtered)
+    ## Sample files ------------------------------------------------------------
+    ## FIXME Handle the sample format (HDF5, MTX) automatically here instead.
+    sampleFiles <- .sampleFiles(
+        dir = dir,
+        format = format,
+        filtered = filtered
+    )
     
-    ## Sequencing lanes ---------------------------------------------------------
+    ## Sequencing lanes --------------------------------------------------------
     lanes <- detectLanes(sampleFiles)
     
-    ## Sample metadata ----------------------------------------------------------
+    ## Sample metadata ---------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
     
@@ -116,10 +162,11 @@ Chromium <- function(  # nolint
         }
     }
     
-    ## Counts -------------------------------------------------------------------
+    ## Counts ------------------------------------------------------------------
+    ## FIXME Rethink this approach.
     counts <- .import(sampleFiles)
     
-    ## Row data -----------------------------------------------------------------
+    ## Row data ----------------------------------------------------------------
     refJSON <- NULL
     
     ## Prepare gene annotations as GRanges.
@@ -149,8 +196,8 @@ Chromium <- function(  # nolint
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
-        ## in the refdata directory. It will also drop genes that are now dead in
-        ## the current Ensembl release. Don't warn about old Ensembl release
+        ## in the refdata directory. It will also drop genes that are now dead
+        ## in the current Ensembl release. Don't warn about old Ensembl release
         ## version.
         message("Using makeGRangesFromEnsembl() for annotations.")
         rowRanges <- makeGRangesFromEnsembl(
@@ -171,7 +218,7 @@ Chromium <- function(  # nolint
     }
     assert(is(rowRanges, "GRanges"))
     
-    ## Column data --------------------------------------------------------------
+    ## Column data -------------------------------------------------------------
     ## Automatic sample metadata.
     if (is.null(sampleData)) {
         ## Define the grep pattern to use for sample ID extraction.
@@ -209,14 +256,13 @@ Chromium <- function(  # nolint
         )
     }
     
-    ## Metadata -----------------------------------------------------------------
+    ## Metadata ----------------------------------------------------------------
     ## Interesting groups.
     interestingGroups <- camel(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     
     metadata <- list(
         version = packageVersion,
-        pipeline = pipeline,
         level = level,
         dir = dir,
         sampleMetadataFile = as.character(sampleMetadataFile),
@@ -224,17 +270,18 @@ Chromium <- function(  # nolint
         organism = organism,
         genomeBuild = as.character(genomeBuild),
         ensemblRelease = as.integer(ensemblRelease),
-        umiType = umiType,
         allSamples = allSamples,
         lanes = lanes,
-        ## cellranger-specific --------------------------------------------------
+        pipeline = "cellranger",
+        umiType = "chromium",
+        ## cellranger-specific -------------------------------------------------
         refdataDir = refdataDir,
         refJSON = refJSON,
         call = match.call()
     )
     
-    ## Return -------------------------------------------------------------------
-    .new.Chromium(
+    ## Return ------------------------------------------------------------------
+    `new,CellRangerRNASeq`(
         assays = list(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
@@ -246,7 +293,8 @@ Chromium <- function(  # nolint
 
 
 
-.new.Chromium <-  # nolint
+## Updated 2019-08-01.
+`new,CellRangerRNASeq` <-  # nolint
     function(...) {
-        new(Class = "Chromium", makeSingleCellExperiment(...))
+        new(Class = "CellRangerRNASeq", makeSingleCellExperiment(...))
     }

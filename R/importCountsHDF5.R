@@ -3,8 +3,6 @@
 #' @note Updated 2019-07-31.
 #' @export
 #' 
-#' @inheritParams basejump::params
-#' 
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
 #' 
 #' @return `sparseMatrix`.
@@ -20,11 +18,11 @@ importCountsHDF5 <-  # nolint
             grepl(pattern = "\\.H5", x = file, ignore.case = TRUE)
         )
         
-        name <- names(h5dump(file, load = FALSE))
-        assert(isString(name))
+        names <- names(h5dump(file, load = FALSE))
+        assert(isString(names))
         
         ## Import HDF5 data.
-        h5 <- h5read(file = file, name = name)
+        h5 <- h5read(file = file, name = names[[1L]])
         
         ## v3 names:
         ## - "barcodes"
