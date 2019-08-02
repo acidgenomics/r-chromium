@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics single-cell RNA-seq data.
-Version: 0.0.3
-Date: 2019-05-08
+Version: 0.0.4
+Date: 2019-07-31
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -24,11 +24,11 @@ LazyData: false
 Depends:
     R (>= 3.5),
     SingleCellExperiment,
-    basejump (>= 0.10.8)
+    basejump (>= 0.11.3)
 Imports:
-    bcbioBase (>= 0.6.3),
-    bcbioSingleCell (>= 0.3.13),
-    goalie (>= 0.2.16),
+    bcbioBase (>= 0.6.7),
+    bcbioSingleCell (>= 0.3.18),
+    goalie (>= 0.3),
     SummarizedExperiment,
     S4Vectors,
     rhdf5,
@@ -45,10 +45,10 @@ Suggests:
     roxygen2,
     testthat
 Remotes:
-    steinbaugh/basejump,
-    steinbaugh/bcbioBase,
-    steinbaugh/bcbioSingleCell,
-    steinbaugh/goalie
+    acidgenomics/basejump,
+    acidgenomics/goalie,
+    hbc/bcbioBase,
+    hbc/bcbioSingleCell
 biocViews:
     DataImport,
     RNASeq,

@@ -1,25 +1,29 @@
 #' Import Cell Ranger count matrix from MTX file
 #' 
-#' Matrix Market Exchange (MEX/MTX) format.
-#' 
-#' @section Required files:
-#' 
-#' - `barcodes.tsv.gz`: Cell barcodes.
-#' - `features.tsv.gz`: Feature identifiers.
-#'      Note that CellRanger v2 uses "genes" instead of "features".
-#' - `matrix.mtx.gz`: Count matrix.
-#' 
-#' @note Data import using HDF5 file is recommended over this approach.
+#' @note Data import using HDF5 file is now recommended over this approach.
 #' @note Updated 2019-08-01.
 #' @export
 #' 
+#' @section Matrix Market Exchange (MEX/MTX) format:
+#' 
+#' Loading from this matrix requires sidecar files containing cell barcodes and
+#' feature (i.e. gene) identifiers.
+#' 
+#' Cell Ranger v3:
+#' 
+#' - `barcodes.tsv.gz`: Cell barcodes.
+#' - `features.tsv.gz`: Feature identifiers.
+#' 
+#' Cell Ranger v2:
+#' 
+#' - `barcodes.tsv`: Cell barcodes.
+#' - `genes.tsv`: Gene identifiers.
+#' 
 #' @inheritParams basejump::params
 #' 
-#' @return `sparseMatrix`.
-#'   Cell barcodes in the columns, features (i.e. genes) in the rows.
-#' 
 #' @examples
-#' ## > importCountsMTX(file = "matrix.mtx.gz")
+#' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
+#' ## > dim(x)
 importCountsMTX <-  # nolint
     function(file) {
         assert(
