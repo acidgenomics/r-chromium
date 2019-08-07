@@ -1,17 +1,79 @@
-#' Import counts from either HDF5 or MTX file.
+#' Import counts from either HDF5 or MTX files.
 #' @note Updated 2019-08-01.
 #' @noRd
-.importCounts <- function(file, ...) {
-    assert(isAFile(file))
-    if (grepl("\\.H5", file, ignore.case = TRUE)) {
-        fun <- .importCountsHDF5
-    } else if (grepl("\\.MTX", file, ignore.case = TRUE)) {
-        fun <- .importCountsMTX
+.importCounts <- function(
+    sampleDirs,
+    filtered,
+    BPPARAM = BiocParallel::SerialParam()
+) {
+    assert(
+        allAreDirectories(sampleDirs),
+        hasValidNames(sampleDirs),
+        isFlag(filtered)
+    )
+    matrixFiles <- unlist(bplapply(
+        X = sampleDirs,
+        FUN = .findCountMatrix,
+        filtered = filtered,
+        BPPARAM = BPPARAM
+    ))
+    assert(
+        hasLength(unique(basename(matrixFiles)), n = 1L),
+        hasValidNames(matrixFiles)
+    )
+    if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
+        fun <- .importCountsFromHDF5
+    } else if (all(grepl("\\.MTX", matrixFiles, ignore.case = TRUE))) {
+        fun <- .importCountsFromMTX
     } else {
-        stop(sprintf("Failed to import '%s'.", file))
+        stop(sprintf("Unexpected import failure.", file))
     }
-    fun(file, ...)
+    message(sprintf(
+        "Importing counts from '%s' file.",
+        basename(matrixFiles[[1L]])
+    ))
+    ## This step seems to have issues when parsing HDF5 files in parallel
+    ## on an Azure Files mount over CIFS.
+    list <- bpmapply(
+        sampleID = names(matrixFiles),
+        file = matrixFile,
+        FUN = function(sampleID, file) {
+            counts <- fun(file)
+            ## Strip index when all barcodes end with "-1".
+            if (all(grepl("-1$", colnames(counts)))) {
+                colnames(counts) <- sub("-1", "", colnames(counts))
+            }
+            # Now move the multiplexed index name/number to the beginning,
+            # for more logical sorting and consistency with bcbioSingleCell.
+            colnames(counts) <- sub(
+                pattern = "^([ACGT]+)-(.+)$",
+                replacement = "\\2-\\1",
+                x = colnames(counts)
+            )
+            # Prefix cell barcodes with sample identifier when we're loading
+            # counts from multiple samples.
+            if (
+                length(matrixFiles) > 1L ||
+                grepl("^([[:digit:]]+)-([ACGT]+)$", colnames(counts))
+            ) {
+                colnames(counts) <- paste(sampleID, colnames(counts), sep = "-")
+            }
+            ## Ensure names are valid. Don't sanitize the gene identifier rows,
+            ## which can contain some invalid names due to gene symbols. This is
+            ## an edge case that happens with non-standard genomes and/or
+            ## spike-in names.
+            colnames(counts) <- makeNames(colnames(counts))
+            counts
+        },
+        SIMPLIFY = FALSE,
+        USE.NAMES = TRUE,
+        BPPARAM = BPPARAM
+    )
+    # Bind the matrices.
+    do.call(what = cbind, args = list)
 }
+
+
 
 
 
@@ -28,7 +90,7 @@
 #' @examples
 #' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
-.importCountsHDF5 <-  # nolint
+.importCountsFromHDF5 <-  # nolint
     function(file) {
         assert(
             isAFile(file),
@@ -112,7 +174,7 @@
 #' @examples
 #' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
-.importCountsMTX <-  # nolint
+.importCountsFromMTX <-  # nolint
     function(file) {
         assert(
             isAFile(file),
