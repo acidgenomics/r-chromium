@@ -24,31 +24,30 @@
 #'   
 #'   Doesn't apply if there's only a single matrix file in the directory.
 #' 
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-07.
 #' @noRd
 .findCountMatrix <- function(dir, filtered = TRUE) {
     assert(
         isADirectory(dir),
         isFlag(filtered)
     )
-    path <- realpath(dir)
+    dir <- realpath(dir)
     
     ## Simple mode -------------------------------------------------------------
     ## For minimal examples and data downloaded from 10X website.
-    if (!dir.exists(file.path(path, "outs"))) {
+    if (!dir.exists(file.path(dir, "outs"))) {
         file <- list.files(
-            path = path,
+            path = dir,
             pattern = "matrix\\.(h5|mtx)(\\.gz)?",
             full.names = TRUE
         )
-        assert(isAFile(file))
-        return(file)
+        if (isAFile(file)) return(file)
     }
     
     ## Standard Cell Ranger output ---------------------------------------------
     ## Recurse into `outs/` directory by default.
-    path <- file.path(path, "outs")
-    assert(isADirectory(path))
+    dir <- file.path(dir, "outs")
+    assert(isADirectory(dir))
     
     if (isTRUE(filtered)) {
         prefix <- "filtered"
@@ -57,7 +56,7 @@
     }
     
     files <- list.files(
-        path = path,
+        path = dir,
         pattern = paste0("^", prefix, "_"),
         recursive = FALSE,
         full.names = FALSE
@@ -84,32 +83,32 @@
     
     ## Currently preferring HDF5 over MTX.
     if (isTRUE(
-        file.exists(file.path(path, paste0(filestem, ".h5")))
+        file.exists(file.path(dir, paste0(filestem, ".h5")))
     )) {
         ## v3 HDF5
-        file <- file.path(path, paste0(filestem, ".h5"))
+        file <- file.path(dir, paste0(filestem, ".h5"))
     } else if (isTRUE(
-        file.exists(file.path(path, paste0(filestem, "_h5.h5")))
+        file.exists(file.path(dir, paste0(filestem, "_h5.h5")))
     )) {
         ## v2 HDF5
-        file <- file.path(path, paste0(filestem, "_h5.h5"))
+        file <- file.path(dir, paste0(filestem, "_h5.h5"))
     } else if (isTRUE(
-        file.exists(file.path(path, filestem, "matrix.mtx.gz"))
+        file.exists(file.path(dir, filestem, "matrix.mtx.gz"))
     )) {
         ## v3 MTX
-        file <- file.path(path, filestem, "matrix.mtx.gz")
+        file <- file.path(dir, filestem, "matrix.mtx.gz")
     } else if (isTRUE(
-        dir.exists(file.path(path, filestem))
+        dir.exists(file.path(dir, filestem))
     )) {
         ## v2 MTX
         ## Get the genome build from the first sample directory.
         genomeBuild <- list.dirs(
-            path = path[[1L]],
+            path = dir[[1L]],
             full.names = FALSE,
             recursive = FALSE
         )
         assert(isString(genomeBuild))
-        file <- file.path(path, genomeBuild, "matrix.mtx")
+        file <- file.path(dir, genomeBuild, "matrix.mtx")
     }
     
     assert(isAFile(file))
