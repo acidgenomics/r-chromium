@@ -2,9 +2,7 @@
 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-Toolkit for 10X Genomics single-cell RNA-seq data.
-
-🚨🚨🚨 NOT YET COMPATIBLE WITH CELLRANGER 3 🚨🚨🚨
+Toolkit for 10X Genomics Chromium single cell data.
 
 ## Installation
 
