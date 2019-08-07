@@ -3,6 +3,7 @@
 ## Make calculateMetrics an S4 generic...
 ## FIXME Consider using HDF5Array here instead
 ## FIXME Check for single genome.
+## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
 
 
 
@@ -80,12 +81,13 @@
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
-#' slotted in `rowRanges`. Otherwise, the function will attempt to use the
-#' most current annotations available from Ensembl, and some gene IDs may not
-#' match, due to deprecation in the current Ensembl release.
+#' slotted in [`rowRanges()`][SummarizedExperiment::rowRanges]. Otherwise, the
+#' function will attempt to use the most current annotations available from
+#' Ensembl, and some gene IDs may not match, due to deprecation in the current
+#' Ensembl release.
 #'
 #' @author Michael Steinbaugh
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-07.
 #' @export
 #' 
 #' @inheritParams acidroxygen::params
@@ -107,92 +109,135 @@
 CellRanger <- function(
     dir,
     filtered = TRUE,
-    sampleMetadataFile = NULL,
     organism = NULL,
     ensemblRelease = NULL,
     genomeBuild = NULL,
     refdataDir = NULL,
-    gffFile = NULL,
+    samples = NULL,
+    censorSamples = NULL,
+    sampleMetadataFile = NULL,
     transgeneNames = NULL,
-    spikeNames = NULL,
-    interestingGroups = "sampleName"
+    spikeNames = NULL
 ) {
     assert(
         isADirectory(dir),
         isFlag(filtered),
-        isAFile(sampleMetadataFile, nullOK = TRUE),
         isString(organism, nullOK = TRUE),
         isInt(ensemblRelease, nullOK = TRUE),
         isString(genomeBuild, nullOK = TRUE),
         isADirectory(refdataDir, nullOK = TRUE),
-        isAFile(gffFile, nullOK = TRUE),
+        isAny(samples, classes = c("character", "NULL")),
+        isAny(censorSamples, classes = c("character", "NULL")),
+        isAFile(sampleMetadataFile, nullOK = TRUE),
         isCharacter(transgeneNames, nullOK = TRUE),
-        isCharacter(spikeNames, nullOK = TRUE),
-        isCharacter(interestingGroups)
+        isCharacter(spikeNames, nullOK = TRUE)
     )
+    level <- "genes"
+    
+    ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
-    level <- "genes"
-    
-    ## Sample files ------------------------------------------------------------
-    ## FIXME Handle the sample format (HDF5, MTX) automatically here instead.
-    sampleFiles <- .sampleFiles(
-        dir = dir,
-        format = format,
-        filtered = filtered
-    )
+    sampleDirs <- .sampleDirs(dir)
     
     ## Sequencing lanes --------------------------------------------------------
-    lanes <- detectLanes(sampleFiles)
+    lanes <- detectLanes(sampleDirs)
+    assert(
+        isInt(lanes) ||
+            identical(lanes, integer())
+    )
     
-    ## Sample metadata ---------------------------------------------------------
+    ## Samples -----------------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
     
-    if (isAFile(sampleMetadataFile)) {
-        sampleData <- readSampleData(sampleMetadataFile)
-        ## Allow sample selection by with this file.
-        if (nrow(sampleData) < length(sampleFiles)) {
-            message("Loading a subset of samples, defined by the metadata.")
-            allSamples <- FALSE
-            sampleFiles <- sampleFiles[rownames(sampleData)]
-            message(paste(length(sampleFiles), "samples matched by metadata."))
+    ## Get the sample data.
+    if (isString(sampleMetadataFile)) {
+        ## Normalize path of local file.
+        if (file.exists(sampleMetadataFile)) {
+            sampleMetadataFile <- realpath(sampleMetadataFile)
         }
+        ## Note that `readSampleData()` also supports URLs.
+        sampleData <- readSampleData(file = sampleMetadataFile, lanes = lanes)
+        assert(isSubset(rownames(sampleData), names(sampleDirs)))
+        sampleIDs <- rownames(sampleData)
+    } else {
+        sampleIDs <- names(sampleDirs)
     }
     
-    ## Counts ------------------------------------------------------------------
-    ## FIXME Rethink this approach.
-    counts <- .import(sampleFiles)
+    ## Subset the sample directories, if necessary.
+    if (is.character(samples) || is.character(censorSamples)) {
+        if (is.character(samples)) {
+            samples <- makeNames(samples)
+            assert(isSubset(samples, sampleIDs))
+            sampleIDs <- samples
+        }
+        if (is.character(censorSamples)) {
+            censorSamples <- makeNames(censorSamples)
+            assert(isSubset(censorSamples, sampleIDs))
+            sampleIDs <- setdiff(sampleIDs, censorSamples)
+        }
+        assert(
+            isCharacter(sampleIDs),
+            isSubset(sampleIDs, names(sampleDirs))
+        )
+    }
+    assert(
+        hasLength(sampleIDs),
+        isSubset(sampleIDs, names(sampleDirs)),
+        validNames(sampleIDs)
+    )
+    if (length(sampleIDs) < length(sampleDirs)) {
+        sampleDirs <- sampleDirs[sampleIDs]
+        message(sprintf(
+            fmt = "Loading a subset of samples:\n%s",
+            str_trunc(toString(basename(sampleDirs)), width = 80L)
+        ))
+        ## Subset the user-defined sample metadata to match, if necessary.
+        if (!is.null(sampleData)) {
+            keep <- rownames(sampleData) %in% sampleIDs
+            sampleData <- sampleData[keep, , drop = FALSE]
+        }
+        allSamples <- FALSE
+    }
     
+    ## Assays ------------------------------------------------------------------
+    counts <- .importCounts(sampleDirs = sampleDirs, filtered = filtered)
+    assays <- SimpleList(counts = counts)
+
     ## Row data ----------------------------------------------------------------
     refJSON <- NULL
     
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
-        message("Using 10X Genomics reference data for annotations.")
-        message(paste("refdataDir:", refdataDir))
+        message(sprintf(
+            fmt = paste0(
+                "Using 10X Genomics reference data ",
+                "for feature annotations: %s"
+            ),
+            basename(refdataDir)
+        ))
         ## JSON data.
         refJSONFile <- file.path(refdataDir, "reference.json")
-        assert(allAreFiles(refJSONFile))
+        assert(isAFile(refJSONFile))
         refJSON <- import(refJSONFile)
         ## Get the genome build from JSON metadata.
         genomeBuild <- unlist(refJSON[["genomes"]])
         assert(isString(genomeBuild))
+        ## Get the Ensembl release version from JSON metadata.
+        ## e.g. "Homo_sapiens.GRCh38.93.filtered.gtf"
+        ensemblRelease <- refJSON %>%
+            .[["input_gtf_files"]] %>%
+            .[[1L]] %>%
+            str_split("\\.", simplify = TRUE) %>%
+            .[1L, 3L] %>%
+            as.integer()
+        assert(isInt(ensemblRelease))
         ## Convert the GTF file to GRanges.
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
         assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
-        ## Get the Ensembl version from the GTF file name.
-        ## Example: "Homo_sapiens.GRCh37.82.filtered.gtf"
-        ensemblRelease <- gffFile %>%
-            str_split("\\.", simplify = TRUE) %>%
-            .[1L, 3L] %>%
-            as.integer()
-    } else if (isString(gffFile)) {
-        ## Note that this works with a remote URL.
-        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
@@ -219,7 +264,7 @@ CellRanger <- function(
     assert(is(rowRanges, "GRanges"))
     
     ## Column data -------------------------------------------------------------
-    ## Automatic sample metadata.
+    ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
         ## Define the grep pattern to use for sample ID extraction.
         pattern <- "^(.+)_[ACGT]+$"
@@ -236,7 +281,16 @@ CellRanger <- function(
     }
     
     ## Always prefilter, removing very low quality cells with no UMIs or genes.
-    colData <- calculateMetrics(
+    ## FIXME Move this code to basejump to avoid bcbioSingleCell dependency.
+    
+    ## FIXME Seeing this warning pop up:
+    ## Warning in NSBS(i, x, exact = exact, strict.upper.bound = !allow.append,
+    ## : subscript is an array, passing it thru as.vector() first
+    ## Calls: <Anonymous> ... extractROWS -> normalizeSingleBracketSubscript ->
+    ## NSBS -> NSBS
+    ## FIXME This error is only happening when we pass in rowRanges.
+    
+    colData <- bcbioSingleCell::calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
@@ -257,16 +311,11 @@ CellRanger <- function(
     }
     
     ## Metadata ----------------------------------------------------------------
-    ## Interesting groups.
-    interestingGroups <- camel(interestingGroups)
-    assert(isSubset(interestingGroups, colnames(sampleData)))
-    
     metadata <- list(
-        version = packageVersion,
+        version = .version,
         level = level,
         dir = dir,
         sampleMetadataFile = as.character(sampleMetadataFile),
-        interestingGroups = interestingGroups,
         organism = organism,
         genomeBuild = as.character(genomeBuild),
         ensemblRelease = as.integer(ensemblRelease),
@@ -282,7 +331,7 @@ CellRanger <- function(
     
     ## Return ------------------------------------------------------------------
     `new,CellRanger`(
-        assays = SimpleList(counts = counts),
+        assays = assays = assays,
         rowRanges = rowRanges,
         colData = colData,
         metadata = metadata,
