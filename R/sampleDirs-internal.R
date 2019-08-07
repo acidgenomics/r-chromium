@@ -13,6 +13,16 @@
 #' 
 #' @noRd
 .sampleDirs <- function(dir) {
+    ## Check for single sample mode, used for 10X example datasets.
+    if (isAFile(tryCatch(
+        expr = .findCountMatrix(dir),
+        error = function(e) NULL
+    ))) {
+        dir <- realpath(dir)
+        names(dir) <- makeNames(basename(dir))
+        return(dir)
+    }
+    
     dirs <- sort(list.dirs(path = dir, full.names = TRUE, recursive = FALSE))
     assert(hasLength(dirs))
     
@@ -25,7 +35,14 @@
     keep <- .hasSubdir(paths = dirs, name = "outs")
     assert(any(keep))
     dirs <- dirs[keep]
+    names(dirs) <- makeNames(basename(dirs))
     
     assert(allAreDirectories(dirs))
+    message(sprintf(
+        fmt = "%d %s detected:\n%s",
+        length(dirs),
+        ngettext(n = length(dirs), msg1 = "sample", msg2 = "samples"),
+        printString(names(dirs))
+    ))
     dirs
 }
