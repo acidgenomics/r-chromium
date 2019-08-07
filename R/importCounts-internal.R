@@ -109,8 +109,6 @@
 #' - `barcodes.tsv`: Cell barcodes.
 #' - `genes.tsv`: Gene identifiers.
 #' 
-#' @inheritParams basejump::params
-#' 
 #' @examples
 #' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)

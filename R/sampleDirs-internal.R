@@ -2,7 +2,8 @@
 #' 
 #' Checks for the presence of nested `SC_RNA_COUNTER_CS` directories.
 #' 
-#' Note that `aggr` returns `SC_RNA_AGGREGATOR_CS/` directory.
+#' @note `aggr` returns `SC_RNA_AGGREGATOR_CS/` directory.
+#' @note Updated 2019-08-07.
 #' 
 #' @param dir Cell Ranger output directory.
 #' 
