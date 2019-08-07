@@ -1,7 +1,7 @@
 #' @name extract
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
-#' @inheritParams basejump::params
+#' @inheritParams acidroxygen::params
 #'
 #' @description Extract genes by row and cells by column.
 #'
@@ -16,7 +16,7 @@
 #' cells not kept in the matrix will be dropped in favor of the `nCount` column
 #' of `colData`.
 #'
-#' @return `Chromium`.
+#' @return `CellRanger`.
 #'
 #' @examples
 #' data(pbmc)
@@ -38,8 +38,8 @@ NULL
 
 
 
-## Updated 2019-08-01.
-`extract,Chromium` <-  # nolint
+## Updated 2019-08-07.
+`extract,CellRanger` <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
@@ -127,10 +127,10 @@ NULL
 setMethod(
     f = "[",
     signature = signature(
-        x = "Chromium",
+        x = "CellRanger",
         i = "ANY",
         j = "ANY",
         drop = "ANY"
     ),
-    definition = `extract,Chromium`
+    definition = `extract,CellRanger`
 )
