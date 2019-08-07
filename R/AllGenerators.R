@@ -6,6 +6,8 @@
 ## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
 ## FIXME Add `isBPPARAM to goalie.
 
+## FIXME Ready to import calculateMetrics from basejump.
+
 
 
 #' @inherit CellRanger-class title description
@@ -305,8 +307,7 @@ CellRanger <- function(
     }
     
     ## Always prefilter, removing very low quality cells with no UMIs or genes.
-    ## FIXME Move this code to basejump to avoid bcbioSingleCell dependency.
-    colData <- bcbioSingleCell::calculateMetrics(
+    colData <- calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
