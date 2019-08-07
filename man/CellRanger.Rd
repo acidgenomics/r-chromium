@@ -5,9 +5,10 @@
 \title{Cell Ranger RNA-seq data set}
 \usage{
 CellRanger(dir, filtered = TRUE, organism = NULL,
-  ensemblRelease = NULL, genomeBuild = NULL, refdataDir = NULL,
-  samples = NULL, censorSamples = NULL, sampleMetadataFile = NULL,
-  transgeneNames = NULL, spikeNames = NULL)
+  ensemblRelease = NULL, genomeBuild = NULL, gffFile = NULL,
+  refdataDir = NULL, samples = NULL, censorSamples = NULL,
+  sampleMetadataFile = NULL, transgeneNames = NULL,
+  spikeNames = NULL, BPPARAM = BiocParallel::SerialParam())
 }
 \arguments{
 \item{dir}{\code{character(1)}.
@@ -33,6 +34,10 @@ Ensembl genome build assembly name (e.g. \code{"GRCh38"}). If set \code{NULL},
 defaults to the most recent build available.
 Note: don't pass in UCSC build IDs (e.g. \code{"hg38"}).}
 
+\item{gffFile}{\code{character(1)}.
+GFF/GTF (General Feature Format) file.
+Generally, we recommend using GTF (GFFv2) instead of GFFv3.}
+
 \item{refdataDir}{\code{character(1)} or \code{NULL}.
 Directory path to Cell Ranger reference annotation data.}
 
@@ -52,6 +57,15 @@ Vector indicating which assay rows denote transgenes (e.g. EGFP, TDTOMATO).}
 
 \item{spikeNames}{\code{character}.
 Vector indicating which assay rows denote spike-in sequences (e.g. ERCCs).}
+
+\item{BPPARAM}{\code{bpparamClass}.
+BiocParallel parameter to specify the desired processor configuration.\cr
+We recommend using one of the following:
+\itemize{
+\item \link[BiocParallel:bpparam]{bpparam}.
+\item \link[BiocParallel:SerialParam]{SerialParam}.
+\item \link[BiocParallel:MulticoreParam]{MulticoreParam}.
+}}
 }
 \value{
 \code{CellRanger}.

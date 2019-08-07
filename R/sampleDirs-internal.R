@@ -27,17 +27,29 @@
     assert(hasLength(dirs))
     
     ## Must contain `SC_RNA_COUNTER_CS` subdirectory.
-    keep <- .hasSubdir(paths = dirs, name = "SC_RNA_COUNTER_CS")
-    assert(any(keep))
+    subdir <- "SC_RNA_COUNTER_CS"
+    keep <- .hasSubdir(paths = dirs, name = subdir)
+    if (!any(keep)) {
+        stop(sprintf(
+            fmt = "No sample subdirectories containing '%s'.",
+            subdir
+        ))
+    }
     dirs <- dirs[keep]
     
     ## Must contain `outs` subdirectory.
-    keep <- .hasSubdir(paths = dirs, name = "outs")
-    assert(any(keep))
+    subdir <- "outs"
+    keep <- .hasSubdir(paths = dirs, name = subdir)
+    if (!any(keep)) {
+        stop(sprintf(
+            fmt = "No sample subdirectories containing '%s'.",
+            subdir
+        ))
+    }
     dirs <- dirs[keep]
-    names(dirs) <- makeNames(basename(dirs))
     
     assert(allAreDirectories(dirs))
+    names(dirs) <- makeNames(basename(dirs))
     message(sprintf(
         fmt = "%d %s detected:\n%s",
         length(dirs),

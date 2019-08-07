@@ -4,6 +4,7 @@
 ## FIXME Consider using HDF5Array here instead
 ## FIXME Check for single genome.
 ## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
+## FIXME Add `isBPPARAM to goalie.
 
 
 
