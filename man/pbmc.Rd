@@ -4,7 +4,7 @@
 \name{pbmc}
 \alias{pbmc}
 \title{10X Genomics Chromium example data set}
-\format{An object of class \code{Chromium} with 500 rows and 100 columns.}
+\format{An object of class \code{Chromium} of length 1.}
 \usage{
 pbmc
 }

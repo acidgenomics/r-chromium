@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics single-cell RNA-seq data.
-Version: 0.0.4
-Date: 2019-07-31
+Version: 0.1.0
+Date: 2019-08-07
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
