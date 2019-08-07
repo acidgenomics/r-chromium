@@ -11,8 +11,8 @@
 #' @importFrom bcbioSingleCell calculateMetrics
 #' @importFrom dplyr mutate_if pull
 #' @importFrom goalie allAreDirectories allAreFiles assert hasLength hasNames
-#'   hasValidDimnames hasValidNames isADirectory isAFile isCharacter isFlag
-#'   isInt isNonEmpty isScalar isString isSubset validNames
+#'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
+#'   isFlag isInt isNonEmpty isScalar isString isSubset validNames
 #' @importFrom magrittr %>%
 #' @importFrom methods as is new setClass setMethod setValidity validObject
 #' @importFrom readr read_lines read_tsv

@@ -4,6 +4,8 @@
 ## - readSampleData
 ## Look for `requireNamespace` calls and improve...
 
+## FIXME Need to slot which version of Chromium in the object.
+
 
 
 #' Chromium
