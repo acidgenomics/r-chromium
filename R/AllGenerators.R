@@ -6,7 +6,7 @@
 
 
 
-#' @rdname CellRanger
+#' @inherit CellRanger-class title description
 #' @note Updated 2019-08-07.
 #' @export
 #'
@@ -88,7 +88,7 @@
 #' @note Updated 2019-08-01.
 #' @export
 #' 
-#' @inheritParams basejump::params
+#' @inheritParams acidroxygen::params
 #' @param dir `character(1)`.
 #'   Path to Cell Ranger output directory (final upload). This directory path
 #'   must contain `filtered_gene_bc_matrices*` as a child directory.
