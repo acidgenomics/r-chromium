@@ -4,7 +4,7 @@
 #' @importFrom SummarizedExperiment assays
 #' @importFrom S4Vectors SimpleList mcols
 #' @importFrom basejump camel detectLanes emptyRanges import makeDimnames
-#'   makeGRangesFromEnsembl makeGRangesFromGFF makeNames
+#'   makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames makeNames
 #'   makeSingleCellExperiment mapCellsToSamples minimalSampleData realpath
 #'   relevelColData relevelRowRanges
 #' @importFrom bcbioBase readSampleData

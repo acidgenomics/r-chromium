@@ -135,6 +135,7 @@ CellRanger <- function(
         isAFile(sampleMetadataFile, nullOK = TRUE),
         isCharacter(transgeneNames, nullOK = TRUE),
         isCharacter(spikeNames, nullOK = TRUE)
+        ## FIXME Add assert for BPPARAM.
     )
     level <- "genes"
     
@@ -222,6 +223,7 @@ CellRanger <- function(
         matrixFiles = matrixFiles,
         BPPARAM = BPPARAM
     )
+    assert(hasValidDimnames(counts))
     assays <- SimpleList(counts = counts)
 
     ## Row data ----------------------------------------------------------------
@@ -304,14 +306,6 @@ CellRanger <- function(
     
     ## Always prefilter, removing very low quality cells with no UMIs or genes.
     ## FIXME Move this code to basejump to avoid bcbioSingleCell dependency.
-    
-    ## FIXME Seeing this warning pop up:
-    ## Warning in NSBS(i, x, exact = exact, strict.upper.bound = !allow.append,
-    ## : subscript is an array, passing it thru as.vector() first
-    ## Calls: <Anonymous> ... extractROWS -> normalizeSingleBracketSubscript ->
-    ## NSBS -> NSBS
-    ## FIXME This error is only happening when we pass in rowRanges.
-    
     colData <- bcbioSingleCell::calculateMetrics(
         counts = counts,
         rowRanges = rowRanges,
@@ -323,7 +317,7 @@ CellRanger <- function(
     counts <- counts[, rownames(colData), drop = FALSE]
     
     ## Join `sampleData` into cell-level `colData`.
-    if (length(nrow(sampleData)) == 1L) {
+    if (nrow(sampleData) == 1L) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
     } else {
         colData[["sampleID"]] <- mapCellsToSamples(
