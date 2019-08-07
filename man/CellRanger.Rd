@@ -4,10 +4,10 @@
 \alias{CellRanger}
 \title{Cell Ranger RNA-seq data set}
 \usage{
-CellRanger(dir, filtered = TRUE, sampleMetadataFile = NULL,
-  organism = NULL, ensemblRelease = NULL, genomeBuild = NULL,
-  refdataDir = NULL, gffFile = NULL, transgeneNames = NULL,
-  spikeNames = NULL, interestingGroups = "sampleName")
+CellRanger(dir, filtered = TRUE, organism = NULL,
+  ensemblRelease = NULL, genomeBuild = NULL, refdataDir = NULL,
+  samples = NULL, censorSamples = NULL, sampleMetadataFile = NULL,
+  transgeneNames = NULL, spikeNames = NULL)
 }
 \arguments{
 \item{dir}{\code{character(1)}.
@@ -17,11 +17,6 @@ must contain \code{filtered_gene_bc_matrices*} as a child directory.}
 \item{filtered}{\code{logical(1)}.
 Use filtered (recommended) or raw counts. Note that raw counts still
 contain only whitelisted cellular barcodes.}
-
-\item{sampleMetadataFile}{\code{character(1)}.
-Sample metadata file path. CSV or TSV is preferred, but Excel worksheets
-are also supported. Check the documentation for conventions and required
-columns.}
 
 \item{organism}{\code{character(1)}.
 Full Latin organism name (e.g. "\code{Homo sapiens}").}
@@ -41,19 +36,22 @@ Note: don't pass in UCSC build IDs (e.g. \code{"hg38"}).}
 \item{refdataDir}{\code{character(1)} or \code{NULL}.
 Directory path to Cell Ranger reference annotation data.}
 
-\item{gffFile}{\code{character(1)}.
-GFF/GTF (General Feature Format) file.
-Generally, we recommend using GTF (GFFv2) instead of GFFv3.}
+\item{samples}{\code{character}.
+Sample identifiers.}
+
+\item{censorSamples}{\code{character}.
+Specify a subset of samples to censor.}
+
+\item{sampleMetadataFile}{\code{character(1)}.
+Sample metadata file path. CSV or TSV is preferred, but Excel worksheets
+are also supported. Check the documentation for conventions and required
+columns.}
 
 \item{transgeneNames}{\code{character}.
 Vector indicating which assay rows denote transgenes (e.g. EGFP, TDTOMATO).}
 
 \item{spikeNames}{\code{character}.
 Vector indicating which assay rows denote spike-in sequences (e.g. ERCCs).}
-
-\item{interestingGroups}{\code{character}.
-Groups of interest to use for visualization.
-Corresponds to factors describing the columns of the object.}
 }
 \value{
 \code{CellRanger}.
@@ -68,7 +66,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Updated 2019-08-07.
 
-Updated 2019-08-01.
+Updated 2019-08-07.
 }
 \section{Directory structure for multiple samples}{
 
@@ -141,9 +139,10 @@ minimal sample data will be used, based on the directory names.
 We strongly recommend supplying the corresponding reference data required for
 Cell Ranger with the \code{refdataDir} argument. It will convert the gene
 annotations defined in the GTF file into a \code{GRanges} object, which get
-slotted in \code{rowRanges}. Otherwise, the function will attempt to use the
-most current annotations available from Ensembl, and some gene IDs may not
-match, due to deprecation in the current Ensembl release.
+slotted in \code{\link[SummarizedExperiment:rowRanges]{rowRanges()}}. Otherwise, the
+function will attempt to use the most current annotations available from
+Ensembl, and some gene IDs may not match, due to deprecation in the current
+Ensembl release.
 }
 
 \examples{
