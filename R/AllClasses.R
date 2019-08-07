@@ -32,9 +32,12 @@ setValidity(
 #' showClass("CellRangerATAC")
 setClass(
     Class = "CellRangerATAC",
-    contains = "SingleCellExperiment",
-    validity = function(object) {
+    contains = "SingleCellExperiment"
+)
+setValidity(
+    Class = "CellRanger",
+    method = function(object) {
         ## FIXME
-        TRUE
+        stop("IN PROGRESS")
     }
 )
