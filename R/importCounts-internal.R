@@ -46,11 +46,9 @@
             ) {
                 colnames(counts) <- paste(sampleID, colnames(counts), sep = "-")
             }
-            ## Ensure names are valid. Don't sanitize the gene identifier rows,
-            ## which can contain some invalid names due to gene symbols. This is
-            ## an edge case that happens with non-standard genomes and/or
-            ## spike-in names.
-            colnames(counts) <- makeNames(colnames(counts))
+            ## Ensure dimnames are valid. Note that this may sanitize gene names
+            ## for some model systems, and or transgenes.
+            counts <- makeDimnames(counts)
             counts
         },
         SIMPLIFY = FALSE,
