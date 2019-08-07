@@ -3,25 +3,30 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
 ## 2019-01-15
 
+library(usethis)
 library(pryr)
 library(tidyverse)
 library(Matrix)
+
+dataset_name <- "pbmc4k_v2"
+data_raw_dir <- "data-raw"
 
 ## Restrict to 2 MB.
 ## Use `pryr::object_size()` instead of `utils::object.size()`.
 limit <- structure(2e6, class = "object_size")
 
 ## Complete dataset =============================================================
-dir <- initDir("data-raw/cellranger")
-## Example dataset contains a single sample ("pbmc4k").
-outs_dir <- initDir(file.path(dir, "pbmc", "outs"))
+dir <- initDir(file.path(data_raw_dir, dataset_name))
+sample_dir <- initDir(file.path(dir, "pbmc"))
+outs_dir <- initDir(file.path(sample_dir, "outs"))
+initDir(file.path(sample_dir, "SC_RNA_COUNTER_CS"))
 
 ## Directory structure:
 ## - pbmc
 ## - outs
 ## - filtered_gene_bc_matrices
 ## - GRCh38
-tar_file <- "data-raw/pbmc.tar.gz"
+tar_file <- file.path(data_raw_dir, paste0(dataset_name, ".tar.gz"))
 if (!file.exists(tar_file)) {
     download.file(
         url = paste(
@@ -40,7 +45,7 @@ untar(tarfile = tar_file, exdir = outs_dir)
 stopifnot(identical(dir(outs_dir), "filtered_gene_bc_matrices"))
 
 ## Using Ensembl 84 GTF annotations.
-gtf_file <- file.path(dir, "genes.gtf")
+gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.84.gtf.gz")
 if (!file.exists(gtf_file)) {
     download.file(
         url = paste(
@@ -49,21 +54,28 @@ if (!file.exists(gtf_file)) {
             "release-84",
             "gtf",
             "homo_sapiens",
-            "Homo_sapiens.GRCh38.84.gtf.gz",
+            basename(gtf_file),
             sep = "/"
         ),
         destfile = gtf_file
     )
 }
 
-## Note that this blows up in memory too much to run on RStudio AMI.
-pbmc <- Chromium(dir = dir, organism = "Homo sapiens", gffFile = gtf_file)
+object <- CellRanger(
+    dir = dir,
+    organism = "Homo sapiens",
+    gffFile = gtf_file
+)
 ## We're using a subset of this object for our working example (see below).
-object_size(pbmc)
-assignAndSaveData(name = "pbmc", object = pbmc, dir = "data-raw")
+object_size(object)
+assignAndSaveData(
+    name = dataset_name,
+    object = object,
+    dir = data_raw_dir
+)
 
 ## Example object ===============================================================
-counts <- counts(pbmc)
+counts <- counts(object)
 
 ## Subset the matrix to include only the top genes and cells.
 top_genes <- Matrix::rowSums(counts) %>%
@@ -76,47 +88,43 @@ top_cells <- Matrix::colSums(counts) %>%
     head(n = 100L)
 cells <- sort(names(top_cells))
 
-## Subset the original pbmc dataset to contain only top genes and cells.
-pbmc <- pbmc[genes, cells]
+## Subset the original object dataset to contain only top genes and cells.
+## FIXME This needs to relevel rowRanges automatically.
+object <- object[genes, cells]
 
 ## Include only minimal metadata columns in rowRanges.
-rowRanges(pbmc) <- rowRanges(pbmc) %>%
-    .[, c("broadClass", "geneBiotype", "geneID", "geneName")] %>%
-    relevelRowRanges()
+rowRanges(object) <- relevel(rowRanges(object))
 
 ## Report the size of each slot in bytes.
 vapply(
-    X = coerceS4ToList(pbmc),
+    X = coerceS4ToList(object),
     FUN = object_size,
     FUN.VALUE = numeric(1L)
 )
-object_size(pbmc)
-stopifnot(object_size(pbmc) < limit)
-stopifnot(validObject(pbmc))
+object_size(object)
+stopifnot(object_size(object) < limit)
+stopifnot(validObject(object))
 
-usethis::use_data(pbmc, compress = "xz", overwrite = TRUE)
+pbmc4k_v2 <- object
+usethis::use_data(pbmc4k_v2, compress = "xz", overwrite = TRUE)
 
-
-
-## Example Cell Ranger output ===================================================
+## Example Cell Ranger v2 output ===============================================
 input_dir <- file.path(
-    dir,
-    "pbmc",
-    "outs",
+    outs_dir,
     "filtered_gene_bc_matrices",
     "GRCh38"
 )
 stopifnot(dir.exists(input_dir))
+unlink("inst/extdata/cellranger_v2", recursive = TRUE)
 output_dir <- file.path(
     "inst",
     "extdata",
-    "cellranger",
+    "cellranger_v2",
     "pbmc",
     "outs",
     "filtered_gene_bc_matrices",
     "GRCh38"
 )
-unlink("inst/extdata/cellranger", recursive = TRUE)
 dir.create(output_dir, recursive = TRUE)
 
 ## Prepare the sparse matrix.
