@@ -24,11 +24,11 @@ LazyData: false
 Depends:
     R (>= 3.5),
     SingleCellExperiment,
-    basejump (>= 0.11.3)
+    basejump (>= 0.11.4)
 Imports:
-    bcbioBase (>= 0.6.7),
-    bcbioSingleCell (>= 0.3.18),
-    goalie (>= 0.3),
+    bcbioBase (>= 0.6.8),
+    bcbioSingleCell (>= 0.3.19),
+    goalie (>= 0.3.1),
     SummarizedExperiment,
     S4Vectors,
     rhdf5,
@@ -40,11 +40,13 @@ Imports:
     methods,
     utils
 Suggests:
+    acidroxygen (>= 0.0.1),
     BiocStyle,
     patrick,
     roxygen2,
     testthat
 Remotes:
+    acidgenomics/acidroxygen,
     acidgenomics/basejump,
     acidgenomics/goalie,
     hbc/bcbioBase,
