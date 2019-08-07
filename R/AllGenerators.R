@@ -331,7 +331,7 @@ CellRanger <- function(
     
     ## Return ------------------------------------------------------------------
     `new,CellRanger`(
-        assays = assays = assays,
+        assays = assays,
         rowRanges = rowRanges,
         colData = colData,
         metadata = metadata,
