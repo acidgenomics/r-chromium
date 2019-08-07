@@ -112,12 +112,14 @@ CellRanger <- function(
     organism = NULL,
     ensemblRelease = NULL,
     genomeBuild = NULL,
+    gffFile = NULL,
     refdataDir = NULL,
     samples = NULL,
     censorSamples = NULL,
     sampleMetadataFile = NULL,
     transgeneNames = NULL,
-    spikeNames = NULL
+    spikeNames = NULL,
+    BPPARAM = BiocParallel::SerialParam()
 ) {
     assert(
         isADirectory(dir),
@@ -125,6 +127,7 @@ CellRanger <- function(
         isString(organism, nullOK = TRUE),
         isInt(ensemblRelease, nullOK = TRUE),
         isString(genomeBuild, nullOK = TRUE),
+        isString(gffFile, nullOK = TRUE),
         isADirectory(refdataDir, nullOK = TRUE),
         isAny(samples, classes = c("character", "NULL")),
         isAny(censorSamples, classes = c("character", "NULL")),
@@ -203,7 +206,21 @@ CellRanger <- function(
     }
     
     ## Assays ------------------------------------------------------------------
-    counts <- .importCounts(sampleDirs = sampleDirs, filtered = filtered)
+    matrixFiles <- .matrixFiles(
+        sampleDirs = sampleDirs,
+        filtered = filtered,
+        BPPARAM = BPPARAM
+    )
+    
+    ## Get the pipeline from the matrix file attributes.
+    pipeline <- attr(matrixFiles, "pipeline")
+    assert(isString(pipeline))
+    attr(matrixFiles, "pipeline") <- NULL
+    
+    counts <- .importCounts(
+        matrixFiles = matrixFiles,
+        BPPARAM = BPPARAM
+    )
     assays <- SimpleList(counts = counts)
 
     ## Row data ----------------------------------------------------------------
@@ -238,6 +255,10 @@ CellRanger <- function(
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
         assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
+    } else if (isString(gffFile)) {
+        ## This step is necessary for generating v2 working example.
+        ## Note that this works with a remote URL.
+        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
@@ -274,8 +295,8 @@ CellRanger <- function(
                 pattern = pattern
             )
             samples <- unique(match[, 2L, drop = TRUE])
-        } else if (length(sampleFiles) == 1L) {
-            samples <- names(sampleFiles)
+        } else if (length(sampleDirs) == 1L) {
+            samples <- names(sampleDirs)
         }
         sampleData <- minimalSampleData(samples)
     }
@@ -312,21 +333,22 @@ CellRanger <- function(
     
     ## Metadata ----------------------------------------------------------------
     metadata <- list(
-        version = .version,
-        level = level,
-        dir = dir,
-        sampleMetadataFile = as.character(sampleMetadataFile),
-        organism = organism,
-        genomeBuild = as.character(genomeBuild),
-        ensemblRelease = as.integer(ensemblRelease),
         allSamples = allSamples,
+        call = match.call(),
+        dir = dir,
+        ensemblRelease = as.integer(ensemblRelease),
+        genomeBuild = as.character(genomeBuild),
         lanes = lanes,
-        pipeline = "cellranger",
-        umiType = "chromium",
-        ## cellranger-specific -------------------------------------------------
-        refdataDir = refdataDir,
+        level = level,
+        matrixFiles = matrixFiles,
+        organism = organism,
+        pipeline = pipeline,
         refJSON = refJSON,
-        call = match.call()
+        refdataDir = refdataDir,
+        sampleDirs = sampleDirs,
+        sampleMetadataFile = as.character(sampleMetadataFile),
+        umiType = "chromium",
+        version = .version
     )
     
     ## Return ------------------------------------------------------------------
