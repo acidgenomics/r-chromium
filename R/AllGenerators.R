@@ -2,12 +2,12 @@
 ## FIXME Consider moving calculate metrics to basejump?
 ## Make calculateMetrics an S4 generic...
 ## FIXME Consider using HDF5Array here instead
-
 ## FIXME Check for single genome.
 
 
 
-#' @rdname CellRangerRNASeq-class
+#' @rdname CellRanger
+#' @note Updated 2019-08-07.
 #' @export
 #'
 #' @details
@@ -102,9 +102,9 @@
 #'
 #' @examples
 #' dir <- system.file("extdata/cellranger", package = "Chromium")
-#' x <- CellRangerRNASeq(dir)
+#' x <- CellRanger(dir)
 #' print(x)
-CellRangerRNASeq <- function(
+CellRanger <- function(
     dir,
     filtered = TRUE,
     sampleMetadataFile = NULL,
@@ -281,8 +281,8 @@ CellRangerRNASeq <- function(
     )
     
     ## Return ------------------------------------------------------------------
-    `new,CellRangerRNASeq`(
-        assays = list(counts = counts),
+    `new,CellRanger`(
+        assays = SimpleList(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
         metadata = metadata,
@@ -294,7 +294,7 @@ CellRangerRNASeq <- function(
 
 
 ## Updated 2019-08-01.
-`new,CellRangerRNASeq` <-  # nolint
+`new,CellRanger` <-  # nolint
     function(...) {
-        new(Class = "CellRangerRNASeq", makeSingleCellExperiment(...))
+        new(Class = "CellRanger", makeSingleCellExperiment(...))
     }
