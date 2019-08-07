@@ -1,26 +1,3 @@
-#' 10X Genomics Chromium
-#' 
-#' Extends `SingleCellExperiment`.
-#' 
-#' @author Michael Steinbaugh
-#' @export
-#' 
-#' @examples
-#' showClass("Chromium")
-setClass(
-    Class = "Chromium",
-    contains = "SingleCellExperiment"
-)
-setValidity(
-    Class = "Chromium",
-    method = function(object) {
-        ## FIXME
-        TRUE
-    }
-)
-
-
-
 #' Cell Ranger RNA-seq data set
 #' 
 #' Contains UMI droplet-based single-cell RNA-seq data.
@@ -29,13 +6,13 @@ setValidity(
 #' @export
 #' 
 #' @examples
-#' showClass("CellRangerRNASeq")
+#' showClass("CellRanger")
 setClass(
-    Class = "CellRangerRNASeq",
-    contains = "Chromium"
+    Class = "CellRanger",
+    contains = "SingleCellExperiment"
 )
 setValidity(
-    Class = "CellRangerRNASeq",
+    Class = "CellRanger",
     method = function(object) {
         ## FIXME
         TRUE
@@ -52,10 +29,10 @@ setValidity(
 #' @export
 #' 
 #' @examples
-#' showClass("CellRangerATACSeq")
+#' showClass("CellRangerATAC")
 setClass(
-    Class = "CellRangerATACSeq",
-    contains = "Chromium",
+    Class = "CellRangerATAC",
+    contains = "SingleCellExperiment",
     validity = function(object) {
         ## FIXME
         TRUE
