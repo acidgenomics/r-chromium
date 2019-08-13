@@ -9,7 +9,7 @@ options(
 )
 
 if (!dir.exists("tests")) {
-    message("No unit tests defined in `tests/` directory.")
+    message("No unit tests defined in 'tests/' directory.")
     quit()
 }
 
