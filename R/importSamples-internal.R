@@ -16,10 +16,10 @@
         } else if (all(grepl("\\.mtx$", sampleFiles))) {
             fun <- importCountsMTX
         } else {
-            stop(paste(
-                "Failed to determine which file extension (e.g. H5, MTX)",
+            stop(
+                "Failed to determine which file extension (e.g. H5, MTX) ",
                 "to use for count matrix import."
-            ))
+            )
         }
 
         list <- mapply(
