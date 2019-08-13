@@ -1,3 +1,5 @@
+globalVariables(".")
+
 .version <- packageVersion("Chromium")
 
 ## Trailing number is to match cellranger output.

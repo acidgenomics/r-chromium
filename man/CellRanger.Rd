@@ -80,7 +80,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Updated 2019-08-07.
 
-Updated 2019-08-07.
+Updated 2019-08-13.
 }
 \section{Directory structure for multiple samples}{
 

@@ -90,7 +90,7 @@
 #' Ensembl release.
 #'
 #' @author Michael Steinbaugh
-#' @note Updated 2019-08-07.
+#' @note Updated 2019-08-13.
 #' @export
 #' 
 #' @inheritParams acidroxygen::params
@@ -249,12 +249,13 @@ CellRanger <- function(
         assert(isString(genomeBuild))
         ## Get the Ensembl release version from JSON metadata.
         ## e.g. "Homo_sapiens.GRCh38.93.filtered.gtf"
-        ensemblRelease <- refJSON %>%
-            .[["input_gtf_files"]] %>%
-            .[[1L]] %>%
-            str_split("\\.", simplify = TRUE) %>%
-            .[1L, 3L] %>%
-            as.integer()
+        ensemblRelease <- refJSON[["input_gtf_files"]][[1L]]
+        ensemblRelease <- str_split(
+            string = ensemblRelease,
+            pattern = "\\.",
+            simplify = TRUE
+        )
+        ensemblRelease <- as.integer(ensemblRelease[1L, 3L])
         assert(isInt(ensemblRelease))
         ## Convert the GTF file to GRanges.
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
