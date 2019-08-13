@@ -19,21 +19,24 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' data(pbmc)
+#' data(pbmc4k_v2)
+#' 
+#' ## CellRanger ====
+#' object <- pbmc4k_v2
 #'
-#' cells <- head(colnames(pbmc), 100L)
+#' cells <- head(colnames(object), 100L)
 #' head(cells)
-#' genes <- head(rownames(pbmc), 100L)
+#' genes <- head(rownames(object), 100L)
 #' head(genes)
 #'
 #' ## Subset by cell identifiers.
-#' pbmc[, cells]
+#' object[, cells]
 #'
 #' ## Subset by genes.
-#' pbmc[genes, ]
+#' object[genes, ]
 #'
 #' ## Subset by both genes and cells.
-#' pbmc[genes, cells]
+#' object[genes, cells]
 NULL
 
 

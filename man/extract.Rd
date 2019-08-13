@@ -85,21 +85,24 @@ cells not kept in the matrix will be dropped in favor of the \code{nCount} colum
 of \code{colData}.
 }
 \examples{
-data(pbmc)
+data(pbmc4k_v2)
 
-cells <- head(colnames(pbmc), 100L)
+## CellRanger ====
+object <- pbmc4k_v2
+
+cells <- head(colnames(object), 100L)
 head(cells)
-genes <- head(rownames(pbmc), 100L)
+genes <- head(rownames(object), 100L)
 head(genes)
 
 ## Subset by cell identifiers.
-pbmc[, cells]
+object[, cells]
 
 ## Subset by genes.
-pbmc[genes, ]
+object[genes, ]
 
 ## Subset by both genes and cells.
-pbmc[genes, cells]
+object[genes, cells]
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
