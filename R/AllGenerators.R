@@ -1,17 +1,10 @@
-## FIXME Add support for single sample mode.
-## FIXME Consider moving calculate metrics to basejump?
-## Make calculateMetrics an S4 generic...
-## FIXME Consider using HDF5Array here instead
-## FIXME Check for single genome.
 ## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
-## FIXME Add `isBPPARAM to goalie.
-
-## FIXME Ready to import calculateMetrics from basejump.
 
 
 
 #' @inherit CellRanger-class title description
-#' @note Updated 2019-08-07.
+#' @note Currently supports loading of a single genome.
+#' @note Updated 2019-08-13.
 #' @export
 #'
 #' @details
@@ -88,10 +81,6 @@
 #' function will attempt to use the most current annotations available from
 #' Ensembl, and some gene IDs may not match, due to deprecation in the current
 #' Ensembl release.
-#'
-#' @author Michael Steinbaugh
-#' @note Updated 2019-08-13.
-#' @export
 #' 
 #' @inheritParams acidroxygen::params
 #' @param dir `character(1)`.

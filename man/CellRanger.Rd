@@ -78,7 +78,7 @@ Read \href{https://www.10xgenomics.com/software/}{10x Genomics Cell Ranger} outp
 for a Chromium data set into a \code{SingleCellExperiment} object.
 }
 \note{
-Updated 2019-08-07.
+Currently supports loading of a single genome.
 
 Updated 2019-08-13.
 }
@@ -163,7 +163,4 @@ Ensembl release.
 dir <- system.file("extdata/cellranger_v2", package = "Chromium")
 x <- CellRanger(dir)
 print(x)
-}
-\author{
-Michael Steinbaugh
 }
