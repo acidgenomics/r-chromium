@@ -106,7 +106,7 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger", package = "Chromium")
+#' dir <- system.file("extdata/cellranger_v2", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- function(
@@ -136,8 +136,8 @@ CellRanger <- function(
         isAny(censorSamples, classes = c("character", "NULL")),
         isAFile(sampleMetadataFile, nullOK = TRUE),
         isCharacter(transgeneNames, nullOK = TRUE),
-        isCharacter(spikeNames, nullOK = TRUE)
-        ## FIXME Add assert for BPPARAM.
+        isCharacter(spikeNames, nullOK = TRUE),
+        identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
     level <- "genes"
     
@@ -226,7 +226,6 @@ CellRanger <- function(
         BPPARAM = BPPARAM
     )
     assert(hasValidDimnames(counts))
-    assays <- SimpleList(counts = counts)
 
     ## Row data ----------------------------------------------------------------
     refJSON <- NULL
@@ -309,14 +308,10 @@ CellRanger <- function(
     
     ## Always prefilter, removing very low quality cells with no UMIs or genes.
     colData <- calculateMetrics(
-        counts = counts,
+        object = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
     )
-    
-    ## Subset the counts to match the prefiltered metrics.
-    assert(isSubset(rownames(colData), colnames(counts)))
-    counts <- counts[, rownames(colData), drop = FALSE]
     
     ## Join `sampleData` into cell-level `colData`.
     if (nrow(sampleData) == 1L) {
@@ -349,20 +344,16 @@ CellRanger <- function(
     )
     
     ## Return ------------------------------------------------------------------
-    `new,CellRanger`(
-        assays = assays,
+    ## Subset the counts to match the prefiltered metrics.
+    assert(isSubset(rownames(colData), colnames(counts)))
+    counts <- counts[, rownames(colData), drop = FALSE]
+    sce <- makeSingleCellExperiment(
+        assays = SimpleList(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
         metadata = metadata,
         transgeneNames = transgeneNames,
         spikeNames = spikeNames
     )
+    new(Class = "CellRanger", sce)
 }
-
-
-
-## Updated 2019-08-01.
-`new,CellRanger` <-  # nolint
-    function(...) {
-        new(Class = "CellRanger", makeSingleCellExperiment(...))
-    }
