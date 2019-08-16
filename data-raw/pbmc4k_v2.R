@@ -93,7 +93,7 @@ cells <- sort(names(top_cells))
 object <- object[genes, cells]
 
 ## Include only minimal metadata columns in rowRanges.
-rowRanges(object) <- relevel(rowRanges(object))
+rowRanges(object) <- droplevels(rowRanges(object))
 
 ## Report the size of each slot in bytes.
 vapply(

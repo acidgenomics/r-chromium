@@ -8,10 +8,10 @@
 #' @importFrom SingleCellExperiment SingleCellExperiment isSpike
 #' @importFrom SummarizedExperiment assays
 #' @importFrom S4Vectors SimpleList mcols
-#' @importFrom basejump calculateMetrics camel detectLanes emptyRanges import
+#' @importFrom basejump calculateMetrics camel detectLanes droplevels emptyRanges import
 #'   makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames
 #'   makeNames makeSingleCellExperiment mapCellsToSamples minimalSampleData
-#'   realpath relevelColData relevelRowRanges
+#'   realpath
 #' @importFrom goalie allAreDirectories allAreFiles assert hasLength hasNames
 #'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
 #'   isFlag isInt isNonEmpty isScalar isString isSubset validNames

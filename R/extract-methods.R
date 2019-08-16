@@ -70,24 +70,12 @@ NULL
         cells <- colnames(sce)
         
         ## Row data -------------------------------------------------------------
-        ## Ensure factors get releveled, if necessary.
+        ## FIXME Simplify
         rowRanges <- rowRanges(sce)
-        if (
-            ncol(mcols(rowRanges)) > 0L &&
-            !identical(rownames(sce), rownames(x))
-        ) {
-            rowRanges <- relevelRowRanges(rowRanges)
-        }
         
         ## Column data ----------------------------------------------------------
-        ## Ensure factors get releveled, if necessary.
+        ## FIXME Simplify
         colData <- colData(sce)
-        if (
-            ncol(colData) > 0L &&
-            !identical(colnames(sce), colnames(x))
-        ) {
-            colData <- relevelColData(colData)
-        }
         
         ## Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
@@ -111,6 +99,9 @@ NULL
         }
         
         ## Return ---------------------------------------------------------------
+        ## FIXME Simplify this.
+        ## FIXME Look at current bcbioSingleCell approach.
+        ## FIXME droplevels call.
         new(
             Class = class(x)[[1L]],
             makeSingleCellExperiment(
