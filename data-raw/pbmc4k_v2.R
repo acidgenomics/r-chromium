@@ -21,7 +21,10 @@ dir <- initDir(file.path(data_raw_dir, dataset_name))
 unlink(dir, recursive = TRUE)
 sample_dir <- initDir(file.path(dir, "pbmc"))
 outs_dir <- initDir(file.path(sample_dir, "outs"))
-initDir(file.path(sample_dir, "SC_RNA_COUNTER_CS"))
+counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
+initDir(counter_dir)
+## Touch an empty file in the counter directory.
+file.create(file.path(counter_dir, "empty"))
 
 ## Directory structure:
 ## - pbmc
