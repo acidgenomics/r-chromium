@@ -3,7 +3,7 @@
 #' @noRd
 .importCounts <- function(
     matrixFiles,
-    BPPARAM = BiocParallel::SerialParam()
+    BPPARAM = BiocParallel::SerialParam()  # nolint
 ) {
     assert(allAreFiles(matrixFiles))
     if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
@@ -59,15 +59,15 @@
 
 
 #' Import Cell Ranger count matrix from HDF5 file
-#' 
+#'
 #' @note Updated 2019-08-21.
 #' @noRd
-#' 
+#'
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
-#' 
+#'
 #' @return `sparseMatrix`.
 #'   Cell barcodes in the columns, features (i.e. genes) in the rows.
-#'   
+#'
 #' @examples
 #' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
@@ -86,7 +86,7 @@
         ## - "data"
         ## - "features"
         ## - "indices"
-        ## - "indptr"  
+        ## - "indptr"
         counts <- sparseMatrix(
             i = h5[["indices"]] + 1L,
             p = h5[["indptr"]],
@@ -97,9 +97,9 @@
         ## Row names.
         if ("features" %in% names(h5)) {
             ## > names(h5[["features"]])
-            ## [1] "_all_tag_keys" "feature_type" 
-            ## [3] "genome"        "id"           
-            ## [5] "name"          "pattern"      
+            ## [1] "_all_tag_keys" "feature_type"
+            ## [3] "genome"        "id"
+            ## [5] "name"          "pattern"
             ## [7] "read"          "sequence"
             ## Stable gene identifiers are stored in "id".
             ## Gene symbols are stored in "name".
@@ -107,7 +107,7 @@
         } else if ("genes" %in% names(h5)) {
             ## Older H5 objects (v2) use "genes" instead of "features".
             rownames <- h5[["genes"]]
-        } 
+        }
         ## Column names.
         colnames <- h5[["barcodes"]]
         assert(
@@ -123,26 +123,26 @@
 
 
 #' Import Cell Ranger count matrix from MTX file
-#' 
+#'
 #' @note Data import using HDF5 file is now recommended over this approach.
 #' @note Updated 2019-08-21.
 #' @noRd
-#' 
+#'
 #' @section Matrix Market Exchange (MEX/MTX) format:
-#' 
+#'
 #' Loading from this matrix requires sidecar files containing cell barcodes and
 #' feature (i.e. gene) identifiers.
-#' 
+#'
 #' Cell Ranger v3:
-#' 
+#'
 #' - `barcodes.tsv.gz`: Cell barcodes.
 #' - `features.tsv.gz`: Feature identifiers.
-#' 
+#'
 #' Cell Ranger v2:
-#' 
+#'
 #' - `barcodes.tsv`: Cell barcodes.
 #' - `genes.tsv`: Gene identifiers.
-#' 
+#'
 #' @examples
 #' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
@@ -204,6 +204,3 @@
         colnames(counts) <- colnames
         counts
     }
-
-
-

@@ -2,7 +2,7 @@
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
 #' @note Updated 2019-08-21.
-#' 
+#'
 #' @inheritParams acidroxygen::params
 #'
 #' @description Extract genes by row and cells by column.
@@ -22,7 +22,7 @@
 #'
 #' @examples
 #' data(pbmc4k_v2)
-#' 
+#'
 #' ## CellRanger ====
 #' object <- pbmc4k_v2
 #'
@@ -48,7 +48,7 @@ NULL
 `extract,CellRanger` <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
-        
+
         ## Genes (rows).
         if (missing(i)) {
             i <- 1L:nrow(x)
@@ -57,23 +57,23 @@ NULL
         if (missing(j)) {
             j <- 1L:ncol(x)
         }
-        
+
         ## Determine whether we should stash subset in metadata.
         if (identical(x = dim(x), y = c(length(i), length(j)))) {
             subset <- FALSE
         } else {
             subset <- TRUE
         }
-        
+
         ## Subset using SCE method.
         sce <- as(x, "SingleCellExperiment")
         sce <- sce[i, j, drop = drop]
-        
+
         ## Early return original object, if unmodified.
         if (identical(assay(sce), assay(x))) {
             return(x)
         }
-        
+
         ## Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
         if (isTRUE(subset)) {
@@ -82,7 +82,7 @@ NULL
         }
         metadata <- Filter(f = Negate(is.null), x = metadata)
         metadata(sce) <- metadata
-        
+
         ## Return ---------------------------------------------------------------
         sce <- droplevels(sce)
         new(Class = "CellRanger", sce)
