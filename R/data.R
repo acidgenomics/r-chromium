@@ -2,9 +2,7 @@
 #' 
 #' Peripheral blood mononuclear cells (PBMCs).
 #' 
-#' @author Michael Steinbaugh
-#' 
 #' @examples
-#' data(pbmc)
-#' pbmc
-"pbmc"
+#' data(pbmc4k_v2)
+#' pbmc4k_v2
+"pbmc4k_v2"

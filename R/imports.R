@@ -1,20 +1,18 @@
-#' @importFrom Matrix readMM sparseMatrix
-#' @importFrom SingleCellExperiment isSpike
+#' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
+#' @importFrom Matrix sparseMatrix
+#' @importFrom SingleCellExperiment SingleCellExperiment isSpike
 #' @importFrom SummarizedExperiment assays
-#' @importFrom S4Vectors mcols
-#' @importFrom basejump camel detectLanes emptyRanges import makeDimnames
-#'   makeGRangesFromEnsembl makeGRangesFromGFF makeNames
-#'   makeSingleCellExperiment mapCellsToSamples minimalSampleData realpath
-#'   relevelColData relevelRowRanges
-#' @importFrom bcbioBase readSampleData
-#' @importFrom bcbioSingleCell calculateMetrics
-#' @importFrom dplyr mutate_if pull
-#' @importFrom goalie allAreDirectories allAreFiles assert hasNames isADirectory
-#'   isAFile isCharacter isFlag isInt isNonEmpty isString isSubset
-#' @importFrom magrittr %>%
-#' @importFrom methods as is new validObject
-#' @importFrom readr read_lines read_tsv
+#' @importFrom S4Vectors SimpleList mcols
+#' @importFrom basejump calculateMetrics camel detectLanes droplevels
+#'   emptyRanges import makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF
+#'   makeDimnames makeNames makeSingleCellExperiment mapCellsToSamples
+#'   metricsCols minimalSampleData readSampleData realpath standardizeCall
+#' @importFrom goalie allAreDirectories allAreFiles areDisjointSets assert
+#'   hasLength hasNames hasValidDimnames hasValidNames isADirectory isAFile
+#'   isAny isCharacter isFlag isInt isNonEmpty isScalar isString isSubset
+#'   validNames validate validateClasses
+#' @importFrom methods as is new setClass setMethod setValidity validObject
 #' @importFrom rhdf5 h5dump h5read
-#' @importFrom stringr str_match str_split
+#' @importFrom stringr str_match str_split str_trunc
 #' @importFrom utils globalVariables packageVersion
 NULL
