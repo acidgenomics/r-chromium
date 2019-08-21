@@ -1,11 +1,3 @@
-## FIXME Need to move readSampleData to basejump.
-## #' @importFrom bcbioBase readSampleData
-
-## FIXME Rework using basejump import
-## #' @importFrom readr read_lines read_tsv
-
-
-
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
 #' @importFrom Matrix sparseMatrix
 #' @importFrom SingleCellExperiment SingleCellExperiment isSpike
