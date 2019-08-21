@@ -123,14 +123,13 @@
 
 
 #' Find all matrix files for a data set
-#' @note Updated 2019-08-07.
+#' @note Updated 2019-08-21.
 #' @noRd
 .matrixFiles <- function(
     sampleDirs,
     filtered,
     BPPARAM = BiocParallel::SerialParam()
 ) {
-    ## FIXME This is dropping attributes.
     list <- bplapply(
         X = sampleDirs,
         FUN = .findMatrixFile,
