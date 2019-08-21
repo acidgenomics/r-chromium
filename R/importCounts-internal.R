@@ -1,5 +1,7 @@
 ## FIXME Rework to use matrixFiles instead.
 
+
+
 #' Import counts from either HDF5 or MTX files.
 #' @note Updated 2019-08-01.
 #' @noRd
@@ -63,7 +65,7 @@
 
 #' Import Cell Ranger count matrix from HDF5 file
 #' 
-#' @note Updated 2019-07-31.
+#' @note Updated 2019-08-21.
 #' @noRd
 #' 
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
@@ -120,15 +122,14 @@
         
         ## Column names.
         colnames <- h5[["barcodes"]]
-        
         assert(
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
         
+        ## Return.
         rownames(counts) <- rownames
         colnames(counts) <- colnames
-        
         counts
     }
 
@@ -137,7 +138,7 @@
 #' Import Cell Ranger count matrix from MTX file
 #' 
 #' @note Data import using HDF5 file is now recommended over this approach.
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-21.
 #' @noRd
 #' 
 #' @section Matrix Market Exchange (MEX/MTX) format:
@@ -173,6 +174,10 @@
             ignore.case = TRUE
         ))
         
+        ## Count matrix.
+        ## FIXME Switch to using basejump import.
+        ## FIXME Update basejump to not warn about missing sidecars.
+        ## > counts <- import(file)
         counts <- readMM(file)
         assert(is(counts, "sparseMatrix"))
         
@@ -189,9 +194,10 @@
         ## Note that `features.tsv` is tab delimited.
         ## v2: id, name
         ## v3: id, name, expression type
-        rownames <- read_tsv(
+        rownames <- import(
             file = rownamesFile,
-            col_names = FALSE
+            format = "tsv",
+            colnames = FALSE
         )
         rownames <- rownames[[1L]]
         
@@ -204,16 +210,18 @@
         colnamesFile <- file.path(path, colnamesFile)
         assert(isAFile(colnamesFile))
         ## Note that `barcodes.tsv` is NOT tab delimited.
-        colnames <- read_lines(colnamesFile)
+        colnames <- import(
+            file = colnamesFile,
+            format = "lines"
+        )
         
+        ## Return.
         assert(
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        
         rownames(counts) <- rownames
         colnames(counts) <- colnames
-        
         counts
     }
 
