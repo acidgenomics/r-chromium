@@ -51,11 +51,11 @@ NULL
 
         ## Genes (rows).
         if (missing(i)) {
-            i <- 1L:nrow(x)
+            i <- seq_len(nrow(x))
         }
         ## Cells (columns).
         if (missing(j)) {
-            j <- 1L:ncol(x)
+            j <- seq_len(ncol(x))
         }
 
         ## Determine whether we should stash subset in metadata.
@@ -74,7 +74,7 @@ NULL
             return(x)
         }
 
-        ## Metadata -------------------------------------------------------------
+        ## Metadata ------------------------------------------------------------
         metadata <- metadata(sce)
         if (isTRUE(subset)) {
             metadata[["filterGenes"]] <- NULL
@@ -83,7 +83,7 @@ NULL
         metadata <- Filter(f = Negate(is.null), x = metadata)
         metadata(sce) <- metadata
 
-        ## Return ---------------------------------------------------------------
+        ## Return --------------------------------------------------------------
         sce <- droplevels(sce)
         new(Class = "CellRanger", sce)
     }
