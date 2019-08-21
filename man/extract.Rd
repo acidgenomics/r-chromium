@@ -84,6 +84,9 @@ Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column
 of \code{colData}.
 }
+\note{
+Updated 2019-08-21.
+}
 \examples{
 data(pbmc4k_v2)
 
