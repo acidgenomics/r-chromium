@@ -4,7 +4,7 @@
 \name{Chromium-package}
 \title{Chromium}
 \description{
-Toolkit for 10X Genomics single-cell RNA-seq data.
+Toolkit for 10X Genomics Chromium single cell data.
 }
 \seealso{
 Useful links:

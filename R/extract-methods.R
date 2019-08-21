@@ -1,7 +1,9 @@
 #' @name extract
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
-#' @inheritParams basejump::params
+#' @note Updated 2019-08-21.
+#' 
+#' @inheritParams acidroxygen::params
 #'
 #' @description Extract genes by row and cells by column.
 #'
@@ -16,107 +18,74 @@
 #' cells not kept in the matrix will be dropped in favor of the `nCount` column
 #' of `colData`.
 #'
-#' @return `Chromium`.
+#' @return `CellRanger`.
 #'
 #' @examples
-#' data(pbmc)
+#' data(pbmc4k_v2)
+#' 
+#' ## CellRanger ====
+#' object <- pbmc4k_v2
 #'
-#' cells <- head(colnames(pbmc), 100L)
+#' cells <- head(colnames(object), 100L)
 #' head(cells)
-#' genes <- head(rownames(pbmc), 100L)
+#' genes <- head(rownames(object), 100L)
 #' head(genes)
 #'
 #' ## Subset by cell identifiers.
-#' pbmc[, cells]
+#' object[, cells]
 #'
 #' ## Subset by genes.
-#' pbmc[genes, ]
+#' object[genes, ]
 #'
 #' ## Subset by both genes and cells.
-#' pbmc[genes, cells]
+#' object[genes, cells]
 NULL
 
 
 
-extract.Chromium <-  # nolint
+## This approach is adapted from bcbioSingleCell method.
+## Updated 2019-08-21.
+`extract,CellRanger` <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
-        # Genes
+        ## Genes (rows).
         if (missing(i)) {
             i <- 1L:nrow(x)
         }
-        # Cells
+        ## Cells (columns).
         if (missing(j)) {
             j <- 1L:ncol(x)
         }
         
-        if (identical(
-            x = c(length(i), length(j)),
-            y = dim(x)
-        )) {
-            return(x)
+        ## Determine whether we should stash subset in metadata.
+        if (identical(x = dim(x), y = c(length(i), length(j)))) {
+            subset <- FALSE
+        } else {
+            subset <- TRUE
         }
         
-        # Subset using SCE method.
+        ## Subset using SCE method.
         sce <- as(x, "SingleCellExperiment")
         sce <- sce[i, j, drop = drop]
         
-        genes <- rownames(sce)
-        cells <- colnames(sce)
-        
-        # Row data -------------------------------------------------------------
-        # Ensure factors get releveled, if necessary.
-        rowRanges <- rowRanges(sce)
-        if (
-            ncol(mcols(rowRanges)) > 0L &&
-            !identical(rownames(sce), rownames(x))
-        ) {
-            rowRanges <- relevelRowRanges(rowRanges)
+        ## Early return original object, if unmodified.
+        if (identical(assay(sce), assay(x))) {
+            return(x)
         }
         
-        # Column data ----------------------------------------------------------
-        # Ensure factors get releveled, if necessary.
-        colData <- colData(sce)
-        if (
-            ncol(colData) > 0L &&
-            !identical(colnames(sce), colnames(x))
-        ) {
-            colData <- relevelColData(colData)
-        }
-        
-        # Metadata -------------------------------------------------------------
+        ## Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
-        metadata[["subset"]] <- TRUE
-        
-        # Drop unfiltered cellular barcode list.
-        metadata[["cellularBarcodes"]] <- NULL
-        
-        # filterCells
-        filterCells <- metadata[["filterCells"]]
-        if (!is.null(filterCells)) {
-            filterCells <- intersect(filterCells, cells)
-            metadata[["filterCells"]] <- filterCells
+        if (isTRUE(subset)) {
+            metadata[["filterGenes"]] <- NULL
+            metadata[["subset"]] <- TRUE
         }
+        metadata <- Filter(f = Negate(is.null), x = metadata)
+        metadata(sce) <- metadata
         
-        # filterGenes
-        filterGenes <- metadata[["filterGenes"]]
-        if (!is.null(filterGenes)) {
-            filterGenes <- intersect(filterGenes, genes)
-            metadata[["filterGenes"]] <- filterGenes
-        }
-        
-        # Return ---------------------------------------------------------------
-        new(
-            Class = class(x)[[1L]],
-            makeSingleCellExperiment(
-                assays = assays(sce),
-                rowRanges <- rowRanges(sce),
-                colData <- colData,
-                metadata = metadata,
-                spikeNames = rownames(sce)[isSpike(sce)]
-            )
-        )
+        ## Return ---------------------------------------------------------------
+        sce <- droplevels(sce)
+        new(Class = "CellRanger", sce)
     }
 
 
@@ -126,10 +95,10 @@ extract.Chromium <-  # nolint
 setMethod(
     f = "[",
     signature = signature(
-        x = "Chromium",
+        x = "CellRanger",
         i = "ANY",
         j = "ANY",
         drop = "ANY"
     ),
-    definition = extract.Chromium
+    definition = `extract,CellRanger`
 )

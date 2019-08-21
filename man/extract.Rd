@@ -3,10 +3,10 @@
 \docType{methods}
 \name{extract}
 \alias{extract}
-\alias{[,Chromium,ANY,ANY,ANY-method}
+\alias{[,CellRanger,ANY,ANY,ANY-method}
 \title{Extract or Replace Parts of an Object}
 \usage{
-\S4method{[}{Chromium,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
+\S4method{[}{CellRanger,ANY,ANY,ANY}(x, i, j, ..., drop = FALSE)
 }
 \arguments{
 \item{x}{
@@ -68,7 +68,7 @@
   }
 }
 \value{
-\code{Chromium}.
+\code{CellRanger}.
 }
 \description{
 Extract genes by row and cells by column.
@@ -84,22 +84,28 @@ Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column
 of \code{colData}.
 }
+\note{
+Updated 2019-08-21.
+}
 \examples{
-data(pbmc)
+data(pbmc4k_v2)
 
-cells <- head(colnames(pbmc), 100L)
+## CellRanger ====
+object <- pbmc4k_v2
+
+cells <- head(colnames(object), 100L)
 head(cells)
-genes <- head(rownames(pbmc), 100L)
+genes <- head(rownames(object), 100L)
 head(genes)
 
 ## Subset by cell identifiers.
-pbmc[, cells]
+object[, cells]
 
 ## Subset by genes.
-pbmc[genes, ]
+object[genes, ]
 
 ## Subset by both genes and cells.
-pbmc[genes, cells]
+object[genes, cells]
 }
 \references{
 Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)

@@ -2,26 +2,22 @@
 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
 
-Toolkit for 10X Genomics single-cell RNA-seq data.
-
-🚨🚨🚨 NOT YET COMPATIBLE WITH CELLRANGER 3 🚨🚨🚨
+Toolkit for 10X Genomics Chromium single cell data.
 
 ## Installation
 
-This is an [R][] package.
-
-### [Bioconductor][] method
-
-We recommend installing the package with [BiocManager][].
+### [R][] method
 
 ```r
-if (!require("BiocManager")) {
-    install.packages("BiocManager")
+if (!requireNamespace("remotes", quietly = TRUE)) {
+    install.packages("remotes")
 }
-BiocManager::install("remotes")
-BiocManager::install("acidgenomics/Chromium")
+Sys.setenv(R_REMOTES_UPGRADE = "always")
+# Set `GITHUB_PAT` in `~/.Renviron` if you get a rate limit error.
+remotes::install_github("acidgenomics/Chromium")
+remotes::update_packages()
 ```
 
+[Bioconductor]: https://bioconductor.org/
 [BiocManager]: https://cran.r-project.org/package=BiocManager
-[Bioconductor]: https://bioconductor.org
-[R]: https://www.r-project.org
+[R]: https://www.r-project.org/
