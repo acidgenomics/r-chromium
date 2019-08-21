@@ -319,7 +319,7 @@ CellRanger <- function(
     ## Metadata ----------------------------------------------------------------
     metadata <- list(
         allSamples = allSamples,
-        call = match.call(),
+        call = standardizeCall(),
         dir = dir,
         ensemblRelease = as.integer(ensemblRelease),
         genomeBuild = as.character(genomeBuild),
