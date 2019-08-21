@@ -20,7 +20,7 @@ Use filtered (recommended) or raw counts. Note that raw counts still
 contain only whitelisted cellular barcodes.}
 
 \item{organism}{\code{character(1)}.
-Full Latin organism name (e.g. "\code{Homo sapiens}").}
+Full Latin organism name (e.g. \code{"Homo sapiens"}).}
 
 \item{ensemblRelease}{\code{integer(1)}.
 Ensembl release version (e.g. \code{90}). We recommend setting this value if
@@ -80,7 +80,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Currently supports loading of a single genome.
 
-Updated 2019-08-13.
+Updated 2019-08-21.
 }
 \section{Directory structure for multiple samples}{
 

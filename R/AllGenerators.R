@@ -1,10 +1,10 @@
-## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
+## Check approach to aggregate samples with "_1", "_2" suffix.
 
 
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-08-13.
+#' @note Updated 2019-08-21.
 #' @export
 #'
 #' @details
@@ -155,7 +155,11 @@ CellRanger <- function(
             sampleMetadataFile <- realpath(sampleMetadataFile)
         }
         ## Note that `readSampleData()` also supports URLs.
-        sampleData <- readSampleData(file = sampleMetadataFile, lanes = lanes)
+        sampleData <- readSampleData(
+            file = sampleMetadataFile,
+            lanes = lanes,
+            pipeline = "cellranger"
+        )
         assert(isSubset(rownames(sampleData), names(sampleDirs)))
         sampleIDs <- rownames(sampleData)
     } else {
