@@ -1,6 +1,8 @@
 #' @name extract
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
+#' @note Updated 2019-08-21.
+#' 
 #' @inheritParams acidroxygen::params
 #'
 #' @description Extract genes by row and cells by column.
@@ -41,77 +43,49 @@ NULL
 
 
 
-## Updated 2019-08-07.
+## This approach is adapted from bcbioSingleCell method.
+## Updated 2019-08-21.
 `extract,CellRanger` <-  # nolint
     function(x, i, j, ..., drop = FALSE) {
         validObject(x)
         
-        ## Genes
+        ## Genes (rows).
         if (missing(i)) {
             i <- 1L:nrow(x)
         }
-        ## Cells
+        ## Cells (columns).
         if (missing(j)) {
             j <- 1L:ncol(x)
         }
         
-        if (identical(
-            x = c(length(i), length(j)),
-            y = dim(x)
-        )) {
-            return(x)
+        ## Determine whether we should stash subset in metadata.
+        if (identical(x = dim(x), y = c(length(i), length(j)))) {
+            subset <- FALSE
+        } else {
+            subset <- TRUE
         }
         
         ## Subset using SCE method.
         sce <- as(x, "SingleCellExperiment")
         sce <- sce[i, j, drop = drop]
         
-        genes <- rownames(sce)
-        cells <- colnames(sce)
-        
-        ## Row data -------------------------------------------------------------
-        ## FIXME Simplify
-        rowRanges <- rowRanges(sce)
-        
-        ## Column data ----------------------------------------------------------
-        ## FIXME Simplify
-        colData <- colData(sce)
+        ## Early return original object, if unmodified.
+        if (identical(assay(sce), assay(x))) {
+            return(x)
+        }
         
         ## Metadata -------------------------------------------------------------
         metadata <- metadata(sce)
-        metadata[["subset"]] <- TRUE
-        
-        ## Drop unfiltered cellular barcode list.
-        metadata[["cellularBarcodes"]] <- NULL
-        
-        ## filterCells
-        filterCells <- metadata[["filterCells"]]
-        if (!is.null(filterCells)) {
-            filterCells <- intersect(filterCells, cells)
-            metadata[["filterCells"]] <- filterCells
+        if (isTRUE(subset)) {
+            metadata[["filterGenes"]] <- NULL
+            metadata[["subset"]] <- TRUE
         }
-        
-        ## filterGenes
-        filterGenes <- metadata[["filterGenes"]]
-        if (!is.null(filterGenes)) {
-            filterGenes <- intersect(filterGenes, genes)
-            metadata[["filterGenes"]] <- filterGenes
-        }
+        metadata <- Filter(f = Negate(is.null), x = metadata)
+        metadata(sce) <- metadata
         
         ## Return ---------------------------------------------------------------
-        ## FIXME Simplify this.
-        ## FIXME Look at current bcbioSingleCell approach.
-        ## FIXME droplevels call.
-        new(
-            Class = class(x)[[1L]],
-            makeSingleCellExperiment(
-                assays = assays(sce),
-                rowRanges <- rowRanges(sce),
-                colData <- colData,
-                metadata = metadata,
-                spikeNames = rownames(sce)[isSpike(sce)]
-            )
-        )
+        sce <- droplevels(sce)
+        new(Class = "CellRanger", sce)
     }
 
 
