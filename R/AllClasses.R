@@ -1,10 +1,10 @@
 #' Cell Ranger RNA-seq data set
-#' 
+#'
 #' Contains UMI droplet-based single-cell RNA-seq data.
 #'
 #' @author Michael Steinbaugh
 #' @export
-#' 
+#'
 #' @examples
 #' showClass("CellRanger")
 setClass(
@@ -17,18 +17,18 @@ setValidity(
         colData <- colData(object)
         metadata <- metadata(object)
         sampleData <- sampleData(object)
-        
+
         ## Assays --------------------------------------------------------------
         ok <- validate(isSubset("counts", names(assays(object))))
         if (!isTRUE(ok)) return(ok)
-        
+
         ## Row data ------------------------------------------------------------
         ok <- validate(
             is(rowRanges(object), "GRanges"),
             is(rowData(object), "DataFrame")
         )
         if (!isTRUE(ok)) return(ok)
-        
+
         ## Column data ---------------------------------------------------------
         ok <- validate(
             ## Require that metrics columns are defined.
@@ -37,13 +37,13 @@ setValidity(
             areDisjointSets("interestingGroups", colnames(colData))
         )
         if (!isTRUE(ok)) return(ok)
-        
+
         ## > sampleData[["interestingGroups"]] <- NULL
         ## > sampleData[["sampleName"]] <- NULL
         ## Ensure that sample-level metadata is also defined at cell-level.
         ## We're doing this in long format in the colData slot.
         ## > isSubset(colnames(sampleData), colnames(colData))
-        
+
         ## Metadata ------------------------------------------------------------
         ok <- validateClasses(
             object = metadata,
@@ -73,13 +73,13 @@ setValidity(
             subset = TRUE
         )
         if (!isTRUE(ok)) return(ok)
-        
+
         ok <- validate(
             !isSubset("sampleName", names(metadata)),
             isSubset(metadata[["level"]], c("genes", "transcripts"))
         )
         if (!isTRUE(ok)) return(ok)
-        
+
         TRUE
     }
 )
@@ -87,14 +87,14 @@ setValidity(
 
 
 ## nolint start
-## 
+##
 ## #' Cell Ranger ATAC-seq data set
-## #' 
+## #'
 ## #' Contains single-cell ATAC-seq data.
 ## #'
 ## #' @author Michael Steinbaugh
 ## #' @export
-## #' 
+## #'
 ## #' @examples
 ## #' showClass("CellRangerATAC")
 ## setClass(
@@ -107,5 +107,5 @@ setValidity(
 ##         TRUE
 ##     }
 ## )
-## 
+##
 ## nolint end

@@ -12,13 +12,13 @@
 #' for a Chromium data set into a `SingleCellExperiment` object.
 #'
 #' @section Directory structure for multiple samples:
-#' 
+#'
 #' Cell Ranger can vary in its output directory structure, but we're requiring a
 #' single, consistent directory structure for datasets containing multiple
 #' samples that have not been aggregated into a single matrix with `aggr`.
 #'
 #' Cell Ranger v3 output:
-#' 
+#'
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
@@ -67,13 +67,13 @@
 #' }
 #'
 #' @section Sample metadata:
-#' 
+#'
 #' A user-supplied sample metadata file defined by `sampleMetadataFile` is
 #' required for multiplexed datasets. Otherwise this can be left `NULL`, and
 #' minimal sample data will be used, based on the directory names.
 #'
 #' @section Reference data:
-#' 
+#'
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
@@ -81,7 +81,7 @@
 #' function will attempt to use the most current annotations available from
 #' Ensembl, and some gene IDs may not match, due to deprecation in the current
 #' Ensembl release.
-#' 
+#'
 #' @inheritParams acidroxygen::params
 #' @param dir `character(1)`.
 #'   Directory path to Cell Ranger output.
@@ -97,7 +97,7 @@
 #' dir <- system.file("extdata/cellranger_v2", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
-CellRanger <- function(
+CellRanger <- function(  # nolint
     dir,
     filtered = TRUE,
     organism = NULL,
@@ -111,7 +111,7 @@ CellRanger <- function(
     transgeneNames = NULL,
     spikeNames = NULL,
     interestingGroups = "sampleName",
-    BPPARAM = BiocParallel::SerialParam()
+    BPPARAM = BiocParallel::SerialParam()  # nolint
 ) {
     assert(
         isADirectory(dir),
@@ -130,21 +130,21 @@ CellRanger <- function(
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
     level <- "genes"
-    
+
     ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
     sampleDirs <- .sampleDirs(dir)
-    
+
     ## Sequencing lanes --------------------------------------------------------
     lanes <- detectLanes(sampleDirs)
     assert(
         isInt(lanes) ||
             identical(lanes, integer())
     )
-    
+
     ## Samples -----------------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
@@ -200,7 +200,7 @@ CellRanger <- function(
         }
         allSamples <- FALSE
     }
-    
+
     ## Assays ------------------------------------------------------------------
     matrixFiles <- .matrixFiles(
         sampleDirs = sampleDirs,
@@ -260,7 +260,6 @@ CellRanger <- function(
         ## in the current Ensembl release. Don't warn about old Ensembl release
         ## version.
         message("Using makeGRangesFromEnsembl() for annotations.")
-        ## FIXME This is calling Ensembl release 79. What's up with that?
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
@@ -278,7 +277,7 @@ CellRanger <- function(
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
-    
+
     ## Column data -------------------------------------------------------------
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
@@ -313,7 +312,7 @@ CellRanger <- function(
             samples = rownames(sampleData)
         )
     }
-    
+
     ## Metadata ----------------------------------------------------------------
     interestingGroups <- camelCase(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
@@ -337,7 +336,7 @@ CellRanger <- function(
         umiType = "chromium",
         version = .version
     )
-    
+
     ## Return ------------------------------------------------------------------
     sce <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
