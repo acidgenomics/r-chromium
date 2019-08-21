@@ -6,20 +6,18 @@ Toolkit for 10X Genomics Chromium single cell data.
 
 ## Installation
 
-This is an [R][] package.
-
-### [Bioconductor][] method
-
-We recommend installing the package with [BiocManager][].
+### [R][] method
 
 ```r
-if (!require("BiocManager")) {
-    install.packages("BiocManager")
+if (!requireNamespace("remotes", quietly = TRUE)) {
+    install.packages("remotes")
 }
-BiocManager::install("remotes")
-BiocManager::install("acidgenomics/Chromium")
+Sys.setenv(R_REMOTES_UPGRADE = "always")
+# Set `GITHUB_PAT` in `~/.Renviron` if you get a rate limit error.
+remotes::install_github("acidgenomics/Chromium")
+remotes::update_packages()
 ```
 
+[Bioconductor]: https://bioconductor.org/
 [BiocManager]: https://cran.r-project.org/package=BiocManager
-[Bioconductor]: https://bioconductor.org
-[R]: https://www.r-project.org
+[R]: https://www.r-project.org/
