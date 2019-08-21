@@ -6,7 +6,7 @@
 #' @importFrom basejump calculateMetrics camel detectLanes droplevels
 #'   emptyRanges import makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF
 #'   makeDimnames makeNames makeSingleCellExperiment mapCellsToSamples
-#'   minimalSampleData readSampleData realpath
+#'   minimalSampleData readSampleData realpath standardizeCall
 #' @importFrom goalie allAreDirectories allAreFiles assert hasLength hasNames
 #'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
 #'   isFlag isInt isNonEmpty isScalar isString isSubset validNames
