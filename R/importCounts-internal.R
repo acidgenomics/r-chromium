@@ -1,9 +1,5 @@
-## FIXME Rework to use matrixFiles instead.
-
-
-
 #' Import counts from either HDF5 or MTX files.
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-21.
 #' @noRd
 .importCounts <- function(
     matrixFiles,
@@ -22,8 +18,7 @@
         basename(matrixFiles[[1L]]),
         ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
     ))
-    ## This step seems to have issues when parsing HDF5 files in parallel
-    ## on an Azure Files mount over CIFS.
+    ## This step seems to have issues when parsing files in parallel via CIFS.
     list <- bpmapply(
         sampleID = names(matrixFiles),
         file = matrixFiles,
@@ -82,21 +77,16 @@
             isAFile(file),
             grepl(pattern = "\\.H5", x = file, ignore.case = TRUE)
         )
-        
         names <- names(h5dump(file, load = FALSE))
         assert(isString(names))
-        
         ## Import HDF5 data.
         h5 <- h5read(file = file, name = names[[1L]])
-        
         ## v3 names:
         ## - "barcodes"
         ## - "data"
         ## - "features"
         ## - "indices"
         ## - "indptr"  
-        
-        ## Want `Csparse` not `Tsparse` matrix.
         counts <- sparseMatrix(
             i = h5[["indices"]] + 1L,
             p = h5[["indptr"]],
@@ -104,7 +94,6 @@
             dims = h5[["shape"]],
             giveCsparse = TRUE
         )
-        
         ## Row names.
         if ("features" %in% names(h5)) {
             ## > names(h5[["features"]])
@@ -119,14 +108,12 @@
             ## Older H5 objects (v2) use "genes" instead of "features".
             rownames <- h5[["genes"]]
         } 
-        
         ## Column names.
         colnames <- h5[["barcodes"]]
         assert(
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        
         ## Return.
         rownames(counts) <- rownames
         colnames(counts) <- colnames
@@ -173,14 +160,9 @@
             recursive = FALSE,
             ignore.case = TRUE
         ))
-        
         ## Count matrix.
-        ## FIXME Switch to using basejump import.
-        ## FIXME Update basejump to not warn about missing sidecars.
-        ## > counts <- import(file)
-        counts <- readMM(file)
+        counts <- import(file)
         assert(is(counts, "sparseMatrix"))
-        
         ## Row names.
         ## Legacy v2 output uses "genes" instead of "features".
         ## Also, older Cell Ranger output doesn't compress these files.
@@ -200,7 +182,6 @@
             colnames = FALSE
         )
         rownames <- rownames[[1L]]
-        
         ## Column names.
         colnamesFile <- grep(
             pattern = "^barcodes\\.tsv(\\.gz)?$",
@@ -214,7 +195,6 @@
             file = colnamesFile,
             format = "lines"
         )
-        
         ## Return.
         assert(
             identical(length(rownames), nrow(counts)),
