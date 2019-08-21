@@ -8,12 +8,12 @@ CellRanger(dir, filtered = TRUE, organism = NULL,
   ensemblRelease = NULL, genomeBuild = NULL, gffFile = NULL,
   refdataDir = NULL, samples = NULL, censorSamples = NULL,
   sampleMetadataFile = NULL, transgeneNames = NULL,
-  spikeNames = NULL, BPPARAM = BiocParallel::SerialParam())
+  spikeNames = NULL, interestingGroups = "sampleName",
+  BPPARAM = BiocParallel::SerialParam())
 }
 \arguments{
 \item{dir}{\code{character(1)}.
-Path to Cell Ranger output directory (final upload). This directory path
-must contain \code{filtered_gene_bc_matrices*} as a child directory.}
+Directory path to Cell Ranger output.}
 
 \item{filtered}{\code{logical(1)}.
 Use filtered (recommended) or raw counts. Note that raw counts still
@@ -57,6 +57,10 @@ Vector indicating which assay rows denote transgenes (e.g. EGFP, TDTOMATO).}
 
 \item{spikeNames}{\code{character}.
 Vector indicating which assay rows denote spike-in sequences (e.g. ERCCs).}
+
+\item{interestingGroups}{\code{character}.
+Groups of interest to use for visualization.
+Corresponds to factors describing the columns of the object.}
 
 \item{BPPARAM}{\code{bpparamClass}.
 BiocParallel parameter to specify the desired processor configuration.\cr
