@@ -8,7 +8,7 @@
 
 
 #' Does a given directory path contain a subdirectory name?
-#' 
+#'
 #' @note Updated 2019-08-22.
 #'
 #' @param paths `character`.
@@ -54,7 +54,7 @@
 #'
 #' This is a utility function intended to make loading of example datasets
 #' from the 10X Genomics website easier.
-#' 
+#'
 #' @note Updated 2019-08-22.
 #'
 #' @param dir Cell Ranger output directory.

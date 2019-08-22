@@ -1,7 +1,7 @@
 #' 10X Genomics Chromium example data set
 #'
 #' Peripheral blood mononuclear cells (PBMCs).
-#' 
+#'
 #' Chromium v2 chemistry.
 #'
 #' @examples
@@ -14,7 +14,7 @@
 #' 10X Genomics Chromium example data set
 #'
 #' Peripheral blood mononuclear cells (PBMCs).
-#' 
+#'
 #' Chromium v3 chemistry.
 #'
 #' @examples

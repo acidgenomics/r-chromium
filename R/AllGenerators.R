@@ -7,7 +7,7 @@
 ## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
 ## >     "cellranger",
 ## >     "MCF7_50nM_CPI1612"
-## x <- CellRanger(dir)
+## > x <- CellRanger(dir)
 
 ## Aggregation:
 ## > dir <- file.path(
@@ -18,7 +18,7 @@
 ## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
 ## >     "cellranger",
 ## >     "MCF7"
-## x <- CellRanger(dir)
+## > x <- CellRanger(dir)
 
 
 
@@ -314,7 +314,7 @@ CellRanger <- function(  # nolint
     } else if (!.isMinimalSample(dir)) {
         sampleMetrics <- .importSampleMetrics(sampleDirs)
     }
-    
+
     ## Column data -------------------------------------------------------------
     colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
@@ -378,7 +378,7 @@ CellRanger <- function(  # nolint
         transgeneNames = transgeneNames,
         spikeNames = spikeNames
     )
-    
+
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
     object <- calculateMetrics(object = object, prefilter = TRUE)
