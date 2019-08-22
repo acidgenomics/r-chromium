@@ -1,13 +1,13 @@
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
-## Updated 2019-08-21.
+## Updated 2019-08-22.
 
 library(usethis)
 library(pryr)
+library(readr)
 library(Matrix)
 library(basejump)
-## > library(tidyverse)
 
 dataset_name <- "pbmc4k_v2"
 data_raw_dir <- "data-raw"
@@ -21,9 +21,9 @@ dir <- initDir(file.path(data_raw_dir, dataset_name))
 unlink(dir, recursive = TRUE)
 sample_dir <- initDir(file.path(dir, "pbmc"))
 outs_dir <- initDir(file.path(sample_dir, "outs"))
+## Touch an empty file in the counter directory.
 counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
 initDir(counter_dir)
-## Touch an empty file in the counter directory.
 file.create(file.path(counter_dir, "empty"))
 
 ## Directory structure:
@@ -97,11 +97,7 @@ cells <- sort(names(top_cells))
 object <- object[genes, cells]
 
 ## Report the size of each slot in bytes.
-vapply(
-    X = coerceS4ToList(object),
-    FUN = object_size,
-    FUN.VALUE = numeric(1L)
-)
+lapply(coerceS4ToList(object), object_size)
 object_size(object)
 stopifnot(object_size(object) < limit)
 stopifnot(validObject(object))
@@ -116,39 +112,46 @@ input_dir <- file.path(
     "GRCh38"
 )
 stopifnot(dir.exists(input_dir))
-unlink("inst/extdata/cellranger_v2", recursive = TRUE)
 output_dir <- file.path(
     "inst",
     "extdata",
-    "cellranger_v2",
-    "pbmc",
-    "outs",
+    "cellranger_v2"
+)
+unlink(output_dir, recursive = TRUE)
+sample_dir <- initDir(file.path(output_dir, "pbmc"))
+outs_dir <- initDir(file.path(sample_dir, "outs"))
+## Touch an empty file in the counter directory.
+counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
+initDir(counter_dir)
+file.create(file.path(counter_dir, "empty"))
+output_dir <- file.path(
+    outs_dir,
     "filtered_gene_bc_matrices",
     "GRCh38"
 )
-dir.create(output_dir, recursive = TRUE)
+initDir(output_dir)
 
 ## Prepare the sparse matrix.
 counts <- Matrix::readMM(file = file.path(input_dir, "matrix.mtx"))
 counts <- counts[seq_len(100), seq_len(100)]
 Matrix::writeMM(counts, file = file.path(output_dir, "matrix.mtx"))
 
-genes <- readr::read_tsv(
+genes <- read_tsv(
     file = file.path(input_dir, "genes.tsv"),
     col_names = c("geneID", "geneName"),
     n_max = 100
 )
-readr::write_tsv(
+write_tsv(
     x = genes,
     path = file.path(output_dir, "genes.tsv"),
     col_names = FALSE
 )
 
-barcodes <- readr::read_lines(
+barcodes <- read_lines(
     file = file.path(input_dir, "barcodes.tsv"),
     n_max = 100
 )
-readr::write_lines(
+write_lines(
     x = barcodes,
     path = file.path(output_dir, "barcodes.tsv")
 )
