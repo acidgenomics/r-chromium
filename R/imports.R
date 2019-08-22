@@ -2,7 +2,7 @@
 #' @importFrom Matrix sparseMatrix
 #' @importFrom SingleCellExperiment SingleCellExperiment isSpike
 #' @importFrom SummarizedExperiment assay assays
-#' @importFrom S4Vectors SimpleList mcols metadata metadata<-
+#' @importFrom S4Vectors DataFrame SimpleList mcols metadata metadata<-
 #' @importFrom basejump calculateMetrics camelCase detectLanes droplevels
 #'   emptyRanges import makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF
 #'   makeDimnames makeNames makeSingleCellExperiment mapCellsToSamples
