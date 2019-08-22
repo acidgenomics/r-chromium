@@ -14,10 +14,10 @@ jobs:
   include:
     - stage: test
       name: "bioc-3.9"
-      script: image="singlecell" tag="bioc-3.9" ./docker.sh
+      script: image="singlecell" tag="bioc-3.9" ./.Rcheck/docker
     - stage: test
       name: "bioc-devel"
-      script: image="singlecell" tag="bioc-devel" ./docker.sh
+      script: image="singlecell" tag="bioc-devel" ./.Rcheck/docker
 
 matrix:
   allow_failures:
