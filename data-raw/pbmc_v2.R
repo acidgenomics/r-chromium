@@ -25,7 +25,6 @@ outs_dir <- initDir(file.path(sample_dir, "outs"))
 counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
 initDir(counter_dir)
 file.create(file.path(counter_dir, "empty"))
-
 ## Download the example files.
 prefix <- "pbmc4k"
 files <- paste0(
@@ -61,12 +60,10 @@ invisible(lapply(
     dir = dir,
     url = url
 ))
-
 ## Extract the filtered MTX matrix files.
 tarfile <- file.path(dir, paste0(prefix, "_filtered_gene_bc_matrices.tar.gz"))
 untar(tarfile = tarfile, exdir = outs_dir)
 stopifnot(identical(dir(outs_dir), "filtered_gene_bc_matrices"))
-
 ## Copy the example outs files.
 files <- c(
     "metrics_summary.csv",
@@ -83,7 +80,6 @@ invisible(lapply(
         
     }
 ))
-
 ## Using Ensembl 84 GTF annotations.
 gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.84.gtf.gz")
 if (!file.exists(gtf_file)) {
@@ -100,7 +96,6 @@ if (!file.exists(gtf_file)) {
         destfile = gtf_file
     )
 }
-
 object <- CellRanger(
     dir = dir,
     organism = "Homo sapiens",
