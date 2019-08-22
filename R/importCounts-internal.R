@@ -69,7 +69,7 @@
 #'   Cell barcodes in the columns, features (i.e. genes) in the rows.
 #'
 #' @examples
-#' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
+#' ## > x <- .importCountsFromHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
 .importCountsFromHDF5 <-  # nolint
     function(file) {
@@ -144,7 +144,7 @@
 #' - `genes.tsv`: Gene identifiers.
 #'
 #' @examples
-#' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
+#' ## > x <- .importCountsFromMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
 .importCountsFromMTX <-  # nolint
     function(file) {
