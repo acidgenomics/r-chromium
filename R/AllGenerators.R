@@ -1,10 +1,21 @@
-## Check approach to aggregate samples with "_1", "_2" suffix.
+## Single sample:
+## FIXME Warn if metrics_summary.csv is missing.
+## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7_50nM_CPI1612/outs
+
+## Aggregation:
+## FIXME Warn if aggregation.csv is missing.
+## FIXME Warn if summary.json is missing.
+## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7/outs
+
+## FIXME Check approach to aggregate samples with "_1", "_2" suffix.
+
+## FIXME Improve support for extra gene symbols in Cell Ranger output (e.g. pbmc_v3).
 
 
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-08-21.
+#' @note Updated 2019-08-22.
 #' @export
 #'
 #' @details
@@ -22,6 +33,7 @@
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
+#' |---- SC_RNA_COUNTER_CS/
 #' |---- outs/
 #' |------ filtered_feature_bc_matrix/
 #' |-------- barcodes.tsv.gz
@@ -46,6 +58,7 @@
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
+#' |---- SC_RNA_COUNTER_CS/
 #' |---- outs/
 #' |------ filtered_gene_bc_matrices/
 #' |-------- <genomeBuild>/
@@ -279,6 +292,7 @@ CellRanger <- function(  # nolint
     assert(is(rowRanges, "GRanges"))
 
     ## Column data -------------------------------------------------------------
+    colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
         ## Define the grep pattern to use for sample ID extraction.
@@ -289,22 +303,13 @@ CellRanger <- function(  # nolint
                 pattern = pattern
             )
             samples <- unique(match[, 2L, drop = TRUE])
-        } else if (length(sampleDirs) == 1L) {
+        } else if (hasLength(sampleDirs, n = 1L)) {
             samples <- names(sampleDirs)
         }
         sampleData <- minimalSampleData(samples)
     }
-    ## Always prefilter, removing very low quality cells with no UMIs or genes.
-    colData <- calculateMetrics(
-        object = counts,
-        rowRanges = rowRanges,
-        prefilter = TRUE
-    )
-    ## Subset the counts to match the prefiltered metrics.
-    assert(isSubset(rownames(colData), colnames(counts)))
-    counts <- counts[, rownames(colData), drop = FALSE]
     ## Join `sampleData` into cell-level `colData`.
-    if (nrow(sampleData) == 1L) {
+    if (identical(nrow(sampleData), 1L)) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
     } else {
         colData[["sampleID"]] <- mapCellsToSamples(
@@ -337,8 +342,8 @@ CellRanger <- function(  # nolint
         version = .version
     )
 
-    ## Return ------------------------------------------------------------------
-    sce <- makeSingleCellExperiment(
+    ## SingleCellExperiment ----------------------------------------------------
+    object <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
@@ -346,5 +351,9 @@ CellRanger <- function(  # nolint
         transgeneNames = transgeneNames,
         spikeNames = spikeNames
     )
-    new(Class = "CellRanger", sce)
+    
+    ## Return ------------------------------------------------------------------
+    ## Always prefilter, removing very low quality cells and/or genes.
+    object <- calculateMetrics(object = object, prefilter = TRUE)
+    new(Class = "CellRanger", object)
 }
