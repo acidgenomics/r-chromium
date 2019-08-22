@@ -154,7 +154,7 @@ CellRanger <- function(  # nolint
     ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
-        refdataDir <- realpath(refdataDir)
+        refdataDir <- realpath(refdataDir)  ## nocov
     }
     sampleDirs <- .sampleDirs(dir)
 
@@ -241,6 +241,7 @@ CellRanger <- function(  # nolint
     refJSON <- NULL
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
+        ## nocov start
         message(sprintf(
             fmt = paste0(
                 "Using 10X Genomics reference data ",
@@ -269,10 +270,11 @@ CellRanger <- function(  # nolint
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
         assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
+        ## nocov end
     } else if (isString(gffFile)) {
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
-        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
+        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
