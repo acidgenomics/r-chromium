@@ -1,15 +1,3 @@
-## FIXME renamed to pbmc_v2
-
-
-
-## FIXME Add HDF5 example
-## http://cf.10xgenomics.com/samples/cell-exp/2.1.0/pbmc4k/pbmc4k_filtered_gene_bc_matrices_h5.h5
-## http://cf.10xgenomics.com/samples/cell-exp/2.1.0/pbmc4k/pbmc4k_molecule_info.h5
-
-
-
-
-
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
@@ -29,12 +17,7 @@ data_raw_dir <- "data-raw"
 limit <- structure(2e6, class = "object_size")
 
 ## Complete dataset =============================================================
-## Create the example dataset directory structure:
-## | pbmc_v2
-## |-- pbmc
-## |---- outs
-## |------ filtered_gene_bc_matrices
-## |-------- GRCh38
+## Create the example dataset directory structure.
 dir <- initDir(file.path(data_raw_dir, dataset_name))
 unlink(dir, recursive = TRUE)
 sample_dir <- initDir(file.path(dir, "pbmc"))
@@ -48,8 +31,9 @@ prefix <- "pbmc4k"
 files <- paste0(
     prefix, "_",
     c(
-        ## "filtered_gene_bc_matrices_h5.h5",  # 403
+        ## "filtered_gene_bc_matrices_h5.h5",  # 403 (2019-08-22)
         "filtered_gene_bc_matrices.tar.gz",
+        "metrics_summary.csv",
         "molecule_info.h5",
         "raw_gene_bc_matrices_h5.h5",
         "raw_gene_bc_matrices.tar.gz"
