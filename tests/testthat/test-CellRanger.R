@@ -18,3 +18,7 @@ test_that("AnnotationHub metadata", {
     )
     expect_s4_class(x, "CellRanger")
 })
+
+## FIXME
+test_that("User-defined sample metadata", {
+})
