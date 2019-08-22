@@ -103,28 +103,10 @@ if (!file.exists(gtf_file)) {
     )
 }
 
-## The 10X matrices now include gene symbols that aren't in Ensembl GTF:
-## 
-##  [1] "CD11b"  "CD127"  "CD137"  "CD14"   "CD15"   "CD16"   "CD19"   "CD197" 
-##  [9] "CD20"   "CD25"   "CD27"   "CD274"  "CD278"  "CD28"   "CD3"    "CD335" 
-## [17] "CD34"   "CD4"    "CD45RA" "CD45RO" "CD56"   "CD62L"  "CD69"   "CD80"  
-## [25] "CD86"   "CD8a"   "HLA_DR" "IgG1"   "IgG2a"  "IgG2b"  "PD_1"   "TIGIT"
-## 
-## These will be slotted in rowRanges with "unknown" seqnames.
-
-## FIXME Improve handling in calculateMetrics.
-## Error in .local(object, ...) : 
-## Features missing in 'rowRanges()': CD3, CD4, CD8a, CD11b, CD14, CD15, CD16, CD19, CD20, CD25, CD27, CD28, CD34, CD45RA, CD45RO, CD56, ## CD62L, CD69, CD80, CD86, CD127, CD137, CD197, CD274, CD278, CD335, PD_1, HLA_DR, TIGIT, IgG1, IgG....
-## Calls: CellRanger -> calculateMetrics -> calculateMetrics -> .local
-
-## Check that spikeNames and transgeneNames work.
 object <- CellRanger(
     dir = dir,
     organism = "Homo sapiens",
     gffFile = gtf_file
-    ## spikeNames = symbols,
-    ## spikeNames = symbols
-    ## transgeneNames = symbols
 )
 
 ## We're using a subset of this object for our working example (see below).
@@ -132,4 +114,84 @@ assignAndSaveData(
     name = dataset_name,
     object = object,
     dir = data_raw_dir
+)
+
+
+
+
+
+
+## Example object ==============================================================
+counts <- counts(object)
+
+## Subset the matrix to include only the top genes and cells.
+top_genes <- Matrix::rowSums(counts) %>%
+    sort(decreasing = TRUE) %>%
+    head(n = 500L)
+genes <- sort(names(top_genes))
+
+top_cells <- Matrix::colSums(counts) %>%
+    sort(decreasing = TRUE) %>%
+    head(n = 100L)
+cells <- sort(names(top_cells))
+
+## Subset the original object dataset to contain only top genes and cells.
+object <- object[genes, cells]
+
+## Report the size of each slot in bytes.
+lapply(coerceS4ToList(object), object_size)
+object_size(object)
+stopifnot(object_size(object) < limit)
+stopifnot(validObject(object))
+
+pbmc_v3 <- object
+usethis::use_data(pbmc_v3, compress = "xz", overwrite = TRUE)
+
+## Example Cell Ranger v3 output ===============================================
+input_dir <- file.path(
+    outs_dir,
+    "filtered_feature_bc_matrix"
+)
+stopifnot(dir.exists(input_dir))
+output_dir <- file.path(
+    "inst",
+    "extdata",
+    "cellranger_v3"
+)
+unlink(output_dir, recursive = TRUE)
+sample_dir <- initDir(file.path(output_dir, "pbmc"))
+outs_dir <- initDir(file.path(sample_dir, "outs"))
+## Touch an empty file in the counter directory.
+counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
+initDir(counter_dir)
+file.create(file.path(counter_dir, "empty"))
+output_dir <- file.path(
+    outs_dir,
+    "filtered_feature_bc_matrix"
+)
+initDir(output_dir)
+
+## Prepare the sparse matrix.
+counts <- Matrix::readMM(file = file.path(input_dir, "matrix.mtx.gz"))
+counts <- counts[seq_len(100), seq_len(100)]
+Matrix::writeMM(counts, file = file.path(output_dir, "matrix.mtx.gz"))
+
+features <- read_tsv(
+    file = file.path(input_dir, "features.tsv.gz"),
+    col_names = FALSE,
+    n_max = 100
+)
+write_tsv(
+    x = genes,
+    path = file.path(output_dir, "features.tsv.gz"),
+    col_names = FALSE
+)
+
+barcodes <- read_lines(
+    file = file.path(input_dir, "barcodes.tsv.gz"),
+    n_max = 100
+)
+write_lines(
+    x = barcodes,
+    path = file.path(output_dir, "barcodes.tsv.gz")
 )

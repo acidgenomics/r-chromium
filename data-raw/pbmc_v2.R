@@ -155,7 +155,7 @@ Matrix::writeMM(counts, file = file.path(output_dir, "matrix.mtx"))
 
 genes <- read_tsv(
     file = file.path(input_dir, "genes.tsv"),
-    col_names = c("geneID", "geneName"),
+    col_names = FALSE,
     n_max = 100
 )
 write_tsv(
