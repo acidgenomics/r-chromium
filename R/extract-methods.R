@@ -21,10 +21,10 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' data(pbmc4k_v2)
+#' data(pbmc_v3)
 #'
 #' ## CellRanger ====
-#' object <- pbmc4k_v2
+#' object <- pbmc_v3
 #'
 #' cells <- head(colnames(object), 100L)
 #' head(cells)
