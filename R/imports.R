@@ -1,12 +1,13 @@
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
 #' @importFrom Matrix sparseMatrix
 #' @importFrom SingleCellExperiment SingleCellExperiment isSpike
-#' @importFrom SummarizedExperiment assays
-#' @importFrom S4Vectors SimpleList mcols
-#' @importFrom basejump calculateMetrics camel detectLanes droplevels
+#' @importFrom SummarizedExperiment assay assays
+#' @importFrom S4Vectors SimpleList mcols metadata metadata<-
+#' @importFrom basejump calculateMetrics camelCase detectLanes droplevels
 #'   emptyRanges import makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF
 #'   makeDimnames makeNames makeSingleCellExperiment mapCellsToSamples
-#'   metricsCols minimalSampleData readSampleData realpath standardizeCall
+#'   metricsCols minimalSampleData printString readSampleData realpath
+#'   standardizeCall
 #' @importFrom goalie allAreDirectories allAreFiles areDisjointSets assert
 #'   hasLength hasNames hasValidDimnames hasValidNames isADirectory isAFile
 #'   isAny isCharacter isFlag isInt isNonEmpty isScalar isString isSubset
