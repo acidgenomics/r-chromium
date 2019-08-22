@@ -39,7 +39,7 @@
 #'
 #' Cell Ranger v3 output:
 #'
-#' \preformatted{
+#' ```
 #' | <dir>/
 #' |-- <sampleName>/
 #' |---- SC_RNA_COUNTER_CS/
@@ -59,12 +59,11 @@
 #' |-------- matrix.mtx.gz
 #' |------ raw_feature_bc_matrix.h5
 #' |------ web_summary.html
-#' )
-#' }
+#' ```
 #'
 #' Cell Ranger v2 output:
 #'
-#' \preformatted{
+#' ```
 #' | <dir>/
 #' |-- <sampleName>/
 #' |---- SC_RNA_COUNTER_CS/
@@ -85,8 +84,7 @@
 #' |---------- genes.tsv
 #' |---------- matrix.mtx
 #' |------ raw_gene_bc_matrices_h5.h5
-#' )
-#' }
+#' ```
 #'
 #' @section Sample metadata:
 #'
