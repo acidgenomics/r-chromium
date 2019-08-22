@@ -84,7 +84,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Currently supports loading of a single genome.
 
-Updated 2019-08-21.
+Updated 2019-08-22.
 }
 \section{Directory structure for multiple samples}{
 
@@ -98,6 +98,7 @@ Cell Ranger v3 output:
 \preformatted{
 | <dir>/
 |-- <sampleName>/
+|---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_feature_bc_matrix/
 |-------- barcodes.tsv.gz
@@ -122,6 +123,7 @@ Cell Ranger v2 output:
 \preformatted{
 | <dir>/
 |-- <sampleName>/
+|---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_gene_bc_matrices/
 |-------- <genomeBuild>/

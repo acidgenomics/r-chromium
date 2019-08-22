@@ -26,10 +26,7 @@
             counts <- fun(file)
             ## Strip index when all barcodes end with "-1".
             if (
-                allAreMatchingRegex(
-                    x = colnames(counts),
-                    pattern = "-1$"
-                )
+                allAreMatchingRegex(x = colnames(counts), pattern = "-1$")
             ) {
                 colnames(counts) <- sub("-1", "", colnames(counts))
             }
@@ -123,8 +120,8 @@
             identical(length(colnames), ncol(counts))
         )
         ## Return.
-        rownames(counts) <- rownames
-        colnames(counts) <- colnames
+        rownames(counts) <- as.character(rownames)
+        colnames(counts) <- as.character(colnames)
         counts
     }
 
