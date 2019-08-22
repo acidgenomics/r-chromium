@@ -1,3 +1,15 @@
+## FIXME renamed to pbmc_v2
+
+
+
+## FIXME Add HDF5 example
+## http://cf.10xgenomics.com/samples/cell-exp/2.1.0/pbmc4k/pbmc4k_filtered_gene_bc_matrices_h5.h5
+## http://cf.10xgenomics.com/samples/cell-exp/2.1.0/pbmc4k/pbmc4k_molecule_info.h5
+
+
+
+
+
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
@@ -9,7 +21,7 @@ library(readr)
 library(Matrix)
 library(basejump)
 
-dataset_name <- "pbmc4k_v2"
+dataset_name <- "pbmc_v2"
 data_raw_dir <- "data-raw"
 
 ## Restrict to 2 MB.
@@ -17,36 +29,58 @@ data_raw_dir <- "data-raw"
 limit <- structure(2e6, class = "object_size")
 
 ## Complete dataset =============================================================
+## Create the example dataset directory structure:
+## | pbmc_v2
+## |-- pbmc
+## |---- outs
+## |------ filtered_gene_bc_matrices
+## |-------- GRCh38
 dir <- initDir(file.path(data_raw_dir, dataset_name))
 unlink(dir, recursive = TRUE)
 sample_dir <- initDir(file.path(dir, "pbmc"))
 outs_dir <- initDir(file.path(sample_dir, "outs"))
-## Touch an empty file in the counter directory.
 counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
 initDir(counter_dir)
 file.create(file.path(counter_dir, "empty"))
 
-## Directory structure:
-## - pbmc
-## - outs
-## - filtered_gene_bc_matrices
-## - GRCh38
-tar_file <- file.path(data_raw_dir, paste0(dataset_name, ".tar.gz"))
-if (!file.exists(tar_file)) {
-    download.file(
-        url = paste(
-            "http://cf.10xgenomics.com",
-            "samples",
-            "cell-exp",
-            "2.1.0",
-            "pbmc4k",
-            "pbmc4k_filtered_gene_bc_matrices.tar.gz",
-            sep = "/"
-        ),
-        destfile = tar_file
+## Download the example files.
+prefix <- "pbmc4k"
+files <- paste0(
+    prefix, "_",
+    c(
+        ## "filtered_gene_bc_matrices_h5.h5",  # 403
+        "filtered_gene_bc_matrices.tar.gz",
+        "molecule_info.h5",
+        "raw_gene_bc_matrices_h5.h5",
+        "raw_gene_bc_matrices.tar.gz"
     )
-}
-untar(tarfile = tar_file, exdir = outs_dir)
+)
+url <- pasteURL(
+    "cf.10xgenomics.com",
+    "samples",
+    "cell-exp",
+    "2.1.0",
+    prefix,
+    protocol = "http"
+)
+invisible(lapply(
+    X = files,
+    FUN = function(file, dir, url) {
+        destfile <- file.path(dir, file)
+        if (!file.exists(destfile)) {
+            download.file(
+                url = file.path(url, file),
+                destfile = destfile
+            )
+        }
+    },
+    dir = dir,
+    url = url
+))
+
+## Extract the filtered MTX matrix files.
+tarfile <- file.path(dir, paste0(prefix, "_filtered_gene_bc_matrices.tar.gz"))
+untar(tarfile = tarfile, exdir = outs_dir)
 stopifnot(identical(dir(outs_dir), "filtered_gene_bc_matrices"))
 
 ## Using Ensembl 84 GTF annotations.
@@ -72,14 +106,13 @@ object <- CellRanger(
     gffFile = gtf_file
 )
 ## We're using a subset of this object for our working example (see below).
-object_size(object)
 assignAndSaveData(
     name = dataset_name,
     object = object,
     dir = data_raw_dir
 )
 
-## Example object ===============================================================
+## Example object ==============================================================
 counts <- counts(object)
 
 ## Subset the matrix to include only the top genes and cells.
@@ -102,8 +135,8 @@ object_size(object)
 stopifnot(object_size(object) < limit)
 stopifnot(validObject(object))
 
-pbmc4k_v2 <- object
-usethis::use_data(pbmc4k_v2, compress = "xz", overwrite = TRUE)
+pbmc_v2 <- object
+usethis::use_data(pbmc_v2, compress = "xz", overwrite = TRUE)
 
 ## Example Cell Ranger v2 output ===============================================
 input_dir <- file.path(
