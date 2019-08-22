@@ -1,15 +1,24 @@
-## FIXME Detect aggregate directory and parse corresponding metadata.
-
 ## Single sample:
-## FIXME Warn if metrics_summary.csv is missing.
-## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7_50nM_CPI1612
+## > dir <- file.path(
+## >     "",
+## >     "mnt",
+## >     "azbioinfoseq03",
+## >     "scRNA-seq",
+## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
+## >     "cellranger",
+## >     "MCF7_50nM_CPI1612"
+## x <- CellRanger(dir)
 
 ## Aggregation:
-## FIXME Warn if aggregation.csv is missing.
-## FIXME Warn if summary.json is missing.
-## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7
-
-## FIXME Check approach to aggregate samples with "_1", "_2" suffix.
+## > dir <- file.path(
+## >     "",
+## >     "mnt",
+## >     "azbioinfoseq03",
+## >     "scRNA-seq",
+## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
+## >     "cellranger",
+## >     "MCF7"
+## x <- CellRanger(dir)
 
 
 
@@ -107,7 +116,7 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger_v2", package = "Chromium")
+#' dir <- system.file("extdata/cellranger_v3", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- function(  # nolint
@@ -292,15 +301,35 @@ CellRanger <- function(  # nolint
     assert(is(rowRanges, "GRanges"))
 
     ## Metrics -----------------------------------------------------------------
+    ## Note that "molecule_info.h5" file contains additional information that
+    ## may be useful for quality control metric calculations.
     aggregation <- NULL
+    metrics <- NULL
     summary <- NULL
     if (.isAggregate(dir)) {
         aggregation <- import(file.path(dir, "outs", "aggregation.csv"))
         aggregation <- as(aggregation, "DataFrame")
         summary <- import(file.path(dir, "outs", "summary.json"))
         summary <- as(summary, "SimpleList")
-    } else if (!.isSingleSample(dir)) {
-        ## metrics_summary.csv
+    } else if (!.isMinimalSample(dir)) {
+        ## Get sample-level metrics.
+        list <- lapply(
+            X = sampleDirs,
+            FUN = function(dir) {
+                file <- file.path(dir, "outs", "metrics_summary.csv")
+                data <- withCallingHandlers(
+                    expr = import(file),
+                    message = function(m) {
+                        if (grepl("syntactic", m)) {
+                            invokeRestart("muffleMessage")
+                        }
+                        m
+                    }
+                )
+            }
+        )
+        metrics <- DataFrame(do.call(what = rbind, args = list))
+        metrics <- camelCase(metrics)
     }
     
     ## Column data -------------------------------------------------------------
@@ -351,6 +380,7 @@ CellRanger <- function(  # nolint
         refdataDir = as.character(refdataDir),
         sampleDirs = sampleDirs,
         sampleMetadataFile = as.character(sampleMetadataFile),
+        sampleMetrics = metrics,
         summary = summary,
         umiType = "chromium",
         version = .version
