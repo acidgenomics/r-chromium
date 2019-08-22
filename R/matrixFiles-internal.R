@@ -1,29 +1,29 @@
 #' Find the count matrix inside a Cell Ranger sample directory.
-#' 
+#'
 #' This function will automatically move inside an `outs/` directory inside
 #' the path if it is detected.
-#' 
+#'
 #' Currently preferring HDF5 over MTX.
-#' 
+#'
 #' @section File name history:
-#' 
+#'
 #' Cell Ranger v3
-#' 
+#'
 #' - H5: `filtered_feature_bc_matrix.h5`.
 #' - MTX: `filtered_feature_bc_matrix/matrix.mtx.gz`.
-#' 
+#'
 #' Cell Ranger v2
-#' 
+#'
 #' - H5: `filtered_gene_bc_matrices_h5.h5`
 #' - MTX: `filtered_gene_bc_matrices/<genomeBuild>/matrix.mtx`
-#' 
+#'
 #' @param dir Sample directory.
 #' @param filtered `logical(1)`.
 #'   - `TRUE`: Look for `filtered_*` matrix.
 #'   - `FALSE`: Look for `raw_*` matrix.
-#'   
+#'
 #'   Doesn't apply if there's only a single matrix file in the directory.
-#' 
+#'
 #' @note Updated 2019-08-07.
 #' @noRd
 .findMatrixFile <- function(dir, filtered = TRUE) {
@@ -32,7 +32,7 @@
         isFlag(filtered)
     )
     dir <- realpath(dir)
-    
+
     ## Simple mode -------------------------------------------------------------
     ## For minimal examples and data downloaded from 10X website.
     if (!dir.exists(file.path(dir, "outs"))) {
@@ -43,18 +43,18 @@
         )
         if (isAFile(file)) return(file)
     }
-    
+
     ## Standard Cell Ranger output ---------------------------------------------
     ## Recurse into `outs/` directory by default.
     dir <- file.path(dir, "outs")
     assert(isADirectory(dir))
-    
+
     if (isTRUE(filtered)) {
         prefix <- "filtered"
     } else {
         prefix <- "raw"
     }
-    
+
     files <- list.files(
         path = dir,
         pattern = paste0("^", prefix, "_"),
@@ -62,7 +62,7 @@
         full.names = FALSE
     )
     assert(hasLength(files))
-    
+
     ## Get the Cell Ranger version, based on the file names.
     if (isTRUE(any(grepl(
         pattern = paste0("^", prefix, "_feature_bc_matrix$"),
@@ -80,7 +80,7 @@
         stop("Failed to detect Cell Ranger version based on file names.")
     }
     version <- numeric_version(version)
-    
+
     ## Currently preferring HDF5 over MTX.
     if (isTRUE(
         file.exists(file.path(dir, paste0(filestem, ".h5")))
@@ -112,7 +112,7 @@
     } else {
         stop("Failed to locate count matrix.")
     }
-    
+
     assert(
         isAFile(file),
         isString(attr(file, "pipeline"))
@@ -123,14 +123,13 @@
 
 
 #' Find all matrix files for a data set
-#' @note Updated 2019-08-07.
+#' @note Updated 2019-08-21.
 #' @noRd
 .matrixFiles <- function(
     sampleDirs,
     filtered,
-    BPPARAM = BiocParallel::SerialParam()
+    BPPARAM = BiocParallel::SerialParam()  # nolint
 ) {
-    ## FIXME This is dropping attributes.
     list <- bplapply(
         X = sampleDirs,
         FUN = .findMatrixFile,

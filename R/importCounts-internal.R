@@ -1,11 +1,9 @@
-## FIXME Rework to use matrixFiles instead.
-
 #' Import counts from either HDF5 or MTX files.
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-21.
 #' @noRd
 .importCounts <- function(
     matrixFiles,
-    BPPARAM = BiocParallel::SerialParam()
+    BPPARAM = BiocParallel::SerialParam()  # nolint
 ) {
     assert(allAreFiles(matrixFiles))
     if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
@@ -20,8 +18,7 @@
         basename(matrixFiles[[1L]]),
         ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
     ))
-    ## This step seems to have issues when parsing HDF5 files in parallel
-    ## on an Azure Files mount over CIFS.
+    ## This step seems to have issues when parsing files in parallel via CIFS.
     list <- bpmapply(
         sampleID = names(matrixFiles),
         file = matrixFiles,
@@ -62,15 +59,15 @@
 
 
 #' Import Cell Ranger count matrix from HDF5 file
-#' 
-#' @note Updated 2019-07-31.
+#'
+#' @note Updated 2019-08-21.
 #' @noRd
-#' 
+#'
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
-#' 
+#'
 #' @return `sparseMatrix`.
 #'   Cell barcodes in the columns, features (i.e. genes) in the rows.
-#'   
+#'
 #' @examples
 #' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
@@ -80,21 +77,16 @@
             isAFile(file),
             grepl(pattern = "\\.H5", x = file, ignore.case = TRUE)
         )
-        
         names <- names(h5dump(file, load = FALSE))
         assert(isString(names))
-        
         ## Import HDF5 data.
         h5 <- h5read(file = file, name = names[[1L]])
-        
         ## v3 names:
         ## - "barcodes"
         ## - "data"
         ## - "features"
         ## - "indices"
-        ## - "indptr"  
-        
-        ## Want `Csparse` not `Tsparse` matrix.
+        ## - "indptr"
         counts <- sparseMatrix(
             i = h5[["indices"]] + 1L,
             p = h5[["indptr"]],
@@ -102,13 +94,12 @@
             dims = h5[["shape"]],
             giveCsparse = TRUE
         )
-        
         ## Row names.
         if ("features" %in% names(h5)) {
             ## > names(h5[["features"]])
-            ## [1] "_all_tag_keys" "feature_type" 
-            ## [3] "genome"        "id"           
-            ## [5] "name"          "pattern"      
+            ## [1] "_all_tag_keys" "feature_type"
+            ## [3] "genome"        "id"
+            ## [5] "name"          "pattern"
             ## [7] "read"          "sequence"
             ## Stable gene identifiers are stored in "id".
             ## Gene symbols are stored in "name".
@@ -116,45 +107,42 @@
         } else if ("genes" %in% names(h5)) {
             ## Older H5 objects (v2) use "genes" instead of "features".
             rownames <- h5[["genes"]]
-        } 
-        
+        }
         ## Column names.
         colnames <- h5[["barcodes"]]
-        
         assert(
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        
+        ## Return.
         rownames(counts) <- rownames
         colnames(counts) <- colnames
-        
         counts
     }
 
 
 
 #' Import Cell Ranger count matrix from MTX file
-#' 
+#'
 #' @note Data import using HDF5 file is now recommended over this approach.
-#' @note Updated 2019-08-01.
+#' @note Updated 2019-08-21.
 #' @noRd
-#' 
+#'
 #' @section Matrix Market Exchange (MEX/MTX) format:
-#' 
+#'
 #' Loading from this matrix requires sidecar files containing cell barcodes and
 #' feature (i.e. gene) identifiers.
-#' 
+#'
 #' Cell Ranger v3:
-#' 
+#'
 #' - `barcodes.tsv.gz`: Cell barcodes.
 #' - `features.tsv.gz`: Feature identifiers.
-#' 
+#'
 #' Cell Ranger v2:
-#' 
+#'
 #' - `barcodes.tsv`: Cell barcodes.
 #' - `genes.tsv`: Gene identifiers.
-#' 
+#'
 #' @examples
 #' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
@@ -172,10 +160,9 @@
             recursive = FALSE,
             ignore.case = TRUE
         ))
-        
-        counts <- readMM(file)
+        ## Count matrix.
+        counts <- import(file)
         assert(is(counts, "sparseMatrix"))
-        
         ## Row names.
         ## Legacy v2 output uses "genes" instead of "features".
         ## Also, older Cell Ranger output doesn't compress these files.
@@ -189,12 +176,12 @@
         ## Note that `features.tsv` is tab delimited.
         ## v2: id, name
         ## v3: id, name, expression type
-        rownames <- read_tsv(
+        rownames <- import(
             file = rownamesFile,
-            col_names = FALSE
+            format = "tsv",
+            colnames = FALSE
         )
         rownames <- rownames[[1L]]
-        
         ## Column names.
         colnamesFile <- grep(
             pattern = "^barcodes\\.tsv(\\.gz)?$",
@@ -204,18 +191,16 @@
         colnamesFile <- file.path(path, colnamesFile)
         assert(isAFile(colnamesFile))
         ## Note that `barcodes.tsv` is NOT tab delimited.
-        colnames <- read_lines(colnamesFile)
-        
+        colnames <- import(
+            file = colnamesFile,
+            format = "lines"
+        )
+        ## Return.
         assert(
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        
         rownames(counts) <- rownames
         colnames(counts) <- colnames
-        
         counts
     }
-
-
-

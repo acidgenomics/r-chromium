@@ -1,10 +1,10 @@
-## FIXME Need to rework approach to aggregate samples with "_1", "_2" suffix.
+## Check approach to aggregate samples with "_1", "_2" suffix.
 
 
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-08-13.
+#' @note Updated 2019-08-21.
 #' @export
 #'
 #' @details
@@ -12,13 +12,13 @@
 #' for a Chromium data set into a `SingleCellExperiment` object.
 #'
 #' @section Directory structure for multiple samples:
-#' 
+#'
 #' Cell Ranger can vary in its output directory structure, but we're requiring a
 #' single, consistent directory structure for datasets containing multiple
 #' samples that have not been aggregated into a single matrix with `aggr`.
 #'
 #' Cell Ranger v3 output:
-#' 
+#'
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
@@ -67,13 +67,13 @@
 #' }
 #'
 #' @section Sample metadata:
-#' 
+#'
 #' A user-supplied sample metadata file defined by `sampleMetadataFile` is
 #' required for multiplexed datasets. Otherwise this can be left `NULL`, and
 #' minimal sample data will be used, based on the directory names.
 #'
 #' @section Reference data:
-#' 
+#'
 #' We strongly recommend supplying the corresponding reference data required for
 #' Cell Ranger with the `refdataDir` argument. It will convert the gene
 #' annotations defined in the GTF file into a `GRanges` object, which get
@@ -81,11 +81,10 @@
 #' function will attempt to use the most current annotations available from
 #' Ensembl, and some gene IDs may not match, due to deprecation in the current
 #' Ensembl release.
-#' 
+#'
 #' @inheritParams acidroxygen::params
 #' @param dir `character(1)`.
-#'   Path to Cell Ranger output directory (final upload). This directory path
-#'   must contain `filtered_gene_bc_matrices*` as a child directory.
+#'   Directory path to Cell Ranger output.
 #' @param filtered `logical(1)`.
 #'   Use filtered (recommended) or raw counts. Note that raw counts still
 #'   contain only whitelisted cellular barcodes.
@@ -98,7 +97,7 @@
 #' dir <- system.file("extdata/cellranger_v2", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
-CellRanger <- function(
+CellRanger <- function(  # nolint
     dir,
     filtered = TRUE,
     organism = NULL,
@@ -111,7 +110,8 @@ CellRanger <- function(
     sampleMetadataFile = NULL,
     transgeneNames = NULL,
     spikeNames = NULL,
-    BPPARAM = BiocParallel::SerialParam()
+    interestingGroups = "sampleName",
+    BPPARAM = BiocParallel::SerialParam()  # nolint
 ) {
     assert(
         isADirectory(dir),
@@ -126,28 +126,28 @@ CellRanger <- function(
         isAFile(sampleMetadataFile, nullOK = TRUE),
         isCharacter(transgeneNames, nullOK = TRUE),
         isCharacter(spikeNames, nullOK = TRUE),
+        isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
     level <- "genes"
-    
+
     ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)
     }
     sampleDirs <- .sampleDirs(dir)
-    
+
     ## Sequencing lanes --------------------------------------------------------
     lanes <- detectLanes(sampleDirs)
     assert(
         isInt(lanes) ||
             identical(lanes, integer())
     )
-    
+
     ## Samples -----------------------------------------------------------------
     allSamples <- TRUE
     sampleData <- NULL
-    
     ## Get the sample data.
     if (isString(sampleMetadataFile)) {
         ## Normalize path of local file.
@@ -155,13 +155,16 @@ CellRanger <- function(
             sampleMetadataFile <- realpath(sampleMetadataFile)
         }
         ## Note that `readSampleData()` also supports URLs.
-        sampleData <- readSampleData(file = sampleMetadataFile, lanes = lanes)
+        sampleData <- readSampleData(
+            file = sampleMetadataFile,
+            lanes = lanes,
+            pipeline = "cellranger"
+        )
         assert(isSubset(rownames(sampleData), names(sampleDirs)))
         sampleIDs <- rownames(sampleData)
     } else {
         sampleIDs <- names(sampleDirs)
     }
-    
     ## Subset the sample directories, if necessary.
     if (is.character(samples) || is.character(censorSamples)) {
         if (is.character(samples)) {
@@ -197,19 +200,17 @@ CellRanger <- function(
         }
         allSamples <- FALSE
     }
-    
+
     ## Assays ------------------------------------------------------------------
     matrixFiles <- .matrixFiles(
         sampleDirs = sampleDirs,
         filtered = filtered,
         BPPARAM = BPPARAM
     )
-    
     ## Get the pipeline from the matrix file attributes.
     pipeline <- attr(matrixFiles, "pipeline")
     assert(isString(pipeline))
     attr(matrixFiles, "pipeline") <- NULL
-    
     counts <- .importCounts(
         matrixFiles = matrixFiles,
         BPPARAM = BPPARAM
@@ -218,7 +219,6 @@ CellRanger <- function(
 
     ## Row data ----------------------------------------------------------------
     refJSON <- NULL
-    
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         message(sprintf(
@@ -277,7 +277,7 @@ CellRanger <- function(
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
-    
+
     ## Column data -------------------------------------------------------------
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
@@ -294,14 +294,15 @@ CellRanger <- function(
         }
         sampleData <- minimalSampleData(samples)
     }
-    
     ## Always prefilter, removing very low quality cells with no UMIs or genes.
     colData <- calculateMetrics(
         object = counts,
         rowRanges = rowRanges,
         prefilter = TRUE
     )
-    
+    ## Subset the counts to match the prefiltered metrics.
+    assert(isSubset(rownames(colData), colnames(counts)))
+    counts <- counts[, rownames(colData), drop = FALSE]
     ## Join `sampleData` into cell-level `colData`.
     if (nrow(sampleData) == 1L) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
@@ -311,31 +312,32 @@ CellRanger <- function(
             samples = rownames(sampleData)
         )
     }
-    
+
     ## Metadata ----------------------------------------------------------------
+    interestingGroups <- camelCase(interestingGroups)
+    assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
         allSamples = allSamples,
-        call = match.call(),
+        call = standardizeCall(),
         dir = dir,
         ensemblRelease = as.integer(ensemblRelease),
         genomeBuild = as.character(genomeBuild),
+        gffFile = as.character(gffFile),
+        interestingGroups = interestingGroups,
         lanes = lanes,
         level = level,
         matrixFiles = matrixFiles,
-        organism = organism,
+        organism = as.character(organism),
         pipeline = pipeline,
-        refJSON = refJSON,
-        refdataDir = refdataDir,
+        refJSON = as.list(refJSON),
+        refdataDir = as.character(refdataDir),
         sampleDirs = sampleDirs,
         sampleMetadataFile = as.character(sampleMetadataFile),
         umiType = "chromium",
         version = .version
     )
-    
+
     ## Return ------------------------------------------------------------------
-    ## Subset the counts to match the prefiltered metrics.
-    assert(isSubset(rownames(colData), colnames(counts)))
-    counts <- counts[, rownames(colData), drop = FALSE]
     sce <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
         rowRanges = rowRanges,
