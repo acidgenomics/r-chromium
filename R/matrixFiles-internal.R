@@ -24,7 +24,7 @@
 #'
 #'   Doesn't apply if there's only a single matrix file in the directory.
 #'
-#' @note Updated 2019-08-07.
+#' @note Updated 2019-08-22.
 #' @noRd
 .findMatrixFile <- function(dir, filtered = TRUE) {
     assert(
@@ -48,13 +48,11 @@
     ## Recurse into `outs/` directory by default.
     dir <- file.path(dir, "outs")
     assert(isADirectory(dir))
-
     if (isTRUE(filtered)) {
         prefix <- "filtered"
     } else {
         prefix <- "raw"
     }
-
     files <- list.files(
         path = dir,
         pattern = paste0("^", prefix, "_"),

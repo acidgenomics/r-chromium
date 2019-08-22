@@ -1,5 +1,5 @@
 #' Import counts from either HDF5 or MTX files.
-#' @note Updated 2019-08-21.
+#' @note Updated 2019-08-22.
 #' @noRd
 .importCounts <- function(
     matrixFiles,
@@ -25,7 +25,9 @@
         FUN = function(sampleID, file) {
             counts <- fun(file)
             ## Strip index when all barcodes end with "-1".
-            if (all(grepl("-1$", colnames(counts)))) {
+            if (
+                allAreMatchingRegex(x = colnames(counts), pattern = "-1$")
+            ) {
                 colnames(counts) <- sub("-1", "", colnames(counts))
             }
             # Now move the multiplexed index name/number to the beginning,
@@ -39,7 +41,10 @@
             # counts from multiple samples.
             if (
                 length(matrixFiles) > 1L ||
-                grepl("^([[:digit:]]+)-([ACGT]+)$", colnames(counts))
+                allAreMatchingRegex(
+                    x = colnames(counts),
+                    pattern = "^([[:digit:]]+)-([ACGT]+)$"
+                )
             ) {
                 colnames(counts) <- paste(sampleID, colnames(counts), sep = "-")
             }
@@ -69,7 +74,7 @@
 #'   Cell barcodes in the columns, features (i.e. genes) in the rows.
 #'
 #' @examples
-#' ## > x <- importCountsHDF5(file = "filtered_feature_bc_matrix.h5")
+#' ## > x <- .importCountsFromHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
 .importCountsFromHDF5 <-  # nolint
     function(file) {
@@ -115,8 +120,8 @@
             identical(length(colnames), ncol(counts))
         )
         ## Return.
-        rownames(counts) <- rownames
-        colnames(counts) <- colnames
+        rownames(counts) <- as.character(rownames)
+        colnames(counts) <- as.character(colnames)
         counts
     }
 
@@ -144,7 +149,7 @@
 #' - `genes.tsv`: Gene identifiers.
 #'
 #' @examples
-#' ## > x <- importCountsMTX(file = "matrix.mtx.gz")
+#' ## > x <- .importCountsFromMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
 .importCountsFromMTX <-  # nolint
     function(file) {
@@ -200,7 +205,93 @@
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        rownames(counts) <- rownames
-        colnames(counts) <- colnames
+        rownames(counts) <- as.character(rownames)
+        colnames(counts) <- as.character(colnames)
         counts
     }
+
+
+
+#' Import Cell Ranger sample files.
+#' @note Updated 2019-08-22.
+#' @param sampleFiles Count matrix files.
+#' @noRd
+.importSamples <-  # nolint
+    function(sampleFiles) {
+        assert(
+            allAreFiles(sampleFiles),
+            hasNames(sampleFiles)
+        )
+        message("Importing counts.")
+        if (all(grepl("\\.h5$", sampleFiles))) {
+            fun <- .importCountsFromHDF5
+        } else if (all(grepl("\\.mtx$", sampleFiles))) {
+            fun <- .importCountsFromMTX
+        } else {
+            stop(
+                "Failed to determine which file extension (e.g. H5, MTX) ",
+                "to use for count matrix import."
+            )
+        }
+        list <- mapply(
+            sampleID = names(sampleFiles),
+            file = sampleFiles,
+            FUN = function(sampleID, file) {
+                counts <- fun(file)
+                ## Strip index when all barcodes end with "-1".
+                if (all(grepl("-1$", colnames(counts)))) {
+                    colnames(counts) <- sub("-1", "", colnames(counts))
+                }
+                ## Now move the multiplexed index name/number to the beginning,
+                ## for more logical sorting and consistency with bcbio approach.
+                colnames(counts) <- sub(
+                    pattern = "^([ACGT]+)-(.+)$",
+                    replacement = "\\2-\\1",
+                    x = colnames(counts)
+                )
+                ## Prefix cell barcodes with sample identifier when we're
+                ## loading counts from multiple samples.
+                if (
+                    length(sampleFiles) > 1L ||
+                    grepl("^([[:digit:]]+)-([ACGT]+)$", colnames(counts))
+                ) {
+                    colnames(counts) <-
+                        paste(sampleID, colnames(counts), sep = "_")
+                }
+                ## Ensure names are valid.
+                counts <- makeDimnames(counts)
+                counts
+            },
+            SIMPLIFY = FALSE,
+            USE.NAMES = TRUE
+        )
+        ## Bind the matrices.
+        do.call(cbind, list)
+    }
+
+
+
+#' Import sample-level metrics
+#' @note Updated 2019-08-22.
+#' @noRd
+.importSampleMetrics <- function(sampleDirs) {
+    files <- file.path(sampleDirs, "outs", "metrics_summary.csv")
+    list <- lapply(
+        X = files,
+        FUN = function(file) {
+            data <- withCallingHandlers(
+                expr = import(file),
+                message = function(m) {
+                    if (grepl("syntactic", m)) {
+                        invokeRestart("muffleMessage")
+                    }
+                    m
+                }
+            )
+        }
+    )
+    out <- DataFrame(do.call(what = rbind, args = list))
+    out <- camelCase(out)
+    rownames(out) <- names(sampleDirs)
+    out
+}
