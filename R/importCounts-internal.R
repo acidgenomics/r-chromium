@@ -23,7 +23,6 @@
         sampleID = names(matrixFiles),
         file = matrixFiles,
         FUN = function(sampleID, file) {
-            ## FIXME Need to remove brio attributes from NAMES here.
             counts <- fun(file)
             ## Strip index when all barcodes end with "-1".
             if (
