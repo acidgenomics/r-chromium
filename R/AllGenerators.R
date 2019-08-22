@@ -312,24 +312,7 @@ CellRanger <- function(  # nolint
         summary <- import(file.path(dir, "outs", "summary.json"))
         summary <- as(summary, "SimpleList")
     } else if (!.isMinimalSample(dir)) {
-        ## Get sample-level metrics.
-        list <- lapply(
-            X = sampleDirs,
-            FUN = function(dir) {
-                file <- file.path(dir, "outs", "metrics_summary.csv")
-                data <- withCallingHandlers(
-                    expr = import(file),
-                    message = function(m) {
-                        if (grepl("syntactic", m)) {
-                            invokeRestart("muffleMessage")
-                        }
-                        m
-                    }
-                )
-            }
-        )
-        metrics <- DataFrame(do.call(what = rbind, args = list))
-        metrics <- camelCase(metrics)
+        sampleMetrics <- .importSampleMetrics(sampleDirs)
     }
     
     ## Column data -------------------------------------------------------------
@@ -380,7 +363,7 @@ CellRanger <- function(  # nolint
         refdataDir = as.character(refdataDir),
         sampleDirs = sampleDirs,
         sampleMetadataFile = as.character(sampleMetadataFile),
-        sampleMetrics = metrics,
+        sampleMetrics = sampleMetrics,
         summary = summary,
         umiType = "chromium",
         version = .version
