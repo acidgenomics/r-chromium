@@ -1,10 +1,30 @@
-## Check approach to aggregate samples with "_1", "_2" suffix.
+## Single sample:
+## > dir <- file.path(
+## >     "",
+## >     "mnt",
+## >     "azbioinfoseq03",
+## >     "scRNA-seq",
+## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
+## >     "cellranger",
+## >     "MCF7_50nM_CPI1612"
+## > x <- CellRanger(dir)
+
+## Aggregation:
+## > dir <- file.path(
+## >     "",
+## >     "mnt",
+## >     "azbioinfoseq03",
+## >     "scRNA-seq",
+## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
+## >     "cellranger",
+## >     "MCF7"
+## > x <- CellRanger(dir)
 
 
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-08-21.
+#' @note Updated 2019-08-22.
 #' @export
 #'
 #' @details
@@ -22,6 +42,7 @@
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
+#' |---- SC_RNA_COUNTER_CS/
 #' |---- outs/
 #' |------ filtered_feature_bc_matrix/
 #' |-------- barcodes.tsv.gz
@@ -46,6 +67,7 @@
 #' \preformatted{
 #' | <dir>/
 #' |-- <sampleName>/
+#' |---- SC_RNA_COUNTER_CS/
 #' |---- outs/
 #' |------ filtered_gene_bc_matrices/
 #' |-------- <genomeBuild>/
@@ -94,7 +116,7 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger_v2", package = "Chromium")
+#' dir <- system.file("extdata/cellranger_v3", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- function(  # nolint
@@ -278,7 +300,23 @@ CellRanger <- function(  # nolint
     }
     assert(is(rowRanges, "GRanges"))
 
+    ## Metrics -----------------------------------------------------------------
+    ## Note that "molecule_info.h5" file contains additional information that
+    ## may be useful for quality control metric calculations.
+    aggregation <- NULL
+    metrics <- NULL
+    summary <- NULL
+    if (.isAggregate(dir)) {
+        aggregation <- import(file.path(dir, "outs", "aggregation.csv"))
+        aggregation <- as(aggregation, "DataFrame")
+        summary <- import(file.path(dir, "outs", "summary.json"))
+        summary <- as(summary, "SimpleList")
+    } else if (!.isMinimalSample(dir)) {
+        sampleMetrics <- .importSampleMetrics(sampleDirs)
+    }
+
     ## Column data -------------------------------------------------------------
+    colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
         ## Define the grep pattern to use for sample ID extraction.
@@ -289,22 +327,13 @@ CellRanger <- function(  # nolint
                 pattern = pattern
             )
             samples <- unique(match[, 2L, drop = TRUE])
-        } else if (length(sampleDirs) == 1L) {
+        } else if (hasLength(sampleDirs, n = 1L)) {
             samples <- names(sampleDirs)
         }
         sampleData <- minimalSampleData(samples)
     }
-    ## Always prefilter, removing very low quality cells with no UMIs or genes.
-    colData <- calculateMetrics(
-        object = counts,
-        rowRanges = rowRanges,
-        prefilter = TRUE
-    )
-    ## Subset the counts to match the prefiltered metrics.
-    assert(isSubset(rownames(colData), colnames(counts)))
-    counts <- counts[, rownames(colData), drop = FALSE]
     ## Join `sampleData` into cell-level `colData`.
-    if (nrow(sampleData) == 1L) {
+    if (identical(nrow(sampleData), 1L)) {
         colData[["sampleID"]] <- as.factor(rownames(sampleData))
     } else {
         colData[["sampleID"]] <- mapCellsToSamples(
@@ -317,6 +346,7 @@ CellRanger <- function(  # nolint
     interestingGroups <- camelCase(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
+        aggregation = aggregation,
         allSamples = allSamples,
         call = standardizeCall(),
         dir = dir,
@@ -333,12 +363,14 @@ CellRanger <- function(  # nolint
         refdataDir = as.character(refdataDir),
         sampleDirs = sampleDirs,
         sampleMetadataFile = as.character(sampleMetadataFile),
+        sampleMetrics = sampleMetrics,
+        summary = summary,
         umiType = "chromium",
         version = .version
     )
 
-    ## Return ------------------------------------------------------------------
-    sce <- makeSingleCellExperiment(
+    ## SingleCellExperiment ----------------------------------------------------
+    object <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
         rowRanges = rowRanges,
         colData = colData,
@@ -346,5 +378,9 @@ CellRanger <- function(  # nolint
         transgeneNames = transgeneNames,
         spikeNames = spikeNames
     )
-    new(Class = "CellRanger", sce)
+
+    ## Return ------------------------------------------------------------------
+    ## Always prefilter, removing very low quality cells and/or genes.
+    object <- calculateMetrics(object = object, prefilter = TRUE)
+    new(Class = "CellRanger", object)
 }
