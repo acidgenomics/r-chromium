@@ -139,12 +139,12 @@ input_matrix_dir <- file.path(
     input_outs_dir,
     "filtered_feature_bc_matrix"
 )
-unlink(output_dir, recursive = TRUE)
 output_dir <- file.path(
     "inst",
     "extdata",
     "cellranger_v3"
 )
+unlink(output_dir, recursive = TRUE)
 output_sample_dir <- initDir(file.path(output_dir, "pbmc"))
 output_outs_dir <- initDir(file.path(output_sample_dir, "outs"))
 output_counter_dir <- file.path(output_sample_dir, "SC_RNA_COUNTER_CS")
