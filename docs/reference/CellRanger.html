@@ -83,6 +83,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -226,7 +229,7 @@ for a Chromium data set into a <code>SingleCellExperiment</code> object.</p>
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Currently supports loading of a single genome.</p>
-<p>Updated 2019-08-21.</p>
+<p>Updated 2019-08-22.</p>
     
     <h2 class="hasAnchor" id="directory-structure-for-multiple-samples"><a class="anchor" href="#directory-structure-for-multiple-samples"></a>Directory structure for multiple samples</h2>
 
@@ -240,6 +243,7 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 <pre>
 | &lt;dir&gt;/
 |-- &lt;sampleName&gt;/
+|---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_feature_bc_matrix/
 |-------- barcodes.tsv.gz
@@ -263,6 +267,7 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 <pre>
 | &lt;dir&gt;/
 |-- &lt;sampleName&gt;/
+|---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_gene_bc_matrices/
 |-------- &lt;genomeBuild&gt;/
@@ -308,19 +313,19 @@ Ensembl release.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v2"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
+    <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v3"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span>
-#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx' file.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'genes.tsv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Calculating 100 cellular barcode metrics.</span></div><div class='output co'>#&gt; <span class='message'>Calculating metrics without biotype information.</span>
-#&gt; <span class='message'>'rowRanges' required to calculate: nCoding, nMito, mitoRatio.</span></div><div class='output co'>#&gt; <span class='message'>81 / 100 cellular barcodes passed pre-filtering (81.0%).</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
-#&gt; dim: 100 81 
-#&gt; metadata(21): allSamples call ... version wd
+#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'matrix.mtx.gz' in 'tempdir()'</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'features.tsv.gz' in 'tempdir()'</span></div><div class='output co'>#&gt; <span class='message'>Importing 'features.tsv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'barcodes.tsv.gz' in 'tempdir()'</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'metrics_summary.csv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Calculating 100 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'>Calculating metrics without biotype information.</span>
+#&gt; <span class='message'>'rowRanges' required to calculate: nCoding, nMito, mitoRatio.</span></div><div class='output co'>#&gt; <span class='message'>85 / 100 samples passed pre-filtering (85.0%).</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; dim: 100 85 
+#&gt; metadata(22): allSamples call ... version wd
 #&gt; assays(1): counts
-#&gt; rownames(100): ENSG00000008128 ENSG00000008130 ... ENSG00000279457
-#&gt;   ENSG00000279928
+#&gt; rownames(100): ENSG00000008128 ENSG00000008130 ... ENSG00000284662
+#&gt;   ENSG00000284733
 #&gt; rowData names(0):
-#&gt; colnames(81): AAACCTGAGACAGACC AAACCTGAGCGCCTCA ... AACTCAGTCCAACCAA
-#&gt;   AACTCCCAGAAACCTA
-#&gt; colData names(7): log10FeaturesPerCount mitoRatio ... nMito sampleID
+#&gt; colnames(85): AAACCCAAGAGACAAG AAACCCAAGGCCTAGA ... AACCTGAGTCGAGCTC
+#&gt;   AACCTGAGTCTCTCAC
+#&gt; colData names(7): sampleID nCount ... log10FeaturesPerCount mitoRatio
 #&gt; reducedDimNames(0):
 #&gt; spikeNames(0):</div></pre>
   </div>
