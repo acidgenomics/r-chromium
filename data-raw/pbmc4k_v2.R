@@ -1,12 +1,13 @@
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
-## 2019-01-15
+## Updated 2019-08-21.
 
 library(usethis)
 library(pryr)
-library(tidyverse)
 library(Matrix)
+library(basejump)
+## > library(tidyverse)
 
 dataset_name <- "pbmc4k_v2"
 data_raw_dir <- "data-raw"
@@ -17,9 +18,13 @@ limit <- structure(2e6, class = "object_size")
 
 ## Complete dataset =============================================================
 dir <- initDir(file.path(data_raw_dir, dataset_name))
+unlink(dir, recursive = TRUE)
 sample_dir <- initDir(file.path(dir, "pbmc"))
 outs_dir <- initDir(file.path(sample_dir, "outs"))
-initDir(file.path(sample_dir, "SC_RNA_COUNTER_CS"))
+counter_dir <- file.path(sample_dir, "SC_RNA_COUNTER_CS")
+initDir(counter_dir)
+## Touch an empty file in the counter directory.
+file.create(file.path(counter_dir, "empty"))
 
 ## Directory structure:
 ## - pbmc
@@ -89,11 +94,7 @@ top_cells <- Matrix::colSums(counts) %>%
 cells <- sort(names(top_cells))
 
 ## Subset the original object dataset to contain only top genes and cells.
-## FIXME This needs to relevel rowRanges automatically.
 object <- object[genes, cells]
-
-## Include only minimal metadata columns in rowRanges.
-rowRanges(object) <- droplevels(rowRanges(object))
 
 ## Report the size of each slot in bytes.
 vapply(
