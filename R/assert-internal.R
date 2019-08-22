@@ -1,4 +1,15 @@
+#' Does the directory contain Cell Ranger aggr output?
+#' @note Updated 2019-08-22.
+#' @noRd
+.isAggregate <- function(dir) {
+    isADirectory(file.path(dir, "SC_RNA_AGGREGATOR_CS"))
+}
+
+
+
 #' Does a given directory path contain a subdirectory name?
+#'
+#' @note Updated 2019-08-22.
 #'
 #' @param paths `character`.
 #'   Directory paths. Parameterized.
@@ -29,10 +40,22 @@
 
 
 
+#' Does the dataset contain a minimal, single directory structure?
+#' @note Updated 2019-08-22.
+#' @noRd
+.isMinimalSample <- function(dir) {
+    files <- list.files(path = dir, recursive = FALSE)
+    any(grepl(pattern = "matrix\\.(h5|mtx)(\\.gz)?$", x = files))
+}
+
+
+
 #' Does the dataset contain a single sample?
 #'
 #' This is a utility function intended to make loading of example datasets
 #' from the 10X Genomics website easier.
+#'
+#' @note Updated 2019-08-22.
 #'
 #' @param dir Cell Ranger output directory.
 #'
@@ -40,12 +63,9 @@
 #' @noRd
 .isSingleSample <- function(dir) {
     assert(isADirectory(dir))
-
-    ## Check for matrix in the top level of the directory.
-    files <- list.files(path = dir, recursive = FALSE)
-    ok <- any(grepl(pattern = "matrix\\.(h5|mtx)(\\.gz)?$", x = files))
+    ## Check for minimal, single sample directory structure.
+    ok <- .isMinimalSample(dir)
     if (isTRUE(ok)) return(ok)
-
     ## Check matrix files in `outs/` subdirectory.
     outsDir <- file.path(dir, "outs")
     if (dir.exists(outsDir)) {
@@ -54,6 +74,5 @@
         ok <- any(grepl("^(filtered|raw)_", files))
         if (isTRUE(ok)) return(ok)
     }
-
     FALSE
 }

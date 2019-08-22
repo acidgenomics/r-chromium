@@ -83,6 +83,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
@@ -206,28 +209,51 @@ of <code>colData</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pbmc4k_v2</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pbmc_v3</span>)
 
 <span class='co'>## CellRanger ====</span>
-<span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='no'>pbmc4k_v2</span>
+<span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='no'>pbmc_v3</span>
 
 <span class='no'>cells</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>object</span>), <span class='fl'>100L</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cells</span>)</div><div class='output co'>#&gt; [1] "AAACCTGCAGGCGATA" "AAAGCAATCTGCCCTA" "AACCATGAGAGTACCG" "AAGGCAGCACCATCCT"
-#&gt; [5] "ACCAGTATCTCATTCA" "ACGATACAGCCCAGCT"</div><div class='input'><span class='no'>genes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>object</span>), <span class='fl'>100L</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>genes</span>)</div><div class='output co'>#&gt; [1] "ENSG00000002586" "ENSG00000005022" "ENSG00000007312" "ENSG00000008517"
-#&gt; [5] "ENSG00000008988" "ENSG00000009307"</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cells</span>)</div><div class='output co'>#&gt; [1] "AAAGGATAGAGGCCAT" "AAAGGATGTGATTAGA" "AACAACCGTGCACATT" "AACAACCTCTAAGAAG"
+#&gt; [5] "AACCAACGTAACATCC" "AAGAACACAACGGCCT"</div><div class='input'><span class='no'>genes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>object</span>), <span class='fl'>100L</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>genes</span>)</div><div class='output co'>#&gt; [1] "CD11b" "CD127" "CD137" "CD14"  "CD15"  "CD16" </div><div class='input'>
 <span class='co'>## Subset by cell identifiers.</span>
-<span class='no'>object</span>[, <span class='no'>cells</span>]</div><div class='output co'>#&gt; <span class='error'>Error in validObject(x): invalid class "CellRanger" object: isSubset(metricsCols, colnames(colData)) is not TRUE.</span>
-#&gt; <span class='error'>Cause of failure:</span>
-#&gt; <span class='error'>'metricsCols' has elements not in 'colnames(colData)': nCount, nFeature, log10FeaturesPerCount</span></div><div class='input'>
+<span class='no'>object</span>[, <span class='no'>cells</span>]</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; dim: 500 100 
+#&gt; metadata(22): allSamples call ... wd subset
+#&gt; assays(1): counts
+#&gt; rownames(500): CD11b CD127 ... PD_1 TIGIT
+#&gt; rowData names(8): broadClass geneBiotype ... source type
+#&gt; colnames(100): AAAGGATAGAGGCCAT AAAGGATGTGATTAGA ... TTCACGCGTACGGCAA
+#&gt;   TTTGTTGCAAGCGGAT
+#&gt; colData names(7): sampleID nCount ... log10FeaturesPerCount mitoRatio
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):</div><div class='input'>
 <span class='co'>## Subset by genes.</span>
-<span class='no'>object</span>[<span class='no'>genes</span>, ]</div><div class='output co'>#&gt; <span class='error'>Error in validObject(x): invalid class "CellRanger" object: isSubset(metricsCols, colnames(colData)) is not TRUE.</span>
-#&gt; <span class='error'>Cause of failure:</span>
-#&gt; <span class='error'>'metricsCols' has elements not in 'colnames(colData)': nCount, nFeature, log10FeaturesPerCount</span></div><div class='input'>
+<span class='no'>object</span>[<span class='no'>genes</span>, ]</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; dim: 100 100 
+#&gt; metadata(22): allSamples call ... wd subset
+#&gt; assays(1): counts
+#&gt; rownames(100): CD11b CD127 ... ENSG00000102317 ENSG00000102879
+#&gt; rowData names(8): broadClass geneBiotype ... source type
+#&gt; colnames(100): AAAGGATAGAGGCCAT AAAGGATGTGATTAGA ... TTCACGCGTACGGCAA
+#&gt;   TTTGTTGCAAGCGGAT
+#&gt; colData names(7): sampleID nCount ... log10FeaturesPerCount mitoRatio
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):</div><div class='input'>
 <span class='co'>## Subset by both genes and cells.</span>
-<span class='no'>object</span>[<span class='no'>genes</span>, <span class='no'>cells</span>]</div><div class='output co'>#&gt; <span class='error'>Error in validObject(x): invalid class "CellRanger" object: isSubset(metricsCols, colnames(colData)) is not TRUE.</span>
-#&gt; <span class='error'>Cause of failure:</span>
-#&gt; <span class='error'>'metricsCols' has elements not in 'colnames(colData)': nCount, nFeature, log10FeaturesPerCount</span></div></pre>
+<span class='no'>object</span>[<span class='no'>genes</span>, <span class='no'>cells</span>]</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; dim: 100 100 
+#&gt; metadata(22): allSamples call ... wd subset
+#&gt; assays(1): counts
+#&gt; rownames(100): CD11b CD127 ... ENSG00000102317 ENSG00000102879
+#&gt; rowData names(8): broadClass geneBiotype ... source type
+#&gt; colnames(100): AAAGGATAGAGGCCAT AAAGGATGTGATTAGA ... TTCACGCGTACGGCAA
+#&gt;   TTTGTTGCAAGCGGAT
+#&gt; colData names(7): sampleID nCount ... log10FeaturesPerCount mitoRatio
+#&gt; reducedDimNames(0):
+#&gt; spikeNames(0):</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
