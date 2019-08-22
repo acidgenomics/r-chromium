@@ -85,3 +85,51 @@ invisible(lapply(
 
     }
 ))
+
+## Using Ensembl 93 GTF annotations.
+gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.93.gtf.gz")
+if (!file.exists(gtf_file)) {
+    download.file(
+        url = paste(
+            "ftp://ftp.ensembl.org",
+            "pub",
+            "release-93",
+            "gtf",
+            "homo_sapiens",
+            basename(gtf_file),
+            sep = "/"
+        ),
+        destfile = gtf_file
+    )
+}
+
+## The 10X matrices now include gene symbols that aren't in Ensembl GTF:
+## 
+##  [1] "CD11b"  "CD127"  "CD137"  "CD14"   "CD15"   "CD16"   "CD19"   "CD197" 
+##  [9] "CD20"   "CD25"   "CD27"   "CD274"  "CD278"  "CD28"   "CD3"    "CD335" 
+## [17] "CD34"   "CD4"    "CD45RA" "CD45RO" "CD56"   "CD62L"  "CD69"   "CD80"  
+## [25] "CD86"   "CD8a"   "HLA_DR" "IgG1"   "IgG2a"  "IgG2b"  "PD_1"   "TIGIT"
+## 
+## These will be slotted in rowRanges with "unknown" seqnames.
+
+## FIXME Improve handling in calculateMetrics.
+## Error in .local(object, ...) : 
+## Features missing in 'rowRanges()': CD3, CD4, CD8a, CD11b, CD14, CD15, CD16, CD19, CD20, CD25, CD27, CD28, CD34, CD45RA, CD45RO, CD56, ## CD62L, CD69, CD80, CD86, CD127, CD137, CD197, CD274, CD278, CD335, PD_1, HLA_DR, TIGIT, IgG1, IgG....
+## Calls: CellRanger -> calculateMetrics -> calculateMetrics -> .local
+
+## Check that spikeNames and transgeneNames work.
+object <- CellRanger(
+    dir = dir,
+    organism = "Homo sapiens",
+    gffFile = gtf_file
+    ## spikeNames = symbols,
+    ## spikeNames = symbols
+    ## transgeneNames = symbols
+)
+
+## We're using a subset of this object for our working example (see below).
+assignAndSaveData(
+    name = dataset_name,
+    object = object,
+    dir = data_raw_dir
+)
