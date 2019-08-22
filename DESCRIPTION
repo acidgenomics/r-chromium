@@ -24,7 +24,7 @@ LazyData: false
 Depends:
     R (>= 3.6),
     SingleCellExperiment,
-    basejump (>= 0.11.9)
+    basejump (>= 0.11.10)
 Imports:
     goalie (>= 0.3.5),
     BiocParallel,
