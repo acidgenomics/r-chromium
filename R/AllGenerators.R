@@ -1,15 +1,15 @@
+## FIXME Detect aggregate directory and parse corresponding metadata.
+
 ## Single sample:
 ## FIXME Warn if metrics_summary.csv is missing.
-## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7_50nM_CPI1612/outs
+## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7_50nM_CPI1612
 
 ## Aggregation:
 ## FIXME Warn if aggregation.csv is missing.
 ## FIXME Warn if summary.json is missing.
-## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7/outs
+## /mnt/azbioinfoseq03/scRNA-seq/2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq/cellranger/MCF7
 
 ## FIXME Check approach to aggregate samples with "_1", "_2" suffix.
-
-## FIXME Improve support for extra gene symbols in Cell Ranger output (e.g. pbmc_v3).
 
 
 
@@ -291,6 +291,18 @@ CellRanger <- function(  # nolint
     }
     assert(is(rowRanges, "GRanges"))
 
+    ## Metrics -----------------------------------------------------------------
+    aggregation <- NULL
+    summary <- NULL
+    if (.isAggregate(dir)) {
+        aggregation <- import(file.path(dir, "outs", "aggregation.csv"))
+        aggregation <- as(aggregation, "DataFrame")
+        summary <- import(file.path(dir, "outs", "summary.json"))
+        summary <- as(summary, "SimpleList")
+    } else if (!.isSingleSample(dir)) {
+        ## metrics_summary.csv
+    }
+    
     ## Column data -------------------------------------------------------------
     colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
@@ -322,6 +334,7 @@ CellRanger <- function(  # nolint
     interestingGroups <- camelCase(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
+        aggregation = aggregation,
         allSamples = allSamples,
         call = standardizeCall(),
         dir = dir,
@@ -338,6 +351,7 @@ CellRanger <- function(  # nolint
         refdataDir = as.character(refdataDir),
         sampleDirs = sampleDirs,
         sampleMetadataFile = as.character(sampleMetadataFile),
+        summary = summary,
         umiType = "chromium",
         version = .version
     )
