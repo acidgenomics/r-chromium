@@ -1,5 +1,5 @@
 #' Import counts from either HDF5 or MTX files.
-#' @note Updated 2019-08-21.
+#' @note Updated 2019-08-22.
 #' @noRd
 .importCounts <- function(
     matrixFiles,
@@ -23,9 +23,15 @@
         sampleID = names(matrixFiles),
         file = matrixFiles,
         FUN = function(sampleID, file) {
+            ## FIXME Need to remove brio attributes from NAMES here.
             counts <- fun(file)
             ## Strip index when all barcodes end with "-1".
-            if (all(grepl("-1$", colnames(counts)))) {
+            if (
+                allAreMatchingRegex(
+                    x = colnames(counts),
+                    pattern = "-1$"
+                )
+            ) {
                 colnames(counts) <- sub("-1", "", colnames(counts))
             }
             # Now move the multiplexed index name/number to the beginning,
@@ -203,7 +209,7 @@
             identical(length(rownames), nrow(counts)),
             identical(length(colnames), ncol(counts))
         )
-        rownames(counts) <- rownames
-        colnames(counts) <- colnames
+        rownames(counts) <- as.character(rownames)
+        colnames(counts) <- as.character(colnames)
         counts
     }
