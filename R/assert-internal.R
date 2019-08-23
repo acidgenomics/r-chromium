@@ -51,32 +51,3 @@
     )
     isString(files)
 }
-
-
-
-#' Does the dataset contain a single sample?
-#'
-#' This is a utility function intended to make loading of example datasets
-#' from the 10X Genomics website easier.
-#'
-#' @note Updated 2019-08-22.
-#'
-#' @param dir Cell Ranger output directory.
-#'
-#' @note Updated 2019-08-01.
-#' @noRd
-.isSingleSample <- function(dir) {
-    assert(isADirectory(dir))
-    ## Check for minimal, single sample directory structure.
-    ok <- .isMinimalSample(dir)
-    if (isTRUE(ok)) return(ok)
-    ## Check matrix files in `outs/` subdirectory.
-    outsDir <- file.path(dir, "outs")
-    if (dir.exists(outsDir)) {
-        files <- list.files(path = outsDir, recursive = FALSE)
-        ## Note that Cell Ranger v2 outputs "matrices" instead of "matrix".
-        ok <- any(grepl("^(filtered|raw)_", files))
-        if (isTRUE(ok)) return(ok)
-    }
-    FALSE
-}
