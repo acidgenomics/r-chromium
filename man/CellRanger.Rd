@@ -93,10 +93,7 @@ Cell Ranger can vary in its output directory structure, but we're requiring a
 single, consistent directory structure for datasets containing multiple
 samples that have not been aggregated into a single matrix with \code{aggr}.
 
-Cell Ranger v3 output:
-
-\preformatted{
-| <dir>/
+Cell Ranger v3 output:\preformatted{| <dir>/
 |-- <sampleName>/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
@@ -115,13 +112,9 @@ Cell Ranger v3 output:
 |-------- matrix.mtx.gz
 |------ raw_feature_bc_matrix.h5
 |------ web_summary.html
-)
 }
 
-Cell Ranger v2 output:
-
-\preformatted{
-| <dir>/
+Cell Ranger v2 output:\preformatted{| <dir>/
 |-- <sampleName>/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
@@ -141,7 +134,6 @@ Cell Ranger v2 output:
 |---------- genes.tsv
 |---------- matrix.mtx
 |------ raw_gene_bc_matrices_h5.h5
-)
 }
 }
 

@@ -2,7 +2,7 @@ Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
 Version: 0.1.0
-Date: 2019-08-22
+Date: 2019-08-23
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -24,7 +24,7 @@ LazyData: false
 Depends:
     R (>= 3.6),
     SingleCellExperiment,
-    basejump (>= 0.11.10)
+    basejump (>= 0.11.11)
 Imports:
     goalie (>= 0.3.5),
     BiocParallel,

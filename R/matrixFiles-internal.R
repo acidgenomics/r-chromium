@@ -38,7 +38,7 @@
     if (!dir.exists(file.path(dir, "outs"))) {
         file <- list.files(
             path = dir,
-            pattern = "matrix\\.(h5|mtx)(\\.gz)?",
+            pattern = "\\.(h5|mtx)(\\.gz)?",
             full.names = TRUE
         )
         if (isAFile(file)) return(file)
@@ -121,7 +121,7 @@
 
 
 #' Find all matrix files for a data set
-#' @note Updated 2019-08-21.
+#' @note Updated 2019-08-22.
 #' @noRd
 .matrixFiles <- function(
     sampleDirs,
@@ -138,12 +138,17 @@
     pipeline <- vapply(
         X = list,
         FUN = function(x) {
-            attr(x, "pipeline")
-            },
+            attr <- attr(x, "pipeline")
+            ## Handle samples loaded from simple mode.
+            if (!hasLength(attr)) {
+                attr <- NA_character_
+            }
+            attr
+        },
         FUN.VALUE = character(1L),
         USE.NAMES = TRUE
     )
-    files <- unlist(list)
+    files <- unlist(list, use.names = TRUE)
     assert(
         allAreFiles(files),
         hasLength(unique(basename(files)), n = 1L),
