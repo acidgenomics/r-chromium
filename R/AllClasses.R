@@ -1,8 +1,3 @@
-## FIXME No zero count rows and columns.
-## FIXME Require valid names everywhere.
-
-
-
 #' Cell Ranger RNA-seq data set
 #'
 #' Contains UMI droplet-based single-cell RNA-seq data.
