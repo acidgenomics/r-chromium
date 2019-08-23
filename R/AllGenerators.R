@@ -381,11 +381,6 @@ CellRanger <- function(  # nolint
 
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
-    ## FIXME Drop all zero rows and columns to speed up calcs.
-    ## FIXME Add bplapply support to calculateMetrics here.
-    ## FIXME Require hasNonZeroRowsAndCols check.
-    ## FIXME This is taking too long for unfiltered data.
-    ## > object <- calculateMetrics(object = object, prefilter = TRUE)
-    ## > new(Class = "CellRanger", object)
-    object
+    object <- calculateMetrics(object = object, prefilter = TRUE)
+    new(Class = "CellRanger", object)
 }
