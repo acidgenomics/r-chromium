@@ -39,7 +39,7 @@
 #'
 #' Cell Ranger v3 output:
 #'
-#' \preformatted{
+#' ```
 #' | <dir>/
 #' |-- <sampleName>/
 #' |---- SC_RNA_COUNTER_CS/
@@ -59,12 +59,11 @@
 #' |-------- matrix.mtx.gz
 #' |------ raw_feature_bc_matrix.h5
 #' |------ web_summary.html
-#' )
-#' }
+#' ```
 #'
 #' Cell Ranger v2 output:
 #'
-#' \preformatted{
+#' ```
 #' | <dir>/
 #' |-- <sampleName>/
 #' |---- SC_RNA_COUNTER_CS/
@@ -85,8 +84,7 @@
 #' |---------- genes.tsv
 #' |---------- matrix.mtx
 #' |------ raw_gene_bc_matrices_h5.h5
-#' )
-#' }
+#' ```
 #'
 #' @section Sample metadata:
 #'
@@ -156,7 +154,7 @@ CellRanger <- function(  # nolint
     ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
-        refdataDir <- realpath(refdataDir)
+        refdataDir <- realpath(refdataDir)  ## nocov
     }
     sampleDirs <- .sampleDirs(dir)
 
@@ -231,7 +229,7 @@ CellRanger <- function(  # nolint
     )
     ## Get the pipeline from the matrix file attributes.
     pipeline <- attr(matrixFiles, "pipeline")
-    assert(isString(pipeline))
+    assert(isString(pipeline) || identical(pipeline, NA_character_))
     attr(matrixFiles, "pipeline") <- NULL
     counts <- .importCounts(
         matrixFiles = matrixFiles,
@@ -243,6 +241,7 @@ CellRanger <- function(  # nolint
     refJSON <- NULL
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
+        ## nocov start
         message(sprintf(
             fmt = paste0(
                 "Using 10X Genomics reference data ",
@@ -271,10 +270,11 @@ CellRanger <- function(  # nolint
         gffFile <- file.path(refdataDir, "genes", "genes.gtf")
         assert(isString(gffFile))
         rowRanges <- makeGRangesFromGFF(gffFile)
+        ## nocov end
     } else if (isString(gffFile)) {
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
-        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")
+        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
@@ -304,7 +304,7 @@ CellRanger <- function(  # nolint
     ## Note that "molecule_info.h5" file contains additional information that
     ## may be useful for quality control metric calculations.
     aggregation <- NULL
-    metrics <- NULL
+    sampleMetrics <- NULL
     summary <- NULL
     if (.isAggregate(dir)) {
         aggregation <- import(file.path(dir, "outs", "aggregation.csv"))
@@ -341,6 +341,19 @@ CellRanger <- function(  # nolint
             samples = rownames(sampleData)
         )
     }
+    sampleData[["sampleID"]] <- as.factor(rownames(sampleData))
+    ## Need to ensure the `sampleID` factor levels match up, otherwise we'll get
+    ## a warning during the `left_join()` call below.
+    assert(areSetEqual(
+        x = levels(colData[["sampleID"]]),
+        y = levels(sampleData[["sampleID"]])
+    ))
+    levels(sampleData[["sampleID"]]) <- levels(colData[["sampleID"]])
+    colData <- left_join(colData, sampleData, by = "sampleID")
+    assert(
+        is(colData, "DataFrame"),
+        hasRownames(colData)
+    )
 
     ## Metadata ----------------------------------------------------------------
     interestingGroups <- camelCase(interestingGroups)
