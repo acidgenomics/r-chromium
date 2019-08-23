@@ -44,8 +44,12 @@
 #' @note Updated 2019-08-22.
 #' @noRd
 .isMinimalSample <- function(dir) {
-    files <- list.files(path = dir, recursive = FALSE)
-    any(grepl(pattern = "matrix\\.(h5|mtx)(\\.gz)?$", x = files))
+    files <- list.files(
+        path = dir,
+        pattern = "\\.(h5|mtx)(\\.gz)?",
+        recursive = FALSE
+    )
+    isString(files)
 }
 
 

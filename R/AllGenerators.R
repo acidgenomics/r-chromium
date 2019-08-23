@@ -229,7 +229,7 @@ CellRanger <- function(  # nolint
     )
     ## Get the pipeline from the matrix file attributes.
     pipeline <- attr(matrixFiles, "pipeline")
-    assert(isString(pipeline))
+    assert(isString(pipeline) || identical(pipeline, NA_character_))
     attr(matrixFiles, "pipeline") <- NULL
     counts <- .importCounts(
         matrixFiles = matrixFiles,
@@ -304,7 +304,7 @@ CellRanger <- function(  # nolint
     ## Note that "molecule_info.h5" file contains additional information that
     ## may be useful for quality control metric calculations.
     aggregation <- NULL
-    metrics <- NULL
+    sampleMetrics <- NULL
     summary <- NULL
     if (.isAggregate(dir)) {
         aggregation <- import(file.path(dir, "outs", "aggregation.csv"))
@@ -381,6 +381,11 @@ CellRanger <- function(  # nolint
 
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
-    object <- calculateMetrics(object = object, prefilter = TRUE)
-    new(Class = "CellRanger", object)
+    ## FIXME Drop all zero rows and columns to speed up calcs.
+    ## FIXME Add bplapply support to calculateMetrics here.
+    ## FIXME Require hasNonZeroRowsAndCols check.
+    ## FIXME This is taking too long for unfiltered data.
+    ## > object <- calculateMetrics(object = object, prefilter = TRUE)
+    ## > new(Class = "CellRanger", object)
+    object
 }
