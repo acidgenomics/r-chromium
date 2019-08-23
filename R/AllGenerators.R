@@ -341,6 +341,19 @@ CellRanger <- function(  # nolint
             samples = rownames(sampleData)
         )
     }
+    sampleData[["sampleID"]] <- as.factor(rownames(sampleData))
+    ## Need to ensure the `sampleID` factor levels match up, otherwise we'll get
+    ## a warning during the `left_join()` call below.
+    assert(areSetEqual(
+        x = levels(colData[["sampleID"]]),
+        y = levels(sampleData[["sampleID"]])
+    ))
+    levels(sampleData[["sampleID"]]) <- levels(colData[["sampleID"]])
+    colData <- left_join(colData, sampleData, by = "sampleID")
+    assert(
+        is(colData, "DataFrame"),
+        hasRownames(colData)
+    )
 
     ## Metadata ----------------------------------------------------------------
     interestingGroups <- camelCase(interestingGroups)
