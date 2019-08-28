@@ -68,7 +68,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Chromium</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -309,17 +309,20 @@ Ensembl release.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v3"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span>
-#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'matrix.mtx.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'features.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'features.tsv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'barcodes.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'metrics_summary.csv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Calculating 100 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'>Calculating metrics without biotype information.</span>
-#&gt; <span class='message'>'rowRanges' required to calculate: nCoding, nMito, mitoRatio.</span></div><div class='output co'>#&gt; <span class='message'>85 / 100 samples passed pre-filtering (85.0%).</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
-#&gt; dim: 100 85 
+#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'matrix.mtx.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'features.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'features.tsv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'barcodes.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'metrics_summary.csv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Filtered zero count rows and columns:</span>
+#&gt; <span class='message'>  - 46 / 100 rows (46.0%)</span>
+#&gt; <span class='message'>  - 92 / 100 columns (92.0%)</span></div><div class='output co'>#&gt; <span class='message'>Calculating 92 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'>Calculating metrics without biotype information.</span>
+#&gt; <span class='message'>'rowRanges' required to calculate: nCoding, nMito, mitoRatio.</span></div><div class='output co'>#&gt; <span class='message'>Prefilter: 85 / 92 samples (92.4%).</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; dim: 46 85 
 #&gt; metadata(22): allSamples call ... version wd
 #&gt; assays(1): counts
-#&gt; rownames(100): ENSG00000008128 ENSG00000008130 ... ENSG00000284662
-#&gt;   ENSG00000284733
+#&gt; rownames(46): ENSG00000008128 ENSG00000008130 ... ENSG00000272106
+#&gt;   ENSG00000272512
 #&gt; rowData names(0):
 #&gt; colnames(85): AAACCCAAGAGACAAG AAACCCAAGGCCTAGA ... AACCTGAGTCGAGCTC
 #&gt;   AACCTGAGTCTCTCAC
-#&gt; colData names(7): sampleID nCount ... log10FeaturesPerCount mitoRatio
+#&gt; colData names(8): sampleID sampleName ... log10FeaturesPerCount
+#&gt;   mitoRatio
 #&gt; reducedDimNames(0):
 #&gt; spikeNames(0):</div></pre>
   </div>
