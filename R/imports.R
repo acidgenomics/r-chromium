@@ -4,7 +4,7 @@
 #' @importFrom SummarizedExperiment assay assays
 #' @importFrom S4Vectors DataFrame SimpleList mcols metadata metadata<-
 #' @importFrom basejump calculateMetrics camelCase detectLanes droplevels
-#'   emptyRanges import left_join makeDimnames makeGRangesFromEnsembl
+#'   emptyRanges import leftJoin makeDimnames makeGRangesFromEnsembl
 #'   makeGRangesFromGFF makeDimnames makeNames makeSingleCellExperiment
 #'   mapCellsToSamples metricsCols minimalSampleData printString readSampleData
 #'   realpath standardizeCall
