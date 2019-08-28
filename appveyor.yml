@@ -22,17 +22,13 @@ environment:
     USE_RTOOLS: true
   matrix:
     - configuration: 3.6
-      R_VERSION: 3.6.0
+      R_VERSION: 3.6.1
 
 matrix:
   fast_finish: true
 
 build_script:
   - travis-tool.sh install_bioc GenomeInfoDbData
-  - travis-tool.sh install_bioc DelayedArray
-  - travis-tool.sh install_bioc ensembldb
-  - travis-tool.sh install_bioc biomaRt
-  - travis-tool.sh install_bioc EnsDb.Hsapiens.v75
   - travis-tool.sh install_bioc_deps
 
 test_script:
