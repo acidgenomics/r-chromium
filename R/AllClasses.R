@@ -38,12 +38,6 @@ setValidity(
         )
         if (!isTRUE(ok)) return(ok)
 
-        ## > sampleData[["interestingGroups"]] <- NULL
-        ## > sampleData[["sampleName"]] <- NULL
-        ## Ensure that sample-level metadata is also defined at cell-level.
-        ## We're doing this in long format in the colData slot.
-        ## > isSubset(colnames(sampleData), colnames(colData))
-
         ## Metadata ------------------------------------------------------------
         ok <- validateClasses(
             object = metadata,
