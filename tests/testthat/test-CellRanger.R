@@ -31,6 +31,7 @@ test_that("MTX : AnnotationHub", {
 })
 
 test_that("HDF5", {
+    skip_on_appveyor()
     dir <- file.path("cache", "pbmc_v2")
     object <- CellRanger(dir)
     expect_s4_class(object, "CellRanger")
@@ -62,6 +63,7 @@ test_that("MTX : User-defined sample metadata", {
 })
 
 test_that("HDF5", {
+    skip_on_appveyor()
     dir <- file.path("cache", "pbmc_v3")
     object <- CellRanger(dir)
     expect_s4_class(object, "CellRanger")
