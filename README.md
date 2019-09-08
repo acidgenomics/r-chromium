@@ -17,7 +17,6 @@ if (!requireNamespace("remotes", quietly = TRUE)) {
 Sys.setenv(R_REMOTES_UPGRADE = "always")
 # Set `GITHUB_PAT` in `~/.Renviron` if you get a rate limit error.
 remotes::install_github("acidgenomics/Chromium")
-remotes::update_packages()
 ```
 
 [Bioconductor]: https://bioconductor.org/
