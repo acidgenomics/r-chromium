@@ -1,5 +1,5 @@
 ## CPI test data examples
-## 
+##
 ## Single sample:
 ## > dir <- file.path(
 ## >     "",
@@ -10,7 +10,7 @@
 ## >     "cellranger",
 ## >     "MCF7_50nM_CPI1612"
 ## > x <- CellRanger(dir)
-## 
+##
 ## Aggregation:
 ## > dir <- file.path(
 ## >     "",
