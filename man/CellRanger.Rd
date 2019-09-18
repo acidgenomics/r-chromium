@@ -9,7 +9,7 @@ CellRanger(dir, filtered = TRUE, organism = NULL,
   refdataDir = NULL, samples = NULL, censorSamples = NULL,
   sampleMetadataFile = NULL, transgeneNames = NULL,
   spikeNames = NULL, interestingGroups = "sampleName",
-  BPPARAM = BiocParallel::SerialParam())
+  BPPARAM = BiocParallel::bpparam())
 }
 \arguments{
 \item{dir}{\code{character(1)}.
@@ -84,7 +84,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Currently supports loading of a single genome.
 
-Updated 2019-08-22.
+Updated 2019-09-18.
 }
 \section{Directory structure for multiple samples}{
 

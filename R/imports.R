@@ -4,10 +4,10 @@
 #' @importFrom SummarizedExperiment assay assays
 #' @importFrom S4Vectors DataFrame SimpleList mcols metadata metadata<-
 #' @importFrom basejump calculateMetrics camelCase detectLanes droplevels
-#'   emptyRanges import leftJoin makeDimnames makeGRangesFromEnsembl
-#'   makeGRangesFromGFF makeDimnames makeNames makeSingleCellExperiment
-#'   mapCellsToSamples metricsCols minimalSampleData printString readSampleData
-#'   realpath standardizeCall
+#'   emptyRanges import importSampleData leftJoin makeDimnames
+#'   makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames makeNames
+#'   makeSingleCellExperiment mapCellsToSamples metricsCols minimalSampleData
+#'   printString realpath standardizeCall
 #' @importFrom goalie allAreDirectories allAreFiles allAreMatchingRegex
 #'   areDisjointSets areSetEqual assert hasLength hasNames hasRownames
 #'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
