@@ -8,11 +8,13 @@
 
 <title>Cell Ranger RNA-seq data set — CellRanger • Chromium</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
@@ -34,10 +36,11 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Cell Ranger RNA-seq data set — CellRanger" />
 
+<meta property="og:title" content="Cell Ranger RNA-seq data set — CellRanger" />
 <meta property="og:description" content="Contains UMI droplet-based single-cell RNA-seq data." />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -68,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Chromium</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -87,7 +90,6 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/acidgenomics/Chromium">
@@ -114,9 +116,7 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Contains UMI droplet-based single-cell RNA-seq data.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>CellRanger</span>(<span class='no'>dir</span>, <span class='kw'>filtered</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>organism</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -124,8 +124,8 @@
   <span class='kw'>refdataDir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>censorSamples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>sampleMetadataFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transgeneNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>spikeNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>interestingGroups</span> <span class='kw'>=</span> <span class='st'>"sampleName"</span>,
-  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/SerialParam-class.html'>SerialParam</a></span>())</pre>
-    
+  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></span>())</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -216,21 +216,18 @@ We recommend using one of the following:</p><ul>
 </ul></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>CellRanger</code>.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Read <a href='https://www.10xgenomics.com/software/'>10x Genomics Cell Ranger</a> output
 for a Chromium data set into a <code>SingleCellExperiment</code> object.</p>
-    
     <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
 
     <p>Currently supports loading of a single genome.</p>
-<p>Updated 2019-08-22.</p>
-    
+<p>Updated 2019-09-18.</p>
     <h2 class="hasAnchor" id="directory-structure-for-multiple-samples"><a class="anchor" href="#directory-structure-for-multiple-samples"></a>Directory structure for multiple samples</h2>
 
     
@@ -282,7 +279,6 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 |------ raw_gene_bc_matrices_h5.h5
 </pre>
 
-    
     <h2 class="hasAnchor" id="sample-metadata"><a class="anchor" href="#sample-metadata"></a>Sample metadata</h2>
 
     
@@ -291,7 +287,6 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 <p>A user-supplied sample metadata file defined by <code>sampleMetadataFile</code> is
 required for multiplexed datasets. Otherwise this can be left <code>NULL</code>, and
 minimal sample data will be used, based on the directory names.</p>
-    
     <h2 class="hasAnchor" id="reference-data"><a class="anchor" href="#reference-data"></a>Reference data</h2>
 
     
@@ -304,12 +299,11 @@ slotted in <code><a href='https://rdrr.io/pkg/SummarizedExperiment/man/RangedSum
 function will attempt to use the most current annotations available from
 Ensembl, and some gene IDs may not match, due to deprecation in the current
 Ensembl release.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v3"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
 <span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span>
-#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'matrix.mtx.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'features.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'features.tsv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'barcodes.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'metrics_summary.csv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Filtered zero count rows and columns:</span>
+#&gt; <span class='message'>[1] "pbmc"</span></div><div class='output co'>#&gt; <span class='message'>Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'matrix.mtx.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'matrix.mtx.gz' using 'Matrix::readMM()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'features.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'features.tsv.gz' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Decompressing 'barcodes.tsv.gz' in 'tempdir()'.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'barcodes.tsv.gz' using 'base::readLines()'.</span></div><div class='output co'>#&gt; <span class='message'>Unknown organism. Skipping annotations.</span></div><div class='output co'>#&gt; <span class='message'>Importing 'metrics_summary.csv' using 'data.table::fread()'.</span></div><div class='output co'>#&gt; <span class='message'>Filtered zero count rows and columns:</span>
 #&gt; <span class='message'>  - 46 / 100 rows (46.0%)</span>
 #&gt; <span class='message'>  - 92 / 100 columns (92.0%)</span></div><div class='output co'>#&gt; <span class='message'>Calculating 92 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'>Calculating metrics without biotype information.</span>
 #&gt; <span class='message'>'rowRanges' required to calculate: nCoding, nMito, mitoRatio.</span></div><div class='output co'>#&gt; <span class='message'>Prefilter: 85 / 92 samples (92.4%).</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
@@ -324,25 +318,19 @@ Ensembl release.</p>
 #&gt; colData names(8): sampleID sampleName ... log10FeaturesPerCount
 #&gt;   mitoRatio
 #&gt; reducedDimNames(0):
-#&gt; spikeNames(0):</div></pre>
+#&gt; spikeNames(0):
+#&gt; altExpNames(0):</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
       <li><a href="#value">Value</a></li>
-
       <li><a href="#details">Details</a></li>
-
       <li><a href="#note">Note</a></li>
-
       <li><a href="#directory-structure-for-multiple-samples">Directory structure for multiple samples</a></li>
-
       <li><a href="#sample-metadata">Sample metadata</a></li>
-
       <li><a href="#reference-data">Reference data</a></li>
-      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -356,7 +344,7 @@ Ensembl release.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9100.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
 
       </footer>
