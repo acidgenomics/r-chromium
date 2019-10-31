@@ -1,3 +1,7 @@
+## Chromium 0.1.2 (2019-10-30)
+
+Compatibility fixes for Bioconductor 3.10.
+
 ## Chromium 0.1.1 (2019-08-28)
 
 ### Minor changes
