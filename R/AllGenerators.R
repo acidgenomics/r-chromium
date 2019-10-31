@@ -1,3 +1,5 @@
+## CPI test data examples
+##
 ## Single sample:
 ## > dir <- file.path(
 ## >     "",
@@ -8,7 +10,7 @@
 ## >     "cellranger",
 ## >     "MCF7_50nM_CPI1612"
 ## > x <- CellRanger(dir)
-
+##
 ## Aggregation:
 ## > dir <- file.path(
 ## >     "",
@@ -24,7 +26,7 @@
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-08-22.
+#' @note Updated 2019-09-18.
 #' @export
 #'
 #' @details
@@ -131,7 +133,7 @@ CellRanger <- function(  # nolint
     transgeneNames = NULL,
     spikeNames = NULL,
     interestingGroups = "sampleName",
-    BPPARAM = BiocParallel::SerialParam()  # nolint
+    BPPARAM = BiocParallel::bpparam()  # nolint
 ) {
     assert(
         isADirectory(dir),
@@ -174,8 +176,8 @@ CellRanger <- function(  # nolint
         if (file.exists(sampleMetadataFile)) {
             sampleMetadataFile <- realpath(sampleMetadataFile)
         }
-        ## Note that `readSampleData()` also supports URLs.
-        sampleData <- readSampleData(
+        ## Note that URL input is also supported here.
+        sampleData <- importSampleData(
             file = sampleMetadataFile,
             lanes = lanes,
             pipeline = "cellranger"
