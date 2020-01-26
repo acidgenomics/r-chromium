@@ -4,12 +4,22 @@
 \alias{CellRanger}
 \title{Cell Ranger RNA-seq data set}
 \usage{
-CellRanger(dir, filtered = TRUE, organism = NULL,
-  ensemblRelease = NULL, genomeBuild = NULL, gffFile = NULL,
-  refdataDir = NULL, samples = NULL, censorSamples = NULL,
-  sampleMetadataFile = NULL, transgeneNames = NULL,
-  spikeNames = NULL, interestingGroups = "sampleName",
-  BPPARAM = BiocParallel::bpparam())
+CellRanger(
+  dir,
+  filtered = TRUE,
+  organism = NULL,
+  ensemblRelease = NULL,
+  genomeBuild = NULL,
+  gffFile = NULL,
+  refdataDir = NULL,
+  samples = NULL,
+  censorSamples = NULL,
+  sampleMetadataFile = NULL,
+  transgeneNames = NULL,
+  spikeNames = NULL,
+  interestingGroups = "sampleName",
+  BPPARAM = BiocParallel::bpparam()
+)
 }
 \arguments{
 \item{dir}{\code{character(1)}.
