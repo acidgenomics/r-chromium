@@ -94,7 +94,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Currently supports loading of a single genome.
 
-Updated 2019-09-18.
+Updated 2020-01-26.
 }
 \section{Directory structure for multiple samples}{
 

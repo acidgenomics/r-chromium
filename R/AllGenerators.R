@@ -26,7 +26,7 @@
 
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2019-09-18.
+#' @note Updated 2020-01-26.
 #' @export
 #'
 #' @details
@@ -151,21 +151,18 @@ CellRanger <- function(  # nolint
         isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
+    
+    cli_h1("Importing Chromium single-cell RNA-seq run")
+    
+    ## Run info ----------------------------------------------------------------
     level <- "genes"
-
-    ## Directory paths ---------------------------------------------------------
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
         refdataDir <- realpath(refdataDir)  ## nocov
     }
     sampleDirs <- .sampleDirs(dir)
-
-    ## Sequencing lanes --------------------------------------------------------
     lanes <- detectLanes(sampleDirs)
-    assert(
-        isInt(lanes) ||
-            identical(lanes, integer())
-    )
+    assert(isInt(lanes) || identical(lanes, integer()))
 
     ## Samples -----------------------------------------------------------------
     allSamples <- TRUE
@@ -397,5 +394,7 @@ CellRanger <- function(  # nolint
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
     object <- calculateMetrics(object = object, prefilter = TRUE)
-    new(Class = "CellRanger", object)
+    object <- new(Class = "CellRanger", object)
+    cli_alert_success("Chromium single-cell RNA-seq run imported successfully.")
+    object
 }
