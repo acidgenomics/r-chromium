@@ -1,5 +1,5 @@
 #' Import counts from either HDF5 or MTX files.
-#' @note Updated 2019-08-22.
+#' @note Updated 2020-01-26.
 #' @noRd
 .importCounts <- function(
     matrixFiles,
@@ -13,7 +13,7 @@
     } else {
         stop(sprintf("Unexpected import failure.", file))  # nocov
     }
-    message(sprintf(
+    cli_alert(sprintf(
         fmt = "Importing counts from '%s' %s.",
         basename(matrixFiles[[1L]]),
         ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
