@@ -152,9 +152,11 @@ CellRanger <- function(  # nolint
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
     
-    cli_h1("Importing Chromium single-cell RNA-seq run")
+    cli_h1("Chromium")
+    cli_text("Importing Chromium single-cell RNA-seq run")
     
     ## Run info ----------------------------------------------------------------
+    cli_h2("Run info")
     level <- "genes"
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
@@ -164,7 +166,8 @@ CellRanger <- function(  # nolint
     lanes <- detectLanes(sampleDirs)
     assert(isInt(lanes) || identical(lanes, integer()))
 
-    ## Samples -----------------------------------------------------------------
+    ## Sample metadata --------------------------------------------------------
+    cli_h2("Sample metadata")
     allSamples <- TRUE
     sampleData <- NULL
     ## Get the sample data.
@@ -208,10 +211,8 @@ CellRanger <- function(  # nolint
     )
     if (length(sampleIDs) < length(sampleDirs)) {
         sampleDirs <- sampleDirs[sampleIDs]
-        message(sprintf(
-            fmt = "Loading a subset of samples:\n%s",
-            str_trunc(toString(basename(sampleDirs)), width = 80L)
-        ))
+        cli_text("Loading a subset of samples:")
+        cli_ul(basename(sampleDirs))
         ## Subset the user-defined sample metadata to match, if necessary.
         if (!is.null(sampleData)) {
             keep <- rownames(sampleData) %in% sampleIDs
@@ -220,7 +221,8 @@ CellRanger <- function(  # nolint
         allSamples <- FALSE
     }
 
-    ## Assays ------------------------------------------------------------------
+    ## Assays (counts) --------------------------------------------------------
+    cli_h2("Counts")
     matrixFiles <- .matrixFiles(
         sampleDirs = sampleDirs,
         filtered = filtered,
@@ -236,12 +238,13 @@ CellRanger <- function(  # nolint
     )
     assert(hasValidDimnames(counts))
 
-    ## Row data ----------------------------------------------------------------
+    ## Row data (genes/transcripts) -------------------------------------------
+    cli_h2("Feature metadata")
     refJSON <- NULL
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         ## nocov start
-        message(sprintf(
+        cli_alert_info(sprintf(
             fmt = paste0(
                 "Using 10X Genomics reference data ",
                 "for feature annotations: %s"
@@ -273,6 +276,7 @@ CellRanger <- function(  # nolint
     } else if (isString(gffFile)) {
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
+        cli_alert("{.fun makeGRangesFromGFF}")
         rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
@@ -280,7 +284,7 @@ CellRanger <- function(  # nolint
         ## in the refdata directory. It will also drop genes that are now dead
         ## in the current Ensembl release. Don't warn about old Ensembl release
         ## version.
-        message("Using makeGRangesFromEnsembl() for annotations.")
+        cli_alert("{.fun makeGRangesFromEnsembl}")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
@@ -294,12 +298,13 @@ CellRanger <- function(  # nolint
             ensemblRelease <- metadata(rowRanges)[["ensemblRelease"]]
         }
     } else {
-        message("Unknown organism. Skipping annotations.")
+        cli_alert_warning("Slotting empty ranges into {.fun rowRanges}.")
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
 
     ## Metrics -----------------------------------------------------------------
+    cli_h2("Metrics")
     ## Note that "molecule_info.h5" file contains additional information that
     ## may be useful for quality control metric calculations.
     aggregation <- NULL
@@ -315,6 +320,7 @@ CellRanger <- function(  # nolint
     }
 
     ## Column data -------------------------------------------------------------
+    cli_h2("Column data")
     colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
@@ -355,6 +361,7 @@ CellRanger <- function(  # nolint
     )
 
     ## Metadata ----------------------------------------------------------------
+    cli_h2("Metadata")
     interestingGroups <- camelCase(interestingGroups)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
