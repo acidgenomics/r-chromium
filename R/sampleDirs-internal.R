@@ -3,7 +3,7 @@
 #' Checks for the presence of nested `SC_RNA_COUNTER_CS` directories.
 #'
 #' @note `aggr` returns `SC_RNA_AGGREGATOR_CS/` directory.
-#' @note Updated 2019-08-22.
+#' @note Updated 2020-01-26.
 #'
 #' @param dir Cell Ranger output directory.
 #'
@@ -46,11 +46,11 @@
     dirs <- dirs[keep]
     assert(allAreDirectories(dirs))
     names(dirs) <- makeNames(basename(dirs))
-    message(sprintf(
-        fmt = "%d %s detected:\n%s",
+    cli_text(sprintf(
+        fmt = "%d %s detected:",
         length(dirs),
-        ngettext(n = length(dirs), msg1 = "sample", msg2 = "samples"),
-        printString(names(dirs))
+        ngettext(n = length(dirs), msg1 = "sample", msg2 = "samples")
     ))
+    cli_ul(names(dirs))
     dirs
 }

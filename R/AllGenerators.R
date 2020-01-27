@@ -402,6 +402,7 @@ CellRanger <- function(  # nolint
     ## Always prefilter, removing very low quality cells and/or genes.
     object <- calculateMetrics(object = object, prefilter = TRUE)
     object <- new(Class = "CellRanger", object)
+    cat_line()
     cli_alert_success("Chromium single-cell RNA-seq run imported successfully.")
     object
 }
