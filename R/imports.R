@@ -8,7 +8,7 @@
 #'   makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames makeNames
 #'   makeSingleCellExperiment mapCellsToSamples metricsCols minimalSampleData
 #'   printString realpath standardizeCall
-#' @importFrom cli cli_alert_success cli_h1
+#' @importFrom cli cli_alert_info cli_alert_success cli_h1 cli_h2
 #' @importFrom goalie allAreDirectories allAreFiles allAreMatchingRegex
 #'   areDisjointSets areSetEqual assert hasLength hasNames hasRownames
 #'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
