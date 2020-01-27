@@ -151,10 +151,10 @@ CellRanger <- function(  # nolint
         isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
-    
+
     cli_h1("Chromium")
     cli_text("Importing Chromium single-cell RNA-seq run")
-    
+
     ## Run info ----------------------------------------------------------------
     cli_h2("Run info")
     level <- "genes"
