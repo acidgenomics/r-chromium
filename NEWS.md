@@ -1,4 +1,4 @@
-## Chromium 0.1.3 (2020-01-26)
+## Chromium 0.1.3 (2020-01-27)
 
 ### Minor changes
 
