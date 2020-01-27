@@ -30,6 +30,7 @@ Imports:
     Matrix (>= 1.2),
     S4Vectors (>= 0.24),
     SummarizedExperiment (>= 1.16),
+    cli (>= 2.0),
     goalie (>= 0.4.1),
     rhdf5 (>= 2.30),
     stringr (>= 1.4),
