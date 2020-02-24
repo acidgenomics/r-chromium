@@ -16,7 +16,6 @@ CellRanger(
   censorSamples = NULL,
   sampleMetadataFile = NULL,
   transgeneNames = NULL,
-  spikeNames = NULL,
   interestingGroups = "sampleName",
   BPPARAM = BiocParallel::bpparam()
 )
@@ -65,9 +64,6 @@ columns.}
 \item{transgeneNames}{\code{character}.
 Vector indicating which assay rows denote transgenes (e.g. EGFP, TDTOMATO).}
 
-\item{spikeNames}{\code{character}.
-Vector indicating which assay rows denote spike-in sequences (e.g. ERCCs).}
-
 \item{interestingGroups}{\code{character}.
 Groups of interest to use for visualization.
 Corresponds to factors describing the columns of the object.}
@@ -94,7 +90,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 \note{
 Currently supports loading of a single genome.
 
-Updated 2020-01-26.
+Updated 2020-02-24.
 }
 \section{Directory structure for multiple samples}{
 
