@@ -1,32 +1,6 @@
-## CPI test data examples
-##
-## Single sample:
-## > dir <- file.path(
-## >     "",
-## >     "mnt",
-## >     "azbioinfoseq03",
-## >     "scRNA-seq",
-## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
-## >     "cellranger",
-## >     "MCF7_50nM_CPI1612"
-## > x <- CellRanger(dir)
-##
-## Aggregation:
-## > dir <- file.path(
-## >     "",
-## >     "mnt",
-## >     "azbioinfoseq03",
-## >     "scRNA-seq",
-## >     "2019_06_CBPHAT_LNCaP_MCF7_CPI1612_scRNAseq",
-## >     "cellranger",
-## >     "MCF7"
-## > x <- CellRanger(dir)
-
-
-
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2020-01-26.
+#' @note Updated 2020-02-24.
 #' @export
 #'
 #' @details
@@ -131,7 +105,6 @@ CellRanger <- function(  # nolint
     censorSamples = NULL,
     sampleMetadataFile = NULL,
     transgeneNames = NULL,
-    spikeNames = NULL,
     interestingGroups = "sampleName",
     BPPARAM = BiocParallel::bpparam()  # nolint
 ) {
@@ -147,7 +120,6 @@ CellRanger <- function(  # nolint
         isAny(censorSamples, classes = c("character", "NULL")),
         isAFile(sampleMetadataFile, nullOK = TRUE),
         isCharacter(transgeneNames, nullOK = TRUE),
-        isCharacter(spikeNames, nullOK = TRUE),
         isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
@@ -394,8 +366,7 @@ CellRanger <- function(  # nolint
         rowRanges = rowRanges,
         colData = colData,
         metadata = metadata,
-        transgeneNames = transgeneNames,
-        spikeNames = spikeNames
+        transgeneNames = transgeneNames
     )
 
     ## Return ------------------------------------------------------------------

@@ -1,3 +1,11 @@
+## Chromium 0.1.4 (2020-02-24)
+
+### Minor changes
+
+- `CellRanger`: Removed now defunct `spikeNames` argument. Refer to
+  `makeSummarizedExperiment`, `makeSingleCellExperiment` documentation and
+  release notes in basejump package for details.
+
 ## Chromium 0.1.3 (2020-01-27)
 
 ### Minor changes
