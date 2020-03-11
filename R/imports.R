@@ -1,6 +1,6 @@
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
 #' @importFrom Matrix sparseMatrix
-#' @importFrom SingleCellExperiment SingleCellExperiment isSpike
+#' @importFrom SingleCellExperiment SingleCellExperiment
 #' @importFrom SummarizedExperiment assay assays
 #' @importFrom S4Vectors DataFrame SimpleList mcols metadata metadata<-
 #' @importFrom basejump calculateMetrics camelCase detectLanes droplevels

@@ -1,3 +1,10 @@
+## Chromium 0.1.5 (2020-03-11)
+
+### Minor changes
+
+- NAMESPACE fix removing `isSpike`, which is now defunct in Bioconductor 3.11
+  SingleCellExperiment update.
+
 ## Chromium 0.1.4 (2020-02-24)
 
 ### Minor changes
