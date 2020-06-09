@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +43,6 @@
 
 <meta property="og:title" content="Cell Ranger RNA-seq data set — CellRanger" />
 <meta property="og:description" content="Contains UMI droplet-based single-cell RNA-seq data." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +60,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -92,7 +95,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/acidgenomics/Chromium">
+  <a href="https://github.com/acidgenomics/Chromium/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -240,8 +243,8 @@ for a Chromium data set into a <code>SingleCellExperiment</code> object.</p>
 <p>Cell Ranger can vary in its output directory structure, but we're requiring a
 single, consistent directory structure for datasets containing multiple
 samples that have not been aggregated into a single matrix with <code>aggr</code>.</p>
-<p>Cell Ranger v3 output:</p><pre>| &lt;dir&gt;/
-|-- &lt;sampleName&gt;/
+<p>Cell Ranger v3 output:</p><pre>| &amp;lt;dir&amp;gt;/
+|-- &amp;lt;sampleName&amp;gt;/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_feature_bc_matrix/
@@ -261,12 +264,12 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 |------ web_summary.html
 </pre>
 
-<p>Cell Ranger v2 output:</p><pre>| &lt;dir&gt;/
-|-- &lt;sampleName&gt;/
+<p>Cell Ranger v2 output:</p><pre>| &amp;lt;dir&amp;gt;/
+|-- &amp;lt;sampleName&amp;gt;/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_gene_bc_matrices/
-|-------- &lt;genomeBuild&gt;/
+|-------- &amp;lt;genomeBuild&amp;gt;/
 |---------- barcodes.tsv
 |---------- genes.tsv
 |---------- matrix.mtx
@@ -276,7 +279,7 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 |------ possorted_genome_bam.bam
 |------ possorted_genome_bam.bam.bai
 |------ raw_gene_bc_matrices/
-|-------- &lt;genomeBuild&gt;/
+|-------- &amp;lt;genomeBuild&amp;gt;/
 |---------- barcodes.tsv
 |---------- genes.tsv
 |---------- matrix.mtx
@@ -306,10 +309,10 @@ Ensembl release.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v3"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Chromium</span><span> </span><span style='color: #00BBBB;'>─────────────────────────────────────────────</span><span></span></div><div class='output co'>#&gt; <span class='message'>Importing Chromium single-cell RNA-seq run</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Run info</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span></div><div class='output co'>#&gt; <span class='message'>● pbmc</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Sample metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Counts</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>matrix.mtx.gz</span><span> using </span><span style='color: #0000BB;'>Matrix</span><span>::</span><span style='color: #262626;background-color: #DADADA;'>`readMM()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>features.tsv.gz</span><span> using </span><span style='color: #0000BB;'>data.table</span><span>::</span><span style='color: #262626;background-color: #DADADA;'>`fread()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>barcodes.tsv.gz</span><span> using </span><span style='color: #0000BB;'>base</span><span>::</span><span style='color: #262626;background-color: #DADADA;'>`readLines()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Feature metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Slotting empty ranges into </span><span style='color: #262626;background-color: #DADADA;'>`rowRanges()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metrics</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>metrics_summary.csv</span><span> using </span><span style='color: #0000BB;'>data.table</span><span>::</span><span style='color: #262626;background-color: #DADADA;'>`fread()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Column data</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Filtered zero count rows and columns:</span>
+<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Chromium</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────────────────</span><span></span></div><div class='output co'>#&gt; <span class='message'>Importing Chromium single-cell RNA-seq run</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Run info</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span></div><div class='output co'>#&gt; <span class='message'>● pbmc</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Sample metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Counts</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>matrix.mtx.gz</span><span> using </span><span style='color: #0000BB;'>Matrix</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`readMM()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>features.tsv.gz</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>barcodes.tsv.gz</span><span> using </span><span style='color: #0000BB;'>base</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`readLines()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Feature metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Slotting empty ranges into </span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metrics</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>metrics_summary.csv</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Column data</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Filtered zero count rows and columns:</span>
 #&gt; <span class='message'>- 46 / 100 rows (46%)</span>
 #&gt; <span class='message'>- 92 / 100 columns (92%)</span></div><div class='output co'>#&gt; <span class='message'>→ Calculating 92 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Calculating metrics without biotype information.</span>
-#&gt; <span class='message'></span><span style='color: #262626;background-color: #DADADA;'>`rowRanges()`</span><span> required to calculate: </span><span style='color: #262626;background-color: #DADADA;'>`nCoding, nMito, mitoRatio`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Prefilter: 85 / 92 samples (92%).</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Chromium single-cell RNA-seq run imported successfully.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; <span class='message'></span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span> required to calculate: </span><span style='color: #000000;background-color: #BBBBBB;'>`nCoding, nMito, mitoRatio`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Prefilter: 85 / 92 samples (92%).</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Chromium single-cell RNA-seq run imported successfully.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
 #&gt; dim: 46 85 
 #&gt; metadata(22): allSamples call ... version wd
 #&gt; assays(1): counts
@@ -321,22 +324,12 @@ Ensembl release.</p>
 #&gt; colData names(8): sampleID sampleName ... log10FeaturesPerCount
 #&gt;   mitoRatio
 #&gt; reducedDimNames(0):
-#&gt; spikeNames(0):
 #&gt; altExpNames(0):</div></span></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#note">Note</a></li>
-      <li><a href="#directory-structure-for-multiple-samples">Directory structure for multiple samples</a></li>
-      <li><a href="#sample-metadata">Sample metadata</a></li>
-      <li><a href="#reference-data">Reference data</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -347,7 +340,7 @@ Ensembl release.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

@@ -11,7 +11,7 @@ globalVariables(".")
 #' ChromiumTestsURL
 ChromiumTestsURL <-  # nolint
     paste0(
-        "http://tests.acidgenomics.com/Chromium/",
+        "https://tests.acidgenomics.com/Chromium/",
         "v", .version$major, ".", .version$minor  # nolint
     )
 

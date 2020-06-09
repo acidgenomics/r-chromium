@@ -4,7 +4,9 @@
 \name{pbmc_v2}
 \alias{pbmc_v2}
 \title{10X Genomics Chromium example data set}
-\format{An object of class \code{CellRanger} with 500 rows and 100 columns.}
+\format{
+An object of class \code{CellRanger} with 500 rows and 100 columns.
+}
 \usage{
 pbmc_v2
 }
