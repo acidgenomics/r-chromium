@@ -72,9 +72,9 @@ Corresponds to factors describing the columns of the object.}
 BiocParallel parameter to specify the desired processor configuration.\cr
 We recommend using one of the following:
 \itemize{
-\item \link[BiocParallel:bpparam]{bpparam}.
-\item \link[BiocParallel:SerialParam]{SerialParam}.
-\item \link[BiocParallel:MulticoreParam]{MulticoreParam}.
+\item \link[BiocParallel:register]{bpparam}.
+\item \link[BiocParallel:SerialParam-class]{SerialParam}.
+\item \link[BiocParallel:MulticoreParam-class]{MulticoreParam}.
 }}
 }
 \value{
@@ -157,7 +157,7 @@ minimal sample data will be used, based on the directory names.
 We strongly recommend supplying the corresponding reference data required for
 Cell Ranger with the \code{refdataDir} argument. It will convert the gene
 annotations defined in the GTF file into a \code{GRanges} object, which get
-slotted in \code{\link[SummarizedExperiment:rowRanges]{rowRanges()}}. Otherwise, the
+slotted in \code{\link[SummarizedExperiment:RangedSummarizedExperiment-class]{rowRanges()}}. Otherwise, the
 function will attempt to use the most current annotations available from
 Ensembl, and some gene IDs may not match, due to deprecation in the current
 Ensembl release.
