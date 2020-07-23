@@ -1,3 +1,9 @@
+## Chromium 0.1.6 (2020-07-23)
+
+### Minor changes
+
+- Maintenance release, bumping the minimum R version to 4.0.
+
 ## Chromium 0.1.5 (2020-03-11)
 
 ### Minor changes
