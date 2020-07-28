@@ -2,7 +2,7 @@ Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
 Version: 0.1.6
-Date: 2020-07-23
+Date: 2020-07-28
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -38,9 +38,8 @@ Imports:
     utils
 Suggests:
     BiocStyle,
-    patrick (>= 0.0.1),
-    roxygen2 (>= 7.1),
-    testthat (>= 2.3)
+    roxygen2,
+    testthat
 Remotes:
     acidgenomics/basejump,
     acidgenomics/goalie
