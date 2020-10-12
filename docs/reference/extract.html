@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Chromium</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -141,12 +141,12 @@
     Character vectors will be matched to the <code><a href='https://rdrr.io/r/base/names.html'>names</a></code> of the
     object (or for matrices/arrays, the <code><a href='https://rdrr.io/r/base/dimnames.html'>dimnames</a></code>):
     see &#8216;Character indices&#8217; below for further details.</p>
-<p>For <code>[</code>-indexing only: <code>i</code>, <code>j</code>, <code>...</code> can be
+<p>For <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>-indexing only: <code>i</code>, <code>j</code>, <code>...</code> can be
     logical vectors, indicating elements/slices to select.  Such vectors
     are recycled if necessary to match the corresponding extent.
     <code>i</code>, <code>j</code>, <code>...</code> can also be negative integers,
     indicating elements/slices to leave out of the selection.</p>
-<p>When indexing arrays by <code>[</code> a single argument <code>i</code> can be a
+<p>When indexing arrays by <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code> a single argument <code>i</code> can be a
     matrix with as many columns as there are dimensions of <code>x</code>; the
     result is then a vector with elements corresponding to the sets of
     indices in each row of <code>i</code>.</p>
@@ -161,12 +161,12 @@
     Character vectors will be matched to the <code><a href='https://rdrr.io/r/base/names.html'>names</a></code> of the
     object (or for matrices/arrays, the <code><a href='https://rdrr.io/r/base/dimnames.html'>dimnames</a></code>):
     see &#8216;Character indices&#8217; below for further details.</p>
-<p>For <code>[</code>-indexing only: <code>i</code>, <code>j</code>, <code>...</code> can be
+<p>For <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code>-indexing only: <code>i</code>, <code>j</code>, <code>...</code> can be
     logical vectors, indicating elements/slices to select.  Such vectors
     are recycled if necessary to match the corresponding extent.
     <code>i</code>, <code>j</code>, <code>...</code> can also be negative integers,
     indicating elements/slices to leave out of the selection.</p>
-<p>When indexing arrays by <code>[</code> a single argument <code>i</code> can be a
+<p>When indexing arrays by <code><a href='https://rdrr.io/r/base/Extract.html'>[</a></code> a single argument <code>i</code> can be a
     matrix with as many columns as there are dimensions of <code>x</code>; the
     result is then a vector with elements corresponding to the sets of
     indices in each row of <code>i</code>.</p>
@@ -190,8 +190,8 @@
     <p><code>CellRanger</code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Refer to <code><a href='https://rdrr.io/pkg/basejump/man/cell2sample.html'>cell2sample()</a></code> and
-<code><a href='https://rdrr.io/pkg/basejump/man/selectSamples.html'>selectSamples()</a></code> if sample-level extraction is
+    <p>Refer to <code><a href='https://basejump.acidgenomics.com/reference/cell2sample.html'>cell2sample()</a></code> and
+<code><a href='https://basejump.acidgenomics.com/reference/selectSamples.html'>selectSamples()</a></code> if sample-level extraction is
 desired. Note that <code>sampleID</code> is slotted into
 <code><a href='https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html'>colData()</a></code> and defines the cell-to-sample
 mappings.</p>
@@ -206,20 +206,26 @@ of <code>colData</code>.</p>
     <p>Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988)
   <em>The New S Language</em>.
   Wadsworth &amp; Brooks/Cole.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Michael Steinbaugh</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>pbmc_v3</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>pbmc_v3</span><span class='op'>)</span>
 
 <span class='co'>## CellRanger ====</span>
-<span class='no'>object</span> <span class='kw'>&lt;-</span> <span class='no'>pbmc_v3</span>
+<span class='va'>object</span> <span class='op'>&lt;-</span> <span class='va'>pbmc_v3</span>
 
-<span class='no'>cells</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span>(<span class='no'>object</span>), <span class='fl'>100L</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>cells</span>)</div><div class='output co'>#&gt; [1] "AAACCTGCAGGCGATA" "AAAGCAATCTGCCCTA" "AACCATGAGAGTACCG" "AAGGCAGCACCATCCT"
-#&gt; [5] "ACCAGTATCTCATTCA" "ACGATACAGCCCAGCT"</div><div class='input'><span class='no'>genes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>object</span>), <span class='fl'>100L</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>genes</span>)</div><div class='output co'>#&gt; [1] "ENSG00000002586" "ENSG00000005022" "ENSG00000007312" "ENSG00000008517"
+<span class='va'>cells</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>, <span class='fl'>100L</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>cells</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "AAACCTGCAGGCGATA" "AAAGCAATCTGCCCTA" "AACCATGAGAGTACCG" "AAGGCAGCACCATCCT"
+#&gt; [5] "ACCAGTATCTCATTCA" "ACGATACAGCCCAGCT"</div><div class='input'><span class='va'>genes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>, <span class='fl'>100L</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>genes</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "ENSG00000002586" "ENSG00000005022" "ENSG00000007312" "ENSG00000008517"
 #&gt; [5] "ENSG00000008988" "ENSG00000009307"</div><div class='input'>
 <span class='co'>## Subset by cell identifiers.</span>
-<span class='no'>object</span>[, <span class='no'>cells</span>]</div><div class='output co'>#&gt; class: CellRanger 
+<span class='va'>object</span><span class='op'>[</span>, <span class='va'>cells</span><span class='op'>]</span>
+</div><div class='output co'>#&gt; class: CellRanger 
 #&gt; dim: 500 100 
 #&gt; metadata(23): allSamples call ... wd subset
 #&gt; assays(1): counts
@@ -232,7 +238,8 @@ of <code>colData</code>.</p>
 #&gt; reducedDimNames(0):
 #&gt; altExpNames(0):</div><div class='input'>
 <span class='co'>## Subset by genes.</span>
-<span class='no'>object</span>[<span class='no'>genes</span>, ]</div><div class='output co'>#&gt; class: CellRanger 
+<span class='va'>object</span><span class='op'>[</span><span class='va'>genes</span>, <span class='op'>]</span>
+</div><div class='output co'>#&gt; class: CellRanger 
 #&gt; dim: 100 100 
 #&gt; metadata(23): allSamples call ... wd subset
 #&gt; assays(1): counts
@@ -245,7 +252,8 @@ of <code>colData</code>.</p>
 #&gt; reducedDimNames(0):
 #&gt; altExpNames(0):</div><div class='input'>
 <span class='co'>## Subset by both genes and cells.</span>
-<span class='no'>object</span>[<span class='no'>genes</span>, <span class='no'>cells</span>]</div><div class='output co'>#&gt; class: CellRanger 
+<span class='va'>object</span><span class='op'>[</span><span class='va'>genes</span>, <span class='va'>cells</span><span class='op'>]</span>
+</div><div class='output co'>#&gt; class: CellRanger 
 #&gt; dim: 100 100 
 #&gt; metadata(23): allSamples call ... wd subset
 #&gt; assays(1): counts
@@ -272,7 +280,7 @@ of <code>colData</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

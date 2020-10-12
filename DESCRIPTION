@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.1.6
-Date: 2020-07-28
+Version: 0.1.7
+Date: 2020-10-12
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
