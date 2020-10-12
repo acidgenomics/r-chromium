@@ -78,7 +78,7 @@
 #' Ensembl, and some gene IDs may not match, due to deprecation in the current
 #' Ensembl release.
 #'
-#' @inheritParams acidroxygen::params
+#' @inheritParams AcidRoxygen::params
 #' @param dir `character(1)`.
 #'   Directory path to Cell Ranger output.
 #' @param filtered `logical(1)`.
