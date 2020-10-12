@@ -1,6 +1,6 @@
 if (!isTRUE(goalie::hasInternet())) {
     warning("No Internet connection detected.")
-    return()
+    return(invisible(NULL))
 }
 
 ## pbmc_v2
