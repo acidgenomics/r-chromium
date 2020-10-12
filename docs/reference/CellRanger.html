@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Chromium</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.7</span>
       </span>
     </div>
 
@@ -122,21 +122,21 @@
     <p>Contains UMI droplet-based single-cell RNA-seq data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>CellRanger</span>(
-  <span class='no'>dir</span>,
-  <span class='kw'>filtered</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>organism</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ensemblRelease</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>genomeBuild</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>gffFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>refdataDir</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>samples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>censorSamples</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>sampleMetadataFile</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>transgeneNames</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>interestingGroups</span> <span class='kw'>=</span> <span class='st'>"sampleName"</span>,
-  <span class='kw'>BPPARAM</span> <span class='kw'>=</span> <span class='kw pkg'>BiocParallel</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></span>()
-)</pre>
+    <pre class="usage"><span class='fu'>CellRanger</span><span class='op'>(</span>
+  <span class='va'>dir</span>,
+  filtered <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  organism <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ensemblRelease <span class='op'>=</span> <span class='cn'>NULL</span>,
+  genomeBuild <span class='op'>=</span> <span class='cn'>NULL</span>,
+  gffFile <span class='op'>=</span> <span class='cn'>NULL</span>,
+  refdataDir <span class='op'>=</span> <span class='cn'>NULL</span>,
+  samples <span class='op'>=</span> <span class='cn'>NULL</span>,
+  censorSamples <span class='op'>=</span> <span class='cn'>NULL</span>,
+  sampleMetadataFile <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transgeneNames <span class='op'>=</span> <span class='cn'>NULL</span>,
+  interestingGroups <span class='op'>=</span> <span class='st'>"sampleName"</span>,
+  BPPARAM <span class='op'>=</span> <span class='fu'>BiocParallel</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/BiocParallel/man/register.html'>bpparam</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -243,8 +243,8 @@ for a Chromium data set into a <code>SingleCellExperiment</code> object.</p>
 <p>Cell Ranger can vary in its output directory structure, but we're requiring a
 single, consistent directory structure for datasets containing multiple
 samples that have not been aggregated into a single matrix with <code>aggr</code>.</p>
-<p>Cell Ranger v3 output:</p><pre>| &amp;lt;dir&amp;gt;/
-|-- &amp;lt;sampleName&amp;gt;/
+<p>Cell Ranger v3 output:</p><pre>| &lt;dir&gt;/
+|-- &lt;sampleName&gt;/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_feature_bc_matrix/
@@ -264,12 +264,12 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 |------ web_summary.html
 </pre>
 
-<p>Cell Ranger v2 output:</p><pre>| &amp;lt;dir&amp;gt;/
-|-- &amp;lt;sampleName&amp;gt;/
+<p>Cell Ranger v2 output:</p><pre>| &lt;dir&gt;/
+|-- &lt;sampleName&gt;/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
 |------ filtered_gene_bc_matrices/
-|-------- &amp;lt;genomeBuild&amp;gt;/
+|-------- &lt;genomeBuild&gt;/
 |---------- barcodes.tsv
 |---------- genes.tsv
 |---------- matrix.mtx
@@ -279,7 +279,7 @@ samples that have not been aggregated into a single matrix with <code>aggr</code
 |------ possorted_genome_bam.bam
 |------ possorted_genome_bam.bam.bai
 |------ raw_gene_bc_matrices/
-|-------- &amp;lt;genomeBuild&amp;gt;/
+|-------- &lt;genomeBuild&gt;/
 |---------- barcodes.tsv
 |---------- genes.tsv
 |---------- matrix.mtx
@@ -308,11 +308,13 @@ Ensembl, and some gene IDs may not match, due to deprecation in the current
 Ensembl release.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>dir</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata/cellranger_v3"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"Chromium"</span>)
-<span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>CellRanger</span>(<span class='no'>dir</span>)</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Chromium</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────────────────────────</span><span></span></div><div class='output co'>#&gt; <span class='message'>Importing Chromium single-cell RNA-seq run</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Run info</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span></div><div class='output co'>#&gt; <span class='message'>● pbmc</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Sample metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Counts</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>matrix.mtx.gz</span><span> using </span><span style='color: #0000BB;'>Matrix</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`readMM()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>features.tsv.gz</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>barcodes.tsv.gz</span><span> using </span><span style='color: #0000BB;'>readr</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`read_lines()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Feature metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Slotting empty ranges into </span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metrics</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>metrics_summary.csv</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Column data</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Filtered zero count rows and columns:</span>
+    <pre class="examples"><div class='input'><span class='va'>dir</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata/cellranger_v3"</span>, package <span class='op'>=</span> <span class='st'>"Chromium"</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>CellRanger</span><span class='op'>(</span><span class='va'>dir</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>──</span><span> </span><span style='font-weight: bold;'>Chromium</span><span> </span><span style='color: #00BBBB;'>────────────────────────────────────────────────</span><span></span></div><div class='output co'>#&gt; <span class='message'>Importing Chromium single-cell RNA-seq run</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Run info</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>1 sample detected:</span></div><div class='output co'>#&gt; <span class='message'>● pbmc</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Sample metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Counts</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing counts from 'matrix.mtx.gz' file.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>matrix.mtx.gz</span><span> at </span><span style='color: #0000BB;'>/private/var/folders/l1/8y8sjzmn15v49jgrqglghcfr0000gn/T/RtmporkM3P/temp_libpath103b56f2bed65/Chromium/extdata/cellranger_v3/pbmc/outs/filtered_feature_bc_matrix</span><span> using </span><span style='color: #0000BB;'>Matrix</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`readMM()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>features.tsv.gz</span><span> at </span><span style='color: #0000BB;'>/private/var/folders/l1/8y8sjzmn15v49jgrqglghcfr0000gn/T/RtmporkM3P/temp_libpath103b56f2bed65/Chromium/extdata/cellranger_v3/pbmc/outs/filtered_feature_bc_matrix</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>barcodes.tsv.gz</span><span> at </span><span style='color: #0000BB;'>/private/var/folders/l1/8y8sjzmn15v49jgrqglghcfr0000gn/T/RtmporkM3P/temp_libpath103b56f2bed65/Chromium/extdata/cellranger_v3/pbmc/outs/filtered_feature_bc_matrix</span><span> using </span><span style='color: #0000BB;'>readr</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`read_lines()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Feature metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Slotting empty ranges into </span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metrics</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>→ Importing </span><span style='color: #0000BB;'>metrics_summary.csv</span><span> at </span><span style='color: #0000BB;'>/private/var/folders/l1/8y8sjzmn15v49jgrqglghcfr0000gn/T/RtmporkM3P/temp_libpath103b56f2bed65/Chromium/extdata/cellranger_v3/pbmc/outs</span><span> using </span><span style='color: #0000BB;'>vroom</span><span>::</span><span style='color: #000000;background-color: #BBBBBB;'>`vroom()`</span><span>.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Column data</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>── </span><span style='font-weight: bold;'>Metadata</span><span> ──</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Filtered zero count rows and columns:</span>
 #&gt; <span class='message'>- 46 / 100 rows (46%)</span>
 #&gt; <span class='message'>- 92 / 100 columns (92%)</span></div><div class='output co'>#&gt; <span class='message'>→ Calculating 92 sample metrics.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #BBBB00;'>!</span><span> Calculating metrics without biotype information.</span>
-#&gt; <span class='message'></span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span> required to calculate: </span><span style='color: #000000;background-color: #BBBBBB;'>`nCoding, nMito, mitoRatio`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Prefilter: 85 / 92 samples (92%).</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✔</span><span> Chromium single-cell RNA-seq run imported successfully.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; class: CellRanger 
+#&gt; <span class='message'></span><span style='color: #000000;background-color: #BBBBBB;'>`rowRanges()`</span><span> required to calculate: </span><span style='color: #000000;background-color: #BBBBBB;'>`nCoding, nMito, mitoRatio`</span><span>.</span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>ℹ</span><span> Prefilter: 85 / 92 samples (92%).</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BB00;'>✓</span><span> Chromium single-cell RNA-seq run imported successfully.</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; class: CellRanger 
 #&gt; dim: 46 85 
 #&gt; metadata(22): allSamples call ... version wd
 #&gt; assays(1): counts
@@ -340,7 +342,7 @@ Ensembl release.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
