@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.1.6
-Date: 2020-07-23
+Version: 0.1.7
+Date: 2020-10-12
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -23,24 +23,23 @@ Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 4.0),
-    SingleCellExperiment (>= 1.10.1),
-    basejump (>= 0.12.8)
+    SingleCellExperiment (>= 1.10),
+    basejump (>= 0.13.2)
 Imports:
     BiocParallel,
     Matrix (>= 1.2),
     S4Vectors,
     SummarizedExperiment,
     cli (>= 2.0),
-    goalie (>= 0.4.5),
+    goalie (>= 0.4.9),
     rhdf5,
     stringr (>= 1.4),
     methods,
     utils
 Suggests:
     BiocStyle,
-    patrick (>= 0.0.1),
-    roxygen2 (>= 7.1),
-    testthat (>= 2.3)
+    roxygen2,
+    testthat
 Remotes:
     acidgenomics/basejump,
     acidgenomics/goalie

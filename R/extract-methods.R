@@ -3,7 +3,7 @@
 #' @inherit base::Extract title params references
 #' @note Updated 2019-08-21.
 #'
-#' @inheritParams acidroxygen::params
+#' @inheritParams AcidRoxygen::params
 #'
 #' @description Extract genes by row and cells by column.
 #'

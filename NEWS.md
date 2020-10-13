@@ -1,3 +1,9 @@
+## Chromium 0.1.7 (2020-10-12)
+
+### Minor changes
+
+- Updated minimum Acid Genomics dependency versions.
+
 ## Chromium 0.1.6 (2020-07-23)
 
 ### Minor changes
