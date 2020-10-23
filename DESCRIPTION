@@ -40,12 +40,10 @@ Suggests:
     BiocStyle,
     roxygen2,
     testthat
-Remotes:
-    acidgenomics/basejump,
-    acidgenomics/goalie
 biocViews:
     DataImport,
     RNASeq,
     SingleCell
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Additional_repositories: https://r.acidgenomics.com
