@@ -6,13 +6,13 @@
 #' @keywords internal
 #' 
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
-#' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom S4Vectors DataFrame SimpleList mcols metadata metadata<-
-#' @importFrom basejump assay assays calculateMetrics camelCase detectLanes
-#'   droplevels emptyRanges import importSampleData leftJoin makeDimnames
-#'   makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames makeNames
-#'   makeSingleCellExperiment mapCellsToSamples metricsCols minimalSampleData
-#'   packageName packageVersion printString realpath sparseMatrix standardizeCall
+#' @importFrom basejump DataFrame SimpleList SingleCellExperiment assay assays
+#'   calculateMetrics camelCase detectLanes droplevels emptyRanges import
+#'   importSampleData leftJoin makeDimnames makeGRangesFromEnsembl
+#'   makeGRangesFromGFF makeDimnames makeNames makeSingleCellExperiment
+#'   mapCellsToSamples mcols metadata metadata<- metricsCols minimalSampleData
+#'   packageName packageVersion printString realpath sparseMatrix
+#'   standardizeCall
 #' @importFrom cli cat_line cli_alert cli_alert_info cli_alert_success
 #'   cli_alert_warning cli_h1 cli_h2 cli_text cli_ul
 #' @importFrom goalie allAreDirectories allAreFiles allAreMatchingRegex
