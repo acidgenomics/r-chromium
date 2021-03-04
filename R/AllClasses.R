@@ -17,18 +17,15 @@ setValidity(
         colData <- colData(object)
         metadata <- metadata(object)
         sampleData <- sampleData(object)
-
         ## Assays --------------------------------------------------------------
         ok <- validate(isSubset("counts", names(assays(object))))
         if (!isTRUE(ok)) return(ok)
-
         ## Row data ------------------------------------------------------------
         ok <- validate(
             is(rowRanges(object), "GRanges"),
             is(rowData(object), "DataFrame")
         )
         if (!isTRUE(ok)) return(ok)
-
         ## Column data ---------------------------------------------------------
         ok <- validate(
             ## Require that metrics columns are defined.
@@ -37,32 +34,31 @@ setValidity(
             areDisjointSets("interestingGroups", colnames(colData))
         )
         if (!isTRUE(ok)) return(ok)
-
         ## Metadata ------------------------------------------------------------
         ok <- validateClasses(
             object = metadata,
             expected = list(
-                allSamples = "logical",
-                call = "call",
-                dir = "character",
-                date = "Date",
-                ensemblRelease = "integer",
-                genomeBuild = "character",
-                gffFile = "character",
-                interestingGroups = "character",
-                lanes = "integer",
-                level = "character",
-                matrixFiles = "character",
-                organism = "character",
-                pipeline = "character",
-                refJSON = "list",
-                refdataDir = "character",
-                sampleDirs = "character",
-                sampleMetadataFile = "character",
-                sessionInfo = "session_info",
-                umiType = "character",
-                version = "package_version",
-                wd = "character"
+                "allSamples" = "logical",
+                "call" = "call",
+                "dir" = "character",
+                "date" = "Date",
+                "ensemblRelease" = "integer",
+                "genomeBuild" = "character",
+                "gffFile" = "character",
+                "interestingGroups" = "character",
+                "lanes" = "integer",
+                "level" = "character",
+                "matrixFiles" = "character",
+                "organism" = "character",
+                "packageVersion" = "package_version",
+                "pipeline" = "character",
+                "refJson" = "list",
+                "refdataDir" = "character",
+                "sampleDirs" = "character",
+                "sampleMetadataFile" = "character",
+                "sessionInfo" = "session_info",
+                "umiType" = "character",
+                "wd" = "character"
             ),
             subset = TRUE
         )
