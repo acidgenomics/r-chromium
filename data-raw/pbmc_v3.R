@@ -2,7 +2,7 @@
 ## 5k Peripheral blood mononuclear cells (PBMCs) from a healthy donor with cell
 ## surface proteins (v3 chemistry).
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.1.0/5k_pbmc_protein_v3
-## Updated 2019-08-22.
+## Updated 2021-03-03.
 
 library(usethis)
 library(pryr)
@@ -83,6 +83,7 @@ invisible(lapply(
     }
 ))
 ## Using Ensembl 93 GTF annotations.
+## Alternatively, can use ensembldb here.
 gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.93.gtf.gz")
 if (!file.exists(gtf_file)) {
     download.file(
@@ -113,18 +114,22 @@ assignAndSaveData(
 ## Example object ==============================================================
 counts <- counts(object)
 ## Subset the matrix to include only the top genes and cells.
-top_genes <- Matrix::rowSums(counts) %>%
+top_genes <-
+    counts %>%
+    rowSums() %>%
     sort(decreasing = TRUE) %>%
     head(n = 500L)
 genes <- sort(names(top_genes))
-top_cells <- Matrix::colSums(counts) %>%
+top_cells <-
+    counts %>%
+    colSums() %>%
     sort(decreasing = TRUE) %>%
     head(n = 100L)
 cells <- sort(names(top_cells))
 ## Subset the original object dataset to contain only top genes and cells.
 object <- object[genes, cells]
 ## Report the size of each slot in bytes.
-lapply(coerceS4ToList(object), object_size)
+lapply(coerceToList(object), object_size)
 object_size(object)
 stopifnot(object_size(object) < limit)
 stopifnot(validObject(object))
@@ -172,7 +177,7 @@ features <- read_tsv(
 )
 write_tsv(
     x = features,
-    path = file.path(output_matrix_dir, "features.tsv.gz"),
+    file = file.path(output_matrix_dir, "features.tsv.gz"),
     col_names = FALSE
 )
 barcodes <- read_lines(
@@ -181,5 +186,5 @@ barcodes <- read_lines(
 )
 write_lines(
     x = barcodes,
-    path = file.path(output_matrix_dir, "barcodes.tsv.gz")
+    file = file.path(output_matrix_dir, "barcodes.tsv.gz")
 )
