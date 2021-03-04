@@ -23,19 +23,13 @@ Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 4.0),
-    SingleCellExperiment (>= 1.10),
-    basejump (>= 0.13.2)
+    basejump (>= 0.14.16)
 Imports:
-    BiocParallel,
-    Matrix (>= 1.2),
-    S4Vectors,
-    SummarizedExperiment,
-    cli (>= 2.0),
+    BiocParallel (>= 1.24),
     goalie (>= 0.5.0),
-    rhdf5,
+    rhdf5 (>= 2.34),
     stringr (>= 1.4),
-    methods,
-    utils
+    methods
 Suggests:
     testthat
 biocViews:
