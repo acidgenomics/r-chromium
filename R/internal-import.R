@@ -13,7 +13,7 @@
     } else {
         stop(sprintf("Unexpected import failure.", file))  # nocov
     }
-    cli_alert(sprintf(
+    alert(sprintf(
         fmt = "Importing counts from '%s' %s.",
         basename(matrixFiles[[1L]]),
         ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
