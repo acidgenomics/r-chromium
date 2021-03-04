@@ -1,6 +1,6 @@
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2020-02-24.
+#' @note Updated 2021-03-04.
 #' @export
 #'
 #' @details
@@ -123,12 +123,10 @@ CellRanger <- function(  # nolint
         isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
-
-    cli_h1("Chromium")
-    cli_text("Importing Chromium single-cell RNA-seq run")
-
+    h1("Chromium")
+    alert("Importing Chromium single-cell RNA-seq run.")
     ## Run info ----------------------------------------------------------------
-    cli_h2("Run info")
+    h2("Run info")
     level <- "genes"
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
@@ -137,9 +135,8 @@ CellRanger <- function(  # nolint
     sampleDirs <- .sampleDirs(dir)
     lanes <- detectLanes(sampleDirs)
     assert(isInt(lanes) || identical(lanes, integer()))
-
     ## Sample metadata --------------------------------------------------------
-    cli_h2("Sample metadata")
+    h2("Sample metadata")
     allSamples <- TRUE
     sampleData <- NULL
     ## Get the sample data.
@@ -183,8 +180,8 @@ CellRanger <- function(  # nolint
     )
     if (length(sampleIds) < length(sampleDirs)) {
         sampleDirs <- sampleDirs[sampleIds]
-        cli_text("Loading a subset of samples:")
-        cli_ul(basename(sampleDirs))
+        txt("Loading a subset of samples:")
+        ul(basename(sampleDirs))
         ## Subset the user-defined sample metadata to match, if necessary.
         if (!is.null(sampleData)) {
             keep <- rownames(sampleData) %in% sampleIds
@@ -192,9 +189,8 @@ CellRanger <- function(  # nolint
         }
         allSamples <- FALSE
     }
-
     ## Assays (counts) --------------------------------------------------------
-    cli_h2("Counts")
+    h2("Counts")
     matrixFiles <- .matrixFiles(
         sampleDirs = sampleDirs,
         filtered = filtered,
@@ -209,14 +205,13 @@ CellRanger <- function(  # nolint
         BPPARAM = BPPARAM
     )
     assert(hasValidDimnames(counts))
-
     ## Row data (genes/transcripts) -------------------------------------------
-    cli_h2("Feature metadata")
+    h2("Feature metadata")
     refJSON <- NULL
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         ## nocov start
-        cli_alert_info(sprintf(
+        alertInfo(sprintf(
             fmt = paste0(
                 "Using 10X Genomics reference data ",
                 "for feature annotations: %s"
@@ -248,7 +243,7 @@ CellRanger <- function(  # nolint
     } else if (isString(gffFile)) {
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
-        cli_alert("{.fun makeGRangesFromGFF}")
+        alert("{.fun makeGRangesFromGFF}")
         rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
@@ -256,7 +251,7 @@ CellRanger <- function(  # nolint
         ## in the refdata directory. It will also drop genes that are now dead
         ## in the current Ensembl release. Don't warn about old Ensembl release
         ## version.
-        cli_alert("{.fun makeGRangesFromEnsembl}")
+        alert("{.fun makeGRangesFromEnsembl}")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
@@ -270,13 +265,12 @@ CellRanger <- function(  # nolint
             ensemblRelease <- metadata(rowRanges)[["ensemblRelease"]]
         }
     } else {
-        cli_alert_warning("Slotting empty ranges into {.fun rowRanges}.")
+        alertWarning("Slotting empty ranges into {.fun rowRanges}.")
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
-
     ## Metrics -----------------------------------------------------------------
-    cli_h2("Metrics")
+    h2("Metrics")
     ## Note that "molecule_info.h5" file contains additional information that
     ## may be useful for quality control metric calculations.
     aggregation <- NULL
@@ -290,9 +284,8 @@ CellRanger <- function(  # nolint
     } else if (!.isMinimalSample(dir)) {
         sampleMetrics <- .importSampleMetrics(sampleDirs)
     }
-
     ## Column data -------------------------------------------------------------
-    cli_h2("Column data")
+    h2("Column data")
     colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
@@ -331,9 +324,8 @@ CellRanger <- function(  # nolint
         is(colData, "DataFrame"),
         hasRownames(colData)
     )
-
     ## Metadata ----------------------------------------------------------------
-    cli_h2("Metadata")
+    h2("Metadata")
     interestingGroups <- camelCase(interestingGroups, strict = TRUE)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
@@ -359,7 +351,6 @@ CellRanger <- function(  # nolint
         umiType = "chromium",
         version = .version
     )
-
     ## SingleCellExperiment ----------------------------------------------------
     object <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
@@ -368,12 +359,10 @@ CellRanger <- function(  # nolint
         metadata = metadata,
         transgeneNames = transgeneNames
     )
-
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
     object <- calculateMetrics(object = object, prefilter = TRUE)
     object <- new(Class = "CellRanger", object)
-    cat_line()
-    cli_alert_success("Chromium single-cell RNA-seq run imported successfully.")
+    alertSuccess("Chromium single-cell RNA-seq run imported successfully.")
     object
 }
