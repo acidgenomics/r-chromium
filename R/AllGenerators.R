@@ -244,7 +244,11 @@ CellRanger <- function(  # nolint
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
         alert("{.fun makeGRangesFromGFF}")
-        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
+        rowRanges <- makeGRangesFromGFF(
+            file = gffFile,
+            level = "genes",
+            ignoreVersion = TRUE
+        )
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
@@ -256,7 +260,8 @@ CellRanger <- function(  # nolint
             organism = organism,
             level = level,
             genomeBuild = genomeBuild,
-            release = ensemblRelease
+            release = ensemblRelease,
+            ignoreVersion = TRUE
         )
         if (is.null(genomeBuild)) {
             genomeBuild <- metadata(rowRanges)[["genomeBuild"]]
