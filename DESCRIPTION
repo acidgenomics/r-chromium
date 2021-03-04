@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.1.7
-Date: 2020-10-12
+Version: 0.1.8
+Date: 2021-03-04
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -15,9 +15,9 @@ Authors@R: c(
         role = c("cph", "fnd")
     ))
 URL:
-    https://chromium.acidgenomics.com/,
-    https://github.com/acidgenomics/Chromium/
-BugReports: https://github.com/acidgenomics/Chromium/issues/
+    https://r.acidgenomics.com/packages/chromium/,
+    https://github.com/acidgenomics/r-chromium/
+BugReports: https://github.com/acidgenomics/r-chromium/issues/
 License: AGPL-3
 Encoding: UTF-8
 LazyData: false
@@ -31,14 +31,12 @@ Imports:
     S4Vectors,
     SummarizedExperiment,
     cli (>= 2.0),
-    goalie (>= 0.4.9),
+    goalie (>= 0.5.0),
     rhdf5,
     stringr (>= 1.4),
     methods,
     utils
 Suggests:
-    BiocStyle,
-    roxygen2,
     testthat
 biocViews:
     DataImport,
