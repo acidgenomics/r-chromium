@@ -155,39 +155,39 @@ CellRanger <- function(  # nolint
             pipeline = "cellranger"
         )
         assert(isSubset(rownames(sampleData), names(sampleDirs)))
-        sampleIDs <- rownames(sampleData)
+        sampleIds <- rownames(sampleData)
     } else {
-        sampleIDs <- names(sampleDirs)
+        sampleIds <- names(sampleDirs)
     }
     ## Subset the sample directories, if necessary.
     if (is.character(samples) || is.character(censorSamples)) {
         if (is.character(samples)) {
             samples <- makeNames(samples)
-            assert(isSubset(samples, sampleIDs))
-            sampleIDs <- samples
+            assert(isSubset(samples, sampleIds))
+            sampleIds <- samples
         }
         if (is.character(censorSamples)) {
             censorSamples <- makeNames(censorSamples)
-            assert(isSubset(censorSamples, sampleIDs))
-            sampleIDs <- setdiff(sampleIDs, censorSamples)
+            assert(isSubset(censorSamples, sampleIds))
+            sampleIds <- setdiff(sampleIds, censorSamples)
         }
         assert(
-            isCharacter(sampleIDs),
-            isSubset(sampleIDs, names(sampleDirs))
+            isCharacter(sampleIds),
+            isSubset(sampleIds, names(sampleDirs))
         )
     }
     assert(
-        hasLength(sampleIDs),
-        isSubset(sampleIDs, names(sampleDirs)),
-        validNames(sampleIDs)
+        hasLength(sampleIds),
+        isSubset(sampleIds, names(sampleDirs)),
+        validNames(sampleIds)
     )
-    if (length(sampleIDs) < length(sampleDirs)) {
-        sampleDirs <- sampleDirs[sampleIDs]
+    if (length(sampleIds) < length(sampleDirs)) {
+        sampleDirs <- sampleDirs[sampleIds]
         cli_text("Loading a subset of samples:")
         cli_ul(basename(sampleDirs))
         ## Subset the user-defined sample metadata to match, if necessary.
         if (!is.null(sampleData)) {
-            keep <- rownames(sampleData) %in% sampleIDs
+            keep <- rownames(sampleData) %in% sampleIds
             sampleData <- sampleData[keep, , drop = FALSE]
         }
         allSamples <- FALSE
@@ -311,22 +311,22 @@ CellRanger <- function(  # nolint
     }
     ## Join `sampleData` into cell-level `colData`.
     if (identical(nrow(sampleData), 1L)) {
-        colData[["sampleID"]] <- as.factor(rownames(sampleData))
+        colData[["sampleId"]] <- as.factor(rownames(sampleData))
     } else {
-        colData[["sampleID"]] <- mapCellsToSamples(
+        colData[["sampleId"]] <- mapCellsToSamples(
             cells = rownames(colData),
             samples = rownames(sampleData)
         )
     }
-    sampleData[["sampleID"]] <- as.factor(rownames(sampleData))
-    ## Need to ensure the `sampleID` factor levels match up, otherwise we'll get
+    sampleData[["sampleId"]] <- as.factor(rownames(sampleData))
+    ## Need to ensure the `sampleId` factor levels match up, otherwise we'll get
     ## a warning during the `leftJoin()` call below.
     assert(areSetEqual(
-        x = levels(colData[["sampleID"]]),
-        y = levels(sampleData[["sampleID"]])
+        x = levels(colData[["sampleId"]]),
+        y = levels(sampleData[["sampleId"]])
     ))
-    levels(sampleData[["sampleID"]]) <- levels(colData[["sampleID"]])
-    colData <- leftJoin(colData, sampleData, by = "sampleID")
+    levels(sampleData[["sampleId"]]) <- levels(colData[["sampleId"]])
+    colData <- leftJoin(colData, sampleData, by = "sampleId")
     assert(
         is(colData, "DataFrame"),
         hasRownames(colData)
@@ -334,7 +334,7 @@ CellRanger <- function(  # nolint
 
     ## Metadata ----------------------------------------------------------------
     cli_h2("Metadata")
-    interestingGroups <- camelCase(interestingGroups)
+    interestingGroups <- camelCase(interestingGroups, strict = TRUE)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
         aggregation = aggregation,
