@@ -4,7 +4,7 @@
 #'
 #' @aliases NULL
 #' @keywords internal
-#' 
+#'
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
 #' @importFrom basejump DataFrame SimpleList SingleCellExperiment alert
 #'   alertInfo alertSuccess alertWarning assay assays calculateMetrics camelCase
