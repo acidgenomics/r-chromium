@@ -329,27 +329,27 @@ CellRanger <- function(  # nolint
     interestingGroups <- camelCase(interestingGroups, strict = TRUE)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
-        aggregation = aggregation,
-        allSamples = allSamples,
-        call = standardizeCall(),
-        dir = dir,
-        ensemblRelease = as.integer(ensemblRelease),
-        genomeBuild = as.character(genomeBuild),
-        gffFile = as.character(gffFile),
-        interestingGroups = interestingGroups,
-        lanes = lanes,
-        level = level,
-        matrixFiles = matrixFiles,
-        organism = as.character(organism),
-        pipeline = pipeline,
-        refJSON = as.list(refJSON),
-        refdataDir = as.character(refdataDir),
-        sampleDirs = sampleDirs,
-        sampleMetadataFile = as.character(sampleMetadataFile),
-        sampleMetrics = sampleMetrics,
-        summary = summary,
-        umiType = "chromium",
-        version = .version
+        "aggregation" = aggregation,
+        "allSamples" = allSamples,
+        "call" = standardizeCall(),
+        "dir" = dir,
+        "ensemblRelease" = as.integer(ensemblRelease),
+        "genomeBuild" = as.character(genomeBuild),
+        "gffFile" = as.character(gffFile),
+        "interestingGroups" = interestingGroups,
+        "lanes" = lanes,
+        "level" = level,
+        "matrixFiles" = matrixFiles,
+        "organism" = as.character(organism),
+        "packageVersion" = .pkgVersion,
+        "pipeline" = pipeline,
+        "refJson" = as.list(refJSON),
+        "refdataDir" = as.character(refdataDir),
+        "sampleDirs" = sampleDirs,
+        "sampleMetadataFile" = as.character(sampleMetadataFile),
+        "sampleMetrics" = sampleMetrics,
+        "summary" = summary,
+        "umiType" = "chromium"
     )
     ## SingleCellExperiment ----------------------------------------------------
     object <- makeSingleCellExperiment(
