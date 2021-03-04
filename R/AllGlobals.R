@@ -1,8 +1,7 @@
-globalVariables(".")
+.pkgName <- packageName()
+.pkgVersion <- packageVersion(.pkgName)
 
 
-
-.version <- packageVersion("Chromium")
 
 #' Chromium test data URL
 #' @keywords internal
@@ -11,8 +10,8 @@ globalVariables(".")
 #' ChromiumTestsURL
 ChromiumTestsURL <-  # nolint
     paste0(
-        "https://tests.acidgenomics.com/Chromium/",
-        "v", .version$major, ".", .version$minor  # nolint
+        "https://r.acidgenomics.com/testdata/chromium/",
+        "v", .pkgVersion$major, ".", .pkgVersion$minor  # nolint
     )
 
 
