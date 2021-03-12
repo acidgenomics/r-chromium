@@ -12,12 +12,12 @@
 #'   makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames
 #'   makeNames makeSingleCellExperiment mapCellsToSamples mcols metadata
 #'   metadata<- metricsCols minimalSampleData packageName packageVersion
-#'   printString realpath sparseMatrix standardizeCall txt ul
+#'   printString realpath sparseMatrix standardizeCall str_match str_split
+#'   str_trunc txt ul
 #' @importFrom goalie allAreDirectories allAreFiles allAreMatchingRegex
 #'   areDisjointSets areSetEqual assert hasLength hasNames hasRownames
 #'   hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
 #'   isFlag isInt isScalar isString isSubset validNames validate validateClasses
 #' @importFrom methods as is new setClass setMethod setValidity validObject
 #' @importFrom rhdf5 h5dump h5read
-#' @importFrom stringr str_match str_split str_trunc
 "_PACKAGE"
