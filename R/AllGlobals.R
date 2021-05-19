@@ -1,8 +1,5 @@
-globalVariables(".")
-
-
-
-.version <- packageVersion("Chromium")
+.pkgName <- packageName()
+.pkgVersion <- packageVersion(.pkgName)
 
 #' Chromium test data URL
 #' @keywords internal
@@ -11,11 +8,6 @@ globalVariables(".")
 #' ChromiumTestsURL
 ChromiumTestsURL <-  # nolint
     paste0(
-        "https://tests.acidgenomics.com/Chromium/",
-        "v", .version$major, ".", .version$minor  # nolint
+        "https://r.acidgenomics.com/testdata/chromium/",
+        "v", .pkgVersion$major, ".", .pkgVersion$minor  # nolint
     )
-
-
-
-## Trailing number is to match cellranger output.
-barcodePattern <- ")_([ACGT_]{6,})(_[0-9]+)?$"
