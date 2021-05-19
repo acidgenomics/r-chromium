@@ -1,7 +1,7 @@
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
-## Updated 2019-08-22.
+## Updated 2021-03-03.
 
 library(usethis)
 library(pryr)
@@ -81,6 +81,7 @@ invisible(lapply(
     }
 ))
 ## Using Ensembl 84 GTF annotations.
+## Note that ensembldb only supports back to 87.
 gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.84.gtf.gz")
 if (!file.exists(gtf_file)) {
     download.file(
@@ -111,18 +112,22 @@ assignAndSaveData(
 ## Example object ==============================================================
 counts <- counts(object)
 ## Subset the matrix to include only the top genes and cells.
-top_genes <- Matrix::rowSums(counts) %>%
+top_genes <-
+    counts %>%
+    rowSums() %>%
     sort(decreasing = TRUE) %>%
     head(n = 500L)
 genes <- sort(names(top_genes))
-top_cells <- Matrix::colSums(counts) %>%
+top_cells <-
+    counts %>%
+    colSums() %>%
     sort(decreasing = TRUE) %>%
     head(n = 100L)
 cells <- sort(names(top_cells))
 ## Subset the original object dataset to contain only top genes and cells.
 object <- object[genes, cells]
 ## Report the size of each slot in bytes.
-lapply(coerceS4ToList(object), object_size)
+lapply(coerceToList(object), object_size)
 object_size(object)
 stopifnot(object_size(object) < limit)
 stopifnot(validObject(object))
@@ -172,7 +177,7 @@ genes <- read_tsv(
 )
 write_tsv(
     x = genes,
-    path = file.path(output_matrix_dir, "genes.tsv"),
+    file = file.path(output_matrix_dir, "genes.tsv"),
     col_names = FALSE
 )
 barcodes <- read_lines(
@@ -181,5 +186,5 @@ barcodes <- read_lines(
 )
 write_lines(
     x = barcodes,
-    path = file.path(output_matrix_dir, "barcodes.tsv")
+    file = file.path(output_matrix_dir, "barcodes.tsv")
 )

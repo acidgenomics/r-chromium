@@ -1,6 +1,6 @@
 #' @inherit CellRanger-class title description
 #' @note Currently supports loading of a single genome.
-#' @note Updated 2020-02-24.
+#' @note Updated 2021-03-04.
 #' @export
 #'
 #' @details
@@ -123,12 +123,10 @@ CellRanger <- function(  # nolint
         isCharacter(interestingGroups),
         identical(attr(class(BPPARAM), "package"), "BiocParallel")
     )
-
-    cli_h1("Chromium")
-    cli_text("Importing Chromium single-cell RNA-seq run")
-
+    h1("Chromium")
+    alert("Importing Chromium single-cell RNA-seq run.")
     ## Run info ----------------------------------------------------------------
-    cli_h2("Run info")
+    h2("Run info")
     level <- "genes"
     dir <- realpath(dir)
     if (isADirectory(refdataDir)) {
@@ -137,9 +135,8 @@ CellRanger <- function(  # nolint
     sampleDirs <- .sampleDirs(dir)
     lanes <- detectLanes(sampleDirs)
     assert(isInt(lanes) || identical(lanes, integer()))
-
     ## Sample metadata --------------------------------------------------------
-    cli_h2("Sample metadata")
+    h2("Sample metadata")
     allSamples <- TRUE
     sampleData <- NULL
     ## Get the sample data.
@@ -155,46 +152,45 @@ CellRanger <- function(  # nolint
             pipeline = "cellranger"
         )
         assert(isSubset(rownames(sampleData), names(sampleDirs)))
-        sampleIDs <- rownames(sampleData)
+        sampleIds <- rownames(sampleData)
     } else {
-        sampleIDs <- names(sampleDirs)
+        sampleIds <- names(sampleDirs)
     }
     ## Subset the sample directories, if necessary.
     if (is.character(samples) || is.character(censorSamples)) {
         if (is.character(samples)) {
             samples <- makeNames(samples)
-            assert(isSubset(samples, sampleIDs))
-            sampleIDs <- samples
+            assert(isSubset(samples, sampleIds))
+            sampleIds <- samples
         }
         if (is.character(censorSamples)) {
             censorSamples <- makeNames(censorSamples)
-            assert(isSubset(censorSamples, sampleIDs))
-            sampleIDs <- setdiff(sampleIDs, censorSamples)
+            assert(isSubset(censorSamples, sampleIds))
+            sampleIds <- setdiff(sampleIds, censorSamples)
         }
         assert(
-            isCharacter(sampleIDs),
-            isSubset(sampleIDs, names(sampleDirs))
+            isCharacter(sampleIds),
+            isSubset(sampleIds, names(sampleDirs))
         )
     }
     assert(
-        hasLength(sampleIDs),
-        isSubset(sampleIDs, names(sampleDirs)),
-        validNames(sampleIDs)
+        hasLength(sampleIds),
+        isSubset(sampleIds, names(sampleDirs)),
+        validNames(sampleIds)
     )
-    if (length(sampleIDs) < length(sampleDirs)) {
-        sampleDirs <- sampleDirs[sampleIDs]
-        cli_text("Loading a subset of samples:")
-        cli_ul(basename(sampleDirs))
+    if (length(sampleIds) < length(sampleDirs)) {
+        sampleDirs <- sampleDirs[sampleIds]
+        txt("Loading a subset of samples:")
+        ul(basename(sampleDirs))
         ## Subset the user-defined sample metadata to match, if necessary.
         if (!is.null(sampleData)) {
-            keep <- rownames(sampleData) %in% sampleIDs
+            keep <- rownames(sampleData) %in% sampleIds
             sampleData <- sampleData[keep, , drop = FALSE]
         }
         allSamples <- FALSE
     }
-
     ## Assays (counts) --------------------------------------------------------
-    cli_h2("Counts")
+    h2("Counts")
     matrixFiles <- .matrixFiles(
         sampleDirs = sampleDirs,
         filtered = filtered,
@@ -209,14 +205,13 @@ CellRanger <- function(  # nolint
         BPPARAM = BPPARAM
     )
     assert(hasValidDimnames(counts))
-
     ## Row data (genes/transcripts) -------------------------------------------
-    cli_h2("Feature metadata")
+    h2("Feature metadata")
     refJSON <- NULL
     ## Prepare gene annotations as GRanges.
     if (isADirectory(refdataDir)) {
         ## nocov start
-        cli_alert_info(sprintf(
+        alertInfo(sprintf(
             fmt = paste0(
                 "Using 10X Genomics reference data ",
                 "for feature annotations: %s"
@@ -248,20 +243,25 @@ CellRanger <- function(  # nolint
     } else if (isString(gffFile)) {
         ## This step is necessary for generating v2 working example.
         ## Note that this works with a remote URL.
-        cli_alert("{.fun makeGRangesFromGFF}")
-        rowRanges <- makeGRangesFromGFF(gffFile, level = "genes")  # nocov
+        alert("{.fun makeGRangesFromGFF}")
+        rowRanges <- makeGRangesFromGFF(
+            file = gffFile,
+            level = "genes",
+            ignoreVersion = TRUE
+        )
     } else if (isString(organism)) {
         ## Cell Ranger uses Ensembl refdata internally. Here we're fetching the
         ## annotations with AnnotationHub rather than pulling from the GTF file
         ## in the refdata directory. It will also drop genes that are now dead
         ## in the current Ensembl release. Don't warn about old Ensembl release
         ## version.
-        cli_alert("{.fun makeGRangesFromEnsembl}")
+        alert("{.fun makeGRangesFromEnsembl}")
         rowRanges <- makeGRangesFromEnsembl(
             organism = organism,
             level = level,
             genomeBuild = genomeBuild,
-            release = ensemblRelease
+            release = ensemblRelease,
+            ignoreVersion = TRUE
         )
         if (is.null(genomeBuild)) {
             genomeBuild <- metadata(rowRanges)[["genomeBuild"]]
@@ -270,13 +270,12 @@ CellRanger <- function(  # nolint
             ensemblRelease <- metadata(rowRanges)[["ensemblRelease"]]
         }
     } else {
-        cli_alert_warning("Slotting empty ranges into {.fun rowRanges}.")
+        alertWarning("Slotting empty ranges into {.fun rowRanges}.")
         rowRanges <- emptyRanges(rownames(counts))
     }
     assert(is(rowRanges, "GRanges"))
-
     ## Metrics -----------------------------------------------------------------
-    cli_h2("Metrics")
+    h2("Metrics")
     ## Note that "molecule_info.h5" file contains additional information that
     ## may be useful for quality control metric calculations.
     aggregation <- NULL
@@ -290,9 +289,8 @@ CellRanger <- function(  # nolint
     } else if (!.isMinimalSample(dir)) {
         sampleMetrics <- .importSampleMetrics(sampleDirs)
     }
-
     ## Column data -------------------------------------------------------------
-    cli_h2("Column data")
+    h2("Column data")
     colData <- DataFrame(row.names = colnames(counts))
     ## Generate automatic sample metadata, if necessary.
     if (is.null(sampleData)) {
@@ -311,55 +309,53 @@ CellRanger <- function(  # nolint
     }
     ## Join `sampleData` into cell-level `colData`.
     if (identical(nrow(sampleData), 1L)) {
-        colData[["sampleID"]] <- as.factor(rownames(sampleData))
+        colData[["sampleId"]] <- as.factor(rownames(sampleData))
     } else {
-        colData[["sampleID"]] <- mapCellsToSamples(
+        colData[["sampleId"]] <- mapCellsToSamples(
             cells = rownames(colData),
             samples = rownames(sampleData)
         )
     }
-    sampleData[["sampleID"]] <- as.factor(rownames(sampleData))
-    ## Need to ensure the `sampleID` factor levels match up, otherwise we'll get
+    sampleData[["sampleId"]] <- as.factor(rownames(sampleData))
+    ## Need to ensure the `sampleId` factor levels match up, otherwise we'll get
     ## a warning during the `leftJoin()` call below.
     assert(areSetEqual(
-        x = levels(colData[["sampleID"]]),
-        y = levels(sampleData[["sampleID"]])
+        x = levels(colData[["sampleId"]]),
+        y = levels(sampleData[["sampleId"]])
     ))
-    levels(sampleData[["sampleID"]]) <- levels(colData[["sampleID"]])
-    colData <- leftJoin(colData, sampleData, by = "sampleID")
+    levels(sampleData[["sampleId"]]) <- levels(colData[["sampleId"]])
+    colData <- leftJoin(colData, sampleData, by = "sampleId")
     assert(
         is(colData, "DataFrame"),
         hasRownames(colData)
     )
-
     ## Metadata ----------------------------------------------------------------
-    cli_h2("Metadata")
-    interestingGroups <- camelCase(interestingGroups)
+    h2("Metadata")
+    interestingGroups <- camelCase(interestingGroups, strict = TRUE)
     assert(isSubset(interestingGroups, colnames(sampleData)))
     metadata <- list(
-        aggregation = aggregation,
-        allSamples = allSamples,
-        call = standardizeCall(),
-        dir = dir,
-        ensemblRelease = as.integer(ensemblRelease),
-        genomeBuild = as.character(genomeBuild),
-        gffFile = as.character(gffFile),
-        interestingGroups = interestingGroups,
-        lanes = lanes,
-        level = level,
-        matrixFiles = matrixFiles,
-        organism = as.character(organism),
-        pipeline = pipeline,
-        refJSON = as.list(refJSON),
-        refdataDir = as.character(refdataDir),
-        sampleDirs = sampleDirs,
-        sampleMetadataFile = as.character(sampleMetadataFile),
-        sampleMetrics = sampleMetrics,
-        summary = summary,
-        umiType = "chromium",
-        version = .pkgVersion
+        "aggregation" = aggregation,
+        "allSamples" = allSamples,
+        "call" = standardizeCall(),
+        "dir" = dir,
+        "ensemblRelease" = as.integer(ensemblRelease),
+        "genomeBuild" = as.character(genomeBuild),
+        "gffFile" = as.character(gffFile),
+        "interestingGroups" = interestingGroups,
+        "lanes" = lanes,
+        "level" = level,
+        "matrixFiles" = matrixFiles,
+        "organism" = as.character(organism),
+        "packageVersion" = .pkgVersion,
+        "pipeline" = pipeline,
+        "refJson" = as.list(refJSON),
+        "refdataDir" = as.character(refdataDir),
+        "sampleDirs" = sampleDirs,
+        "sampleMetadataFile" = as.character(sampleMetadataFile),
+        "sampleMetrics" = sampleMetrics,
+        "summary" = summary,
+        "umiType" = "chromium"
     )
-
     ## SingleCellExperiment ----------------------------------------------------
     object <- makeSingleCellExperiment(
         assays = SimpleList(counts = counts),
@@ -368,12 +364,10 @@ CellRanger <- function(  # nolint
         metadata = metadata,
         transgeneNames = transgeneNames
     )
-
     ## Return ------------------------------------------------------------------
     ## Always prefilter, removing very low quality cells and/or genes.
     object <- calculateMetrics(object = object, prefilter = TRUE)
     object <- new(Class = "CellRanger", object)
-    cat_line()
-    cli_alert_success("Chromium single-cell RNA-seq run imported successfully.")
+    alertSuccess("Chromium single-cell RNA-seq run imported successfully.")
     object
 }

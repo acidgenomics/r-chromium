@@ -1,3 +1,15 @@
+## Chromium 0.1.9 (2021-03-12)
+
+### Minor changes
+
+- Updated basejump dependencies and removed unnecessary stringr import.
+
+## Chromium 0.1.8 (2021-03-04)
+
+### Minor changes
+
+- Reworked and simplified internal NAMESPACE using basejump v0.14.
+
 ## Chromium 0.1.7 (2020-10-12)
 
 ### Minor changes
