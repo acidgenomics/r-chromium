@@ -357,7 +357,7 @@ CellRanger <- function(  # nolint
         sampleMetrics = sampleMetrics,
         summary = summary,
         umiType = "chromium",
-        version = .version
+        version = .pkgVersion
     )
 
     ## SingleCellExperiment ----------------------------------------------------
