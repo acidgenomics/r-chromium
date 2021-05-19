@@ -10,7 +10,7 @@
 #' @details
 #' Refer to [`cell2sample()`][basejump::cell2sample] and
 #' [`selectSamples()`][basejump::selectSamples] if sample-level extraction is
-#' desired. Note that `sampleID` is slotted into
+#' desired. Note that `sampleId` is slotted into
 #' [`colData()`][SummarizedExperiment::colData] and defines the cell-to-sample
 #' mappings.
 #'

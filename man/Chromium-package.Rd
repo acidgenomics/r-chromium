@@ -9,9 +9,9 @@ Toolkit for 10X Genomics Chromium single cell data.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://chromium.acidgenomics.com/}
-  \item \url{https://github.com/acidgenomics/Chromium/}
-  \item Report bugs at \url{https://github.com/acidgenomics/Chromium/issues/}
+  \item \url{https://r.acidgenomics.com/packages/chromium/}
+  \item \url{https://github.com/acidgenomics/r-chromium/}
+  \item Report bugs at \url{https://github.com/acidgenomics/r-chromium/issues/}
 }
 
 }

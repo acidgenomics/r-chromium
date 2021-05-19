@@ -46,11 +46,11 @@
     dirs <- dirs[keep]
     assert(allAreDirectories(dirs))
     names(dirs) <- makeNames(basename(dirs))
-    cli_text(sprintf(
+    alertInfo(sprintf(
         fmt = "%d %s detected:",
         length(dirs),
         ngettext(n = length(dirs), msg1 = "sample", msg2 = "samples")
     ))
-    cli_ul(names(dirs))
+    ul(names(dirs))
     dirs
 }

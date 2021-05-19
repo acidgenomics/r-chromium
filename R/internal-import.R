@@ -13,16 +13,16 @@
     } else {
         stop(sprintf("Unexpected import failure.", file))  # nocov
     }
-    cli_alert(sprintf(
+    alert(sprintf(
         fmt = "Importing counts from '%s' %s.",
         basename(matrixFiles[[1L]]),
         ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
     ))
     ## This step seems to have issues when parsing files in parallel via CIFS.
     list <- bpmapply(
-        sampleID = names(matrixFiles),
+        sampleId = names(matrixFiles),
         file = matrixFiles,
-        FUN = function(sampleID, file) {
+        FUN = function(sampleId, file) {
             counts <- fun(file)
             ## Strip index when all barcodes end with "-1".
             if (
@@ -46,7 +46,7 @@
                     pattern = "^([[:digit:]]+)-([ACGT]+)$"
                 )
             ) {
-                colnames(counts) <- paste(sampleID, colnames(counts), sep = "-")
+                colnames(counts) <- paste(sampleId, colnames(counts), sep = "-")
             }
             ## Ensure dimnames are valid. Note that this may sanitize gene names
             ## for some model systems, and or transgenes.
@@ -232,7 +232,7 @@
         }
     )
     out <- DataFrame(do.call(what = rbind, args = list))
-    out <- camelCase(out)
+    out <- camelCase(out, strict = TRUE)
     rownames(out) <- names(sampleDirs)
     out
 }
