@@ -3,11 +3,14 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
 ## Updated 2021-03-03.
 
-library(usethis)
-library(pryr)
-library(readr)
-library(Matrix)
-library(basejump)
+suppressPackageStartupMessages({
+    library(magrittr)
+    library(usethis)
+    library(pryr)
+    library(readr)
+    library(Matrix)
+    library(basejump)
+})
 
 dataset_name <- "pbmc_v2"
 data_raw_dir <- "data-raw"
