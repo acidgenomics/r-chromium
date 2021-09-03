@@ -6,7 +6,7 @@
 #' @keywords internal
 #'
 #' @importFrom BiocParallel SerialParam bplapply bpmapply bpparam
-#' @importFrom basejump DataFrame SimpleList SingleCellExperiment alert
+#' @importFrom basejump DataFrame SimpleList SingleCellExperiment abort alert
 #'   alertInfo alertSuccess alertWarning assay assays calculateMetrics camelCase
 #'   detectLanes droplevels emptyRanges h1 h2 import importSampleData leftJoin
 #'   makeDimnames makeGRangesFromEnsembl makeGRangesFromGFF makeDimnames
