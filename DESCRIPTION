@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.1.9
-Date: 2021-03-12
+Version: 0.1.9.9000
+Date: 2021-09-03
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -23,12 +23,12 @@ Encoding: UTF-8
 LazyData: false
 Depends:
     R (>= 4.0),
-    basejump (>= 0.14.17)
+    basejump (>= 0.14.21.9000)
 Imports:
-    BiocParallel (>= 1.24),
-    goalie (>= 0.5.1),
+    BiocParallel (>= 1.26.0),
+    goalie (>= 0.5.4),
     methods,
-    rhdf5 (>= 2.34)
+    rhdf5 (>= 2.36.0)
 Suggests:
     testthat
 biocViews:
