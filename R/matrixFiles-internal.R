@@ -32,7 +32,6 @@
         isFlag(filtered)
     )
     dir <- realpath(dir)
-
     ## Simple mode -------------------------------------------------------------
     ## For minimal examples and data downloaded from 10X website.
     if (!dir.exists(file.path(dir, "outs"))) {
@@ -43,7 +42,6 @@
         )
         if (isAFile(file)) return(file)
     }
-
     ## Standard Cell Ranger output ---------------------------------------------
     ## Recurse into `outs/` directory by default.
     dir <- file.path(dir, "outs")
@@ -60,7 +58,6 @@
         full.names = FALSE
     )
     assert(hasLength(files))
-
     ## Get the Cell Ranger version, based on the file names.
     if (isTRUE(any(grepl(
         pattern = paste0("^", prefix, "_feature_bc_matrix$"),
@@ -75,10 +72,9 @@
         version <- "2"
         filestem <- paste0(prefix, "_gene_bc_matrices")
     } else {
-        stop("Failed to detect Cell Ranger version based on file names.")
+        abort("Failed to detect Cell Ranger version based on file names.")
     }
     version <- numeric_version(version)
-
     ## Currently preferring HDF5 over MTX.
     if (isTRUE(
         file.exists(file.path(dir, paste0(filestem, ".h5")))
@@ -108,9 +104,8 @@
         file <- file.path(dir, filestem, genomeBuild, "matrix.mtx")
         attr(file, "pipeline") <- "Cell Ranger v2 MTX"
     } else {
-        stop("Failed to locate count matrix.")
+        abort("Failed to locate count matrix.")
     }
-
     assert(
         isAFile(file),
         isString(attr(file, "pipeline"))

@@ -3,7 +3,7 @@
 #' Checks for the presence of nested `SC_RNA_COUNTER_CS` directories.
 #'
 #' @note `aggr` returns `SC_RNA_AGGREGATOR_CS/` directory.
-#' @note Updated 2020-01-26.
+#' @note Updated 2021-09-03.
 #'
 #' @param dir Cell Ranger output directory.
 #'
@@ -27,22 +27,18 @@
     ## Must contain `SC_RNA_COUNTER_CS` subdirectory.
     subdir <- "SC_RNA_COUNTER_CS"
     keep <- .hasSubdir(paths = dirs, name = subdir)
-    if (!any(keep)) {
-        stop(sprintf(
-            fmt = "No sample subdirectories containing '%s'.",
-            subdir
-        ))
-    }
+    assert(
+        any(keep),
+        msg = sprintf("No sample subdirectories containing {.var %s}.", subdir)
+    )
     dirs <- dirs[keep]
     ## Must contain `outs` subdirectory.
     subdir <- "outs"
     keep <- .hasSubdir(paths = dirs, name = subdir)
-    if (!any(keep)) {
-        stop(sprintf(
-            fmt = "No sample subdirectories containing '%s'.",
-            subdir
-        ))
-    }
+    assert(
+        any(keep),
+        msg = sprintf("No sample subdirectories containing {.var %s}.", subdir)
+    )
     dirs <- dirs[keep]
     assert(allAreDirectories(dirs))
     names(dirs) <- makeNames(basename(dirs))

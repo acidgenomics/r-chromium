@@ -11,7 +11,7 @@
     } else if (all(grepl("\\.MTX", matrixFiles, ignore.case = TRUE))) {
         fun <- .importCountsFromMTX
     } else {
-        stop(sprintf("Unexpected import failure.", file))  # nocov
+        abort("Unexpected import failure.")  # nocov
     }
     alert(sprintf(
         fmt = "Importing counts from '%s' %s.",
