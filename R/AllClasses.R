@@ -19,13 +19,17 @@ setValidity(
         sampleData <- sampleData(object)
         ## Assays --------------------------------------------------------------
         ok <- validate(isSubset("counts", names(assays(object))))
-        if (!isTRUE(ok)) return(ok)
+        if (!isTRUE(ok)) {
+            return(ok)
+        }
         ## Row data ------------------------------------------------------------
         ok <- validate(
-            is(rowRanges(object), "GRanges"),
+            is(rowRanges(object), "GenomicRanges"),
             is(rowData(object), "DataFrame")
         )
-        if (!isTRUE(ok)) return(ok)
+        if (!isTRUE(ok)) {
+            return(ok)
+        }
         ## Column data ---------------------------------------------------------
         ok <- validate(
             ## Require that metrics columns are defined.
@@ -33,7 +37,9 @@ setValidity(
             ## Ensure that `interestingGroups` isn't slotted in colData.
             areDisjointSets("interestingGroups", colnames(colData))
         )
-        if (!isTRUE(ok)) return(ok)
+        if (!isTRUE(ok)) {
+            return(ok)
+        }
         ## Metadata ------------------------------------------------------------
         ok <- validateClasses(
             object = metadata,
@@ -62,14 +68,16 @@ setValidity(
             ),
             subset = TRUE
         )
-        if (!isTRUE(ok)) return(ok)
-
+        if (!isTRUE(ok)) {
+            return(ok)
+        }
         ok <- validate(
             !isSubset("sampleName", names(metadata)),
             isSubset(metadata[["level"]], c("genes", "transcripts"))
         )
-        if (!isTRUE(ok)) return(ok)
-
+        if (!isTRUE(ok)) {
+            return(ok)
+        }
         TRUE
     }
 )

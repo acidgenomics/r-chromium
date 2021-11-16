@@ -273,7 +273,7 @@ CellRanger <- function(  # nolint
         alertWarning("Slotting empty ranges into {.fun rowRanges}.")
         rowRanges <- emptyRanges(rownames(counts))
     }
-    assert(is(rowRanges, "GRanges"))
+    assert(is(rowRanges, "GenomicRanges"))
     ## Metrics -----------------------------------------------------------------
     h2("Metrics")
     ## Note that "molecule_info.h5" file contains additional information that
