@@ -40,7 +40,9 @@
             pattern = "\\.(h5|mtx)(\\.gz)?",
             full.names = TRUE
         )
-        if (isAFile(file)) return(file)
+        if (isAFile(file)) {
+            return(file)
+        }
     }
     ## Standard Cell Ranger output ---------------------------------------------
     ## Recurse into `outs/` directory by default.
