@@ -1,0 +1,28 @@
+#+TITLE: Chromium
+#+STARTUP: content
+* Development
+** TODO Require valid names in all slots.
+** TODO Work on loading a Chromium v3 dataset and using as an example.
+** TODO Consolidate with bcbioSingleCell:
+    Undocumented arguments in documentation object 'Chromium'.
+    ‘sampleMetadataFile’ ‘genomeBuild’ ‘gffFile’ ‘transgeneNames’ ‘spikeNames’.
+** TODO Add documentation about simple mode.
+** TODO Allow the loading function to work if the user points at dir containing matrix.
+** TODO Can we parse the Cell Ranger `runDate` from the refData YAML?
+** TODO Check to see if we can import tx2gene.csv here.
+** TODO Either make `sampleName` required or strip it from minimal examples.
+** TODO `Chromium`: Break these back out into separate lines.
+* DESeqAnalysis
+** TODO VIGNETTE. Seriously, need to work on this.
+** TODO Enable alpha lfcThreshold support for plotVolcano.
+** TODO Enable baseMeanThreshold for plotMA?
+** TODO Enable lfcThreshold support for plotMA?
+** TODO Work on adding `[` method support.
+    May need to update the object to inherit from DESeqDataSet instead.
+** TODO Add export method for DESeqAnalysisList.
+** TODO Consider reworking object to inherit from DESeqDataSet.
+    If this approach works, can slot inside of 'analysis' internally.
+** TODO Check lfcThreshold support in functions.
+** TODO export needs to support alpha and lfcThreshold.
+** TODO Function to generate a matrix of genes that are DE in at least 1 contrast.
+    Allow the user to specify lfcThreshold here too.
