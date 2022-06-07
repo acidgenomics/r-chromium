@@ -8,6 +8,8 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 3.1.0/5k_pbmc_protein_v3
 
+## FIXME Check that example returns 100 cells and 100 features...
+
 ## nolint start
 suppressPackageStartupMessages({
     library(devtools)
@@ -182,6 +184,7 @@ features <- import(
     colnames = FALSE,
     nMax = 100L
 )
+expect_identical(nrow(features), 100L)
 export(
     object = features,
     con = file.path(outputMatrixDir, "features.tsv.gz"),
@@ -191,7 +194,9 @@ barcodes <- import(
     file = file.path(inputMatrixDir, "barcodes.tsv.gz"),
     nMax = 100L
 )
+expect_identical(nrow(barcodes), 100L)
 export(
     object = barcodes,
-    con = file.path(outputMatrixDir, "barcodes.tsv.gz")
+    con = file.path(outputMatrixDir, "barcodes.tsv.gz"),
+    colnames = FALSE
 )
