@@ -1,5 +1,5 @@
 #' Does the directory contain Cell Ranger aggr output?
-#' 
+#'
 #' @note Updated 2019-08-22.
 #' @noRd
 .isAggregate <- function(dir) {
@@ -14,7 +14,7 @@
 #'
 #' @param paths `character`.
 #' Directory paths. Parameterized.
-#' 
+#'
 #' @param name `character(1)`.
 #' Subdirectory name.
 #'
@@ -43,7 +43,7 @@
 
 
 #' Does the dataset contain a minimal, single directory structure?
-#' 
+#'
 #' @note Updated 2019-08-22.
 #' @noRd
 .isMinimalSample <- function(dir) {
