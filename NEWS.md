@@ -6,6 +6,10 @@
 - Split out basejump imports in NAMESPACE into component packages.
 - Updated lintr and testthat checks.
 
+## Minor changes
+
+- Resaved `pbmc_v2` and `pbmc_v3` example objects.
+
 # Chromium 0.1.9 (2021-03-12)
 
 ## Minor changes
