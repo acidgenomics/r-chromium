@@ -8,8 +8,6 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 3.1.0/5k_pbmc_protein_v3
 
-## FIXME Rework using BiocFileCache approach.
-
 ## nolint start
 suppressPackageStartupMessages({
     library(devtools)
@@ -34,83 +32,74 @@ sampleDir <- initDir(file.path(dir, "pbmc"))
 outsDir <- initDir(file.path(sampleDir, "outs"))
 counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
 file.create(file.path(counterDir, "empty"))
-## Download the example files.
-prefix <- "5k_pbmc_protein_v3"
-files <- paste0(
-    prefix, "_",
-    c(
-        "filtered_feature_bc_matrix.h5",
-        "filtered_feature_bc_matrix.tar.gz",
-        "metrics_summary.csv",
-        "molecule_info.h5",
-        "raw_feature_bc_matrix.h5",
-        "raw_feature_bc_matrix.tar.gz"
-    )
-)
-url <- pasteURL(
+urlStem <- pasteURL(
     "cf.10xgenomics.com",
     "samples",
     "cell-exp",
     "3.1.0",
-    prefix,
+    "5k_pbmc_protein_v3",
     protocol = "http"
 )
-invisible(lapply(
-    X = files,
-    FUN = function(file, dir, url) {
-        destfile <- file.path(dir, file)
-        if (!file.exists(destfile)) {
-            download.file(
-                url = file.path(url, file),
-                destfile = destfile
-            )
-        }
-    },
-    dir = dir,
-    url = url
-))
-## Extract the filtered MTX matrix files.
-tarfile <- file.path(dir, paste0(prefix, "_filtered_feature_bc_matrix.tar.gz"))
-untar(tarfile = tarfile, exdir = outsDir)
-## Copy the example outs files.
-files <- c(
-    "filtered_feature_bc_matrix.h5",
-    "metrics_summary.csv",
-    "molecule_info.h5"
-)
-invisible(lapply(
-    X = files,
-    FUN = function(file) {
-        file.copy(
-            from = file.path(dir, paste0(prefix, "_", file)),
-            to = file.path(outsDir, file),
-            overwrite = TRUE
+urls <- paste(
+    urlStem,
+    paste0(
+        "5k_pbmc_protein_v3_",
+        c(
+            "filtered_feature_bc_matrix.h5",
+            "filtered_feature_bc_matrix.tar.gz",
+            "metrics_summary.csv",
+            "molecule_info.h5",
+            "raw_feature_bc_matrix.h5",
+            "raw_feature_bc_matrix.tar.gz"
         )
-    }
-))
-## Using Ensembl 93 GTF annotations.
-## Alternatively, can use ensembldb here.
-gffFile <- "Homo_sapiens.GRCh38.93.gtf.gz"
-if (!file.exists(gffFile)) {
-    download.file(
-        url = paste(
-            "ftp://ftp.ensembl.org",
-            "pub",
-            "release-93",
-            "gtf",
-            "homo_sapiens",
-            basename(gffFile),
-            sep = "/"
-        ),
-        destfile = gffFile
-    )
-}
+    ),
+    sep = "/"
+)
+files <- vapply(
+    X = urls,
+    pkg = .pkgName,
+    FUN = cacheURL,
+    FUN.VALUE = character(1L),
+    USE.NAMES = FALSE
+)
+names(files) <- gsub(
+    pattern = "^5k_pbmc_protein_v3_",
+    replacement = "",
+    x = basename(urls)
+)
+untar(
+    tarfile = files[["filtered_feature_bc_matrix.tar.gz"]],
+    exdir = outsDir
+)
+file.copy(
+    from = files[["filtered_feature_bc_matrix.h5"]],
+    to = file.path(outsDir, "filtered_feature_bc_matrix.h5")
+)
+file.copy(
+    from = files[["metrics_summary.csv"]],
+    to = file.path(outsDir, "metrics_summary.csv")
+)
+file.copy(
+    from = files[["molecule_info.h5"]],
+    to = file.path(outsDir, "molecule_info.h5")
+)
+gffFile <- cacheURL(
+    url = pasteURL(
+        "ftp.ensembl.org",
+        "pub",
+        "release-93",
+        "gtf",
+        "homo_sapiens",
+        "Homo_sapiens.GRCh38.93.gtf.gz",
+        protocol = "ftp"
+    ),
+    pkg = .pkgName
+)
 object <- CellRanger(
     dir = dir,
     organism = "Homo sapiens",
     gffFile = gffFile
 )
-## We're using a subset of this object for our working example (see below).
 assignAndSaveData(
     name = datasetName,
     object = object,

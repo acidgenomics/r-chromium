@@ -65,12 +65,16 @@ names(files) <- gsub(
     replacement = "",
     x = basename(urls)
 )
+## FIXME Just use the name here.
 tarfile <- grep(
     pattern = "filtered_gene_bc_matrices\\.tar\\.gz$",
     x = files,
     value = TRUE
 )
-untar(tarfile = tarfile, exdir = outsDir)
+untar(
+    tarfile = files[["filtered_gene_bc_matrices.tar.gz"]],
+    exdir = outsDir
+)
 file.copy(
     from = files[["metrics_summary.csv"]],
     to = file.path(outsDir, "metrics_summary.csv")
