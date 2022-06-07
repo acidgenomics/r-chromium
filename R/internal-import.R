@@ -39,10 +39,10 @@
                 # counts from multiple samples.
                 if (
                     length(matrixFiles) > 1L ||
-                    allAreMatchingRegex(
-                        x = colnames(counts),
-                        pattern = "^([[:digit:]]+)-([ACGT]+)$"
-                    )
+                        allAreMatchingRegex(
+                            x = colnames(counts),
+                            pattern = "^([[:digit:]]+)-([ACGT]+)$"
+                        )
                 ) {
                     colnames(counts) <-
                         paste(sampleId, colnames(counts), sep = "-")
