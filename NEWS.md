@@ -8,7 +8,8 @@
 
 ## Minor changes
 
-- Resaved `pbmc_v2` and `pbmc_v3` example objects.
+- Resaved `pbmc_v2` and `pbmc_v3` example objects. Improved handling of UTF-8
+  strings in sample metrics, which now generates a package check note for R 4.2.
 
 # Chromium 0.1.9 (2021-03-12)
 
