@@ -237,7 +237,6 @@ CellRanger <- # nolint
         } else if (isString(gffFile)) {
             ## This step is necessary for generating v2 working example. Note
             ## that this works with a remote URL.
-            alert("{.fun makeGRangesFromGFF}")
             rowRanges <- makeGRangesFromGFF(
                 file = gffFile,
                 level = "genes",
@@ -249,7 +248,6 @@ CellRanger <- # nolint
             ## GTF file in the refdata directory. It will also drop genes that
             ## are now dead in the current Ensembl release. Don't warn about old
             ## Ensembl release version.
-            alert("{.fun makeGRangesFromEnsembl}")
             rowRanges <- makeGRangesFromEnsembl(
                 organism = organism,
                 level = level,
@@ -264,7 +262,10 @@ CellRanger <- # nolint
                 ensemblRelease <- metadata(rowRanges)[["ensemblRelease"]]
             }
         } else {
-            alertWarning("Slotting empty ranges into {.fun rowRanges}.")
+            alertWarning(sprintf(
+                "Slotting empty ranges into {.fun %s}.",
+                "rowRanges"
+            ))
             rowRanges <- emptyRanges(rownames(counts))
         }
         assert(is(rowRanges, "GenomicRanges"))
