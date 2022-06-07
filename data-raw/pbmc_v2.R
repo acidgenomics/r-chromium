@@ -1,14 +1,11 @@
 ## 10X Chromium Cell Ranger v2 example output.
-## 
+##
 ## 4k PBMCs from a healthy donor.
 ##
 ## Updated 2022-06-07.
 ##
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 2.1.0/pbmc4k
-
-## FIXME This file is now failing to import:
-## /Users/mike/git/monorepo/r-packages/r-chromium/data-raw/data-raw/pbmc_v2/pbmc/outs/filtered_gene_bc_matrices/GRCh38/matrix.mtx
 
 ## nolint start
 suppressPackageStartupMessages({

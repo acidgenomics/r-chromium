@@ -18,7 +18,7 @@
 #' - MTX: `filtered_gene_bc_matrices/<genomeBuild>/matrix.mtx`
 #'
 #' @param dir Sample directory.
-#' 
+#'
 #' @param filtered `logical(1)`.
 #' - `TRUE`: Look for `filtered_*` matrix.
 #' - `FALSE`: Look for `raw_*` matrix.
