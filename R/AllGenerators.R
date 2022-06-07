@@ -109,8 +109,7 @@ CellRanger <- # nolint
              censorSamples = NULL,
              sampleMetadataFile = NULL,
              transgeneNames = NULL,
-             interestingGroups = "sampleName"
-    ) {
+             interestingGroups = "sampleName") {
         assert(
             isADirectory(dir),
             isFlag(filtered),
