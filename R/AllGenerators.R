@@ -220,6 +220,7 @@ CellRanger <- # nolint
             ## Get the Ensembl release version from JSON metadata.
             ## e.g. "Homo_sapiens.GRCh38.93.filtered.gtf"
             ensemblRelease <- refJSON[["input_gtf_files"]][[1L]]
+            ## FIXME Switch this to stringi.
             ensemblRelease <- str_split(
                 string = ensemblRelease,
                 pattern = "\\.",
@@ -287,6 +288,7 @@ CellRanger <- # nolint
             ## Define the grep pattern to use for sample ID extraction.
             pattern <- "^(.+)_[ACGT]+$"
             if (all(grepl(pattern, colnames(counts)))) {
+                ## FIXME Switch this to stringi.
                 match <- str_match(
                     string = colnames(counts),
                     pattern = pattern
