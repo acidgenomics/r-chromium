@@ -1,10 +1,14 @@
 ## 10X Chromium Cell Ranger v2 example output.
+## 
 ## 4k PBMCs from a healthy donor.
 ##
 ## Updated 2022-06-07.
 ##
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 2.1.0/pbmc4k
+
+## FIXME This file is now failing to import:
+## /Users/mike/git/monorepo/r-packages/r-chromium/data-raw/data-raw/pbmc_v2/pbmc/outs/filtered_gene_bc_matrices/GRCh38/matrix.mtx
 
 ## nolint start
 suppressPackageStartupMessages({
@@ -18,13 +22,12 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v2"
-dataRawDir <- "data-raw"
 ## Restrict to 2 MB.
 limit <- structure(2e6L, class = "object_size")
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
-dir <- initDir(file.path(dataRawDir, datasetName))
+dir <- initDir(datasetName)
 sampleDir <- initDir(file.path(dir, "pbmc"))
 outsDir <- initDir(file.path(sampleDir, "outs"))
 counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
@@ -81,7 +84,7 @@ invisible(lapply(
 ))
 ## Using Ensembl 84 GTF annotations.
 ## Note that ensembldb only supports back to 87.
-gffFile <- file.path(dataRawDir, "Homo_sapiens.GRCh38.84.gtf.gz")
+gffFile <- "Homo_sapiens.GRCh38.84.gtf.gz"
 if (!file.exists(gffFile)) {
     download.file(
         url = paste(
@@ -104,7 +107,7 @@ object <- CellRanger(
 assignAndSaveData(
     name = datasetName,
     object = object,
-    dir = dataRawDir
+    dir = getwd()
 )
 
 ## Example object ==============================================================
@@ -139,6 +142,7 @@ inputMatrixDir <- file.path(
     "GRCh38"
 )
 outputDir <- file.path(
+    "..",
     "inst",
     "extdata",
     "cellranger_v2"

@@ -162,7 +162,7 @@
             ignore.case = TRUE
         ))
         ## Count matrix.
-        counts <- import(file, quiet = TRUE)
+        counts <- import(file)
         assert(is(counts, "sparseMatrix"))
         ## Row names.
         ## Legacy v2 output uses "genes" instead of "features".
@@ -180,8 +180,7 @@
         rownames <- import(
             file = rownamesFile,
             format = "tsv",
-            colnames = FALSE,
-            quiet = TRUE
+            colnames = FALSE
         )
         rownames <- rownames[[1L]]
         ## Column names.
@@ -195,8 +194,7 @@
         ## Note that `barcodes.tsv` is NOT tab delimited.
         colnames <- import(
             file = colnamesFile,
-            format = "lines",
-            quiet = TRUE
+            format = "lines"
         )
         ## Return.
         assert(
