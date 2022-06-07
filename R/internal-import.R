@@ -221,7 +221,7 @@
             X = files,
             FUN = function(file) {
                 withCallingHandlers(
-                    expr = import(file),
+                    expr = import(file = file),
                     message = function(m) {
                         if (grepl("syntactic", m)) {
                             invokeRestart("muffleMessage")
@@ -231,7 +231,15 @@
                 )
             }
         )
-        out <- DataFrame(do.call(what = rbind, args = list))
+        out <- do.call(what = rbind, args = list)
+        ## Ensure we sanitize marked UTF-8 strings.
+        out <- lapply(
+            X = out,
+            FUN = gsub,
+            pattern = "[^.[:alnum:]]",
+            replacement = ""
+        )
+        out <- do.call(what = DataFrame, args = out)
         out <- camelCase(out, strict = TRUE)
         rownames(out) <- names(sampleDirs)
         out
