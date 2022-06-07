@@ -35,15 +35,15 @@ test_that("HDF5", {
     expect_s4_class(object, "CellRanger")
 })
 
-
-
 dir <- system.file("extdata", "cellranger_v3", package = .pkgName)
 
+## FIXME This test is failing.
 test_that("MTX : Fast mode", {
     object <- CellRanger(dir)
     expect_s4_class(object, "CellRanger")
 })
 
+## FIXME This test is failing.
 test_that("MTX : User-defined sample metadata", {
     sampleMetadataFile <-
         system.file("extdata", "cellranger_v3.csv", package = .pkgName)
