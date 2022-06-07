@@ -22,12 +22,14 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v2"
-## Restrict to 2 MB.
 limit <- structure(2e6L, class = "object_size")
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
 dir <- initDir(datasetName)
+if (dir.exists(dir)) {
+    unlink2(dir)
+}
 sampleDir <- initDir(file.path(dir, "pbmc"))
 outsDir <- initDir(file.path(sampleDir, "outs"))
 counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
