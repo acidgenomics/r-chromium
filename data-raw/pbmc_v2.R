@@ -1,14 +1,17 @@
 ## 10X Chromium Cell Ranger v2 example output.
 ## 4k PBMCs from a healthy donor.
-## https://support.10xgenomics.com/single-cell-gene-expression/datasets/2.1.0/pbmc4k
+##
 ## Updated 2022-06-07.
+##
+## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
+## 2.1.0/pbmc4k
 
 ## nolint start
 suppressPackageStartupMessages({
     library(devtools)
     library(usethis)
     library(AcidBase)
-    library(Matrix)
+    library(AcidExperiment)
     library(pipette)
 })
 ## nolint end
@@ -16,12 +19,10 @@ suppressPackageStartupMessages({
 load_all()
 datasetName <- "pbmc_v2"
 dataRawDir <- "data-raw"
-
 ## Restrict to 2 MB.
-## Use `pryr::object_size()` instead of `utils::object.size()`.
-limit <- structure(2e6, class = "object_size")
+limit <- structure(2e6L, class = "object_size")
 
-## Complete dataset =============================================================
+## Complete dataset ============================================================
 ## Create the example dataset directory structure.
 dir <- initDir(file.path(dataRawDir, datasetName))
 sampleDir <- initDir(file.path(dir, "pbmc"))
@@ -66,7 +67,6 @@ invisible(lapply(
 ## Extract the filtered MTX matrix files.
 tarfile <- file.path(dir, paste0(prefix, "_filtered_gene_bc_matrices.tar.gz"))
 untar(tarfile = tarfile, exdir = outsDir)
-stopifnot(identical(dir(outsDir), "filtered_gene_bc_matrices"))
 ## Copy the example outs files.
 files <- c("metrics_summary.csv", "molecule_info.h5")
 invisible(lapply(
@@ -101,7 +101,6 @@ object <- CellRanger(
     organism = "Homo sapiens",
     gffFile = gffFile
 )
-## We're using a subset of this object for our working example (see below).
 assignAndSaveData(
     name = datasetName,
     object = object,
@@ -110,81 +109,81 @@ assignAndSaveData(
 
 ## Example object ==============================================================
 counts <- counts(object)
-## Subset the matrix to include only the top genes and cells.
-top_genes <-
+topGenes <-
     counts |>
-    rowSums() |>
+    Matrix::rowSums() |>
     sort(decreasing = TRUE) |>
     head(n = 500L)
-genes <- sort(names(top_genes))
-top_cells <-
+genes <- sort(names(topGenes))
+topCells <-
     counts |>
-    colSums() |>
+    Matrix::colSums() |>
     sort(decreasing = TRUE) |>
     head(n = 100L)
-cells <- sort(names(top_cells))
-## Subset the original object dataset to contain only top genes and cells.
+cells <- sort(names(topCells))
 object <- object[genes, cells]
-## Report the size of each slot in bytes.
-lapply(coerceToList(object), object_size)
-object_size(object)
-stopifnot(object_size(object) < limit)
-stopifnot(validObject(object))
-pbmc_v2 <- object
+stopifnot(
+    object.size(object) < limit,
+    validObject(object)
+)
+pbmc_v2 <- object # nolint
 use_data(pbmc_v2, compress = "xz", overwrite = TRUE)
 
 ## Example Cell Ranger v2 output ===============================================
-input_dir <- dir
-input_sampleDir <- sampleDir
-input_outsDir <- outsDir
-input_matrix_dir <- file.path(
-    input_outsDir,
+inputDir <- dir
+inputSampleDir <- sampleDir
+inputOutsDir <- outsDir
+inputMatrixDir <- file.path(
+    inputOutsDir,
     "filtered_gene_bc_matrices",
     "GRCh38"
 )
-output_dir <- file.path(
+outputDir <- file.path(
     "inst",
     "extdata",
     "cellranger_v2"
 )
-unlink(output_dir, recursive = TRUE)
-output_sampleDir <- initDir(file.path(output_dir, "pbmc"))
-output_outsDir <- initDir(file.path(output_sampleDir, "outs"))
-output_counterDir <- file.path(output_sampleDir, "SC_RNA_COUNTER_CS")
-initDir(output_counterDir)
-file.create(file.path(output_counterDir, "empty"))
-output_matrix_dir <- file.path(
-    output_outsDir,
+if (dir.exists(outputDir)) {
+    unlink2(outputDir)
+}
+outputSampleDir <- initDir(file.path(outputDir, "pbmc"))
+outputOutsDir <- initDir(file.path(outputSampleDir, "outs"))
+outputCounterDir <- initDir(file.path(outputSampleDir, "SC_RNA_COUNTER_CS"))
+file.create(file.path(outputCounterDir, "empty"))
+outputMatrixDir <- initDir(file.path(
+    outputOutsDir,
     "filtered_gene_bc_matrices",
     "GRCh38"
-)
-initDir(output_matrix_dir)
-## Copy metrics summary.
+))
 file.copy(
-    from = file.path(input_outsDir, "metrics_summary.csv"),
-    to = file.path(output_outsDir, "metrics_summary.csv"),
+    from = file.path(inputOutsDir, "metrics_summary.csv"),
+    to = file.path(outputOutsDir, "metrics_summary.csv"),
     overwrite = TRUE
 )
-## Prepare the sparse matrix.
-counts <- Matrix::readMM(file = file.path(input_matrix_dir, "matrix.mtx"))
-counts <- counts[seq_len(100), seq_len(100)]
-Matrix::writeMM(counts, file = file.path(output_matrix_dir, "matrix.mtx"))
-## FIXME What's the n_max argument here?
-genes <- import(
-    file = file.path(input_matrix_dir, "genes.tsv"),
-    colnames = FALSE,
-    n_max = 100
-)
+counts <- import(file = file.path(inputMatrixDir, "matrix.mtx"))
+counts <- counts[seq_len(100L), seq_len(100L)]
 export(
-    x = genes,
-    file = file.path(output_matrix_dir, "genes.tsv"),
-    col_names = FALSE
+    object = counts,
+    con = file.path(outputMatrixDir, "matrix.mtx")
 )
-barcodes <- read_lines(
-    file = file.path(input_matrix_dir, "barcodes.tsv"),
-    n_max = 100
+genes <- import(
+    file = file.path(inputMatrixDir, "genes.tsv"),
+    colnames = FALSE,
+    nMax = 100L
 )
-write_lines(
-    x = barcodes,
-    file = file.path(output_matrix_dir, "barcodes.tsv")
+stopifnot(identical(nrow(genes), 100L))
+export(
+    object = genes,
+    con = file.path(outputMatrixDir, "genes.tsv"),
+    colnames = FALSE
+)
+barcodes <- import(
+    file = file.path(inputMatrixDir, "barcodes.tsv"),
+    nMax = 100L
+)
+stopifnot(identical(nrow(barcodes), 100L))
+export(
+    object = barcodes,
+    file = file.path(outputMatrixDir, "barcodes.tsv"),
+    colnames = FALSE
 )

@@ -1,5 +1,5 @@
 #' Import counts from either HDF5 or MTX files.
-#' 
+#'
 #' @note Updated 2022-06-07.
 #' @noRd
 .importCounts <-
@@ -211,7 +211,8 @@
 
 
 #' Import sample-level metrics
-#' @note Updated 2019-08-22.
+#'
+#' @note Updated 2022-06-07.
 #' @noRd
 .importSampleMetrics <-
     function(sampleDirs) {
@@ -219,7 +220,7 @@
         list <- lapply(
             X = files,
             FUN = function(file) {
-                data <- withCallingHandlers(
+                withCallingHandlers(
                     expr = import(file),
                     message = function(m) {
                         if (grepl("syntactic", m)) {

@@ -4,21 +4,22 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/3.1.0/5k_pbmc_protein_v3
 ## Updated 2021-03-03.
 
+## nolint start
 suppressPackageStartupMessages({
-    library(magrittr)
+    library(devtools)
     library(usethis)
     library(pryr)
     library(readr)
     library(Matrix)
     library(basejump)
 })
+## nolint end
 
+load_all()
 dataset_name <- "pbmc_v3"
 data_raw_dir <- "data-raw"
-
 ## Restrict to 2 MB.
-## Use `pryr::object_size()` instead of `utils::object.size()`.
-limit <- structure(2e6, class = "object_size")
+limit <- structure(2e6L, class = "object_size")
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
@@ -86,8 +87,8 @@ invisible(lapply(
 ))
 ## Using Ensembl 93 GTF annotations.
 ## Alternatively, can use ensembldb here.
-gtf_file <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.93.gtf.gz")
-if (!file.exists(gtf_file)) {
+gffFile <- file.path(data_raw_dir, "Homo_sapiens.GRCh38.93.gtf.gz")
+if (!file.exists(gffFile)) {
     download.file(
         url = paste(
             "ftp://ftp.ensembl.org",
@@ -95,16 +96,16 @@ if (!file.exists(gtf_file)) {
             "release-93",
             "gtf",
             "homo_sapiens",
-            basename(gtf_file),
+            basename(gffFile),
             sep = "/"
         ),
-        destfile = gtf_file
+        destfile = gffFile
     )
 }
 object <- CellRanger(
     dir = dir,
     organism = "Homo sapiens",
-    gffFile = gtf_file
+    gffFile = gffFile
 )
 ## We're using a subset of this object for our working example (see below).
 assignAndSaveData(
@@ -117,25 +118,25 @@ assignAndSaveData(
 counts <- counts(object)
 ## Subset the matrix to include only the top genes and cells.
 top_genes <-
-    counts %>%
-    rowSums() %>%
-    sort(decreasing = TRUE) %>%
+    counts |>
+    rowSums() |>
+    sort(decreasing = TRUE) |>
     head(n = 500L)
 genes <- sort(names(top_genes))
 top_cells <-
-    counts %>%
-    colSums() %>%
-    sort(decreasing = TRUE) %>%
+    counts |>
+    colSums() |>
+    sort(decreasing = TRUE) |>
     head(n = 100L)
 cells <- sort(names(top_cells))
 ## Subset the original object dataset to contain only top genes and cells.
 object <- object[genes, cells]
 ## Report the size of each slot in bytes.
-lapply(coerceToList(object), object_size)
-object_size(object)
-stopifnot(object_size(object) < limit)
-stopifnot(validObject(object))
-pbmc_v3 <- object
+stopifnot(
+    object.size(object) < limit,
+    validObject(object)
+)
+pbmc_v3 <- object # nolint
 usethis::use_data(pbmc_v3, compress = "xz", overwrite = TRUE)
 
 ## Example Cell Ranger v3 output ===============================================

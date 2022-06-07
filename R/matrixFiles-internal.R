@@ -120,7 +120,7 @@
 
 
 #' Find all matrix files for a data set
-#' 
+#'
 #' @note Updated 2022-06-07.
 #' @noRd
 .matrixFiles <-
