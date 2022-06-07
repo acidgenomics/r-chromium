@@ -65,7 +65,6 @@ names(files) <- gsub(
     replacement = "",
     x = basename(urls)
 )
-## FIXME Just use the name here.
 tarfile <- grep(
     pattern = "filtered_gene_bc_matrices\\.tar\\.gz$",
     x = files,
