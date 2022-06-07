@@ -4,6 +4,7 @@
 ** TODO Need to address new UTF-8 note.
     checking data for non-ASCII characters (5.3s)
     Note: found 116 marked UTF-8 strings
+    tools:::.check_package_datasets(pkgDir = ".")
 ** TODO Need to add example Cell Ranger v4 output directory.
 ** TODO Require valid names in all slots.
 ** TODO Work on loading a Chromium v3 dataset and using as an example.
