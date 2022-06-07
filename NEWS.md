@@ -1,4 +1,4 @@
-# Chromium 0.2.0 (2022-06-06)
+# Chromium 0.2.0 (2022-06-07)
 
 ## Major changes
 

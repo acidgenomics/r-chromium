@@ -1,13 +1,13 @@
 ## S4 generics and methods =====================================================
 
 #' @importFrom AcidGenerics calculateMetrics camelCase droplevels2 leftJoin
-#' makeDimnames makeNames
+#' makeDimnames makeNames sampleData
 #' @importFrom BiocParallel bplapply bpmapply bpparam
 #' @importFrom S4Vectors mcols metadata metadata<-
-#' @importFrom SummarizedExperiment assay assays
+#' @importFrom SummarizedExperiment assay assays colData
 #' @importFrom pipette import
 #'
-#' @importMethodsFrom AcidExperiment calculateMetrics droplevels2
+#' @importMethodsFrom AcidExperiment calculateMetrics droplevels2 sampleData
 #' @importMethodsFrom AcidPlyr leftJoin
 #' @importMethodsFrom pipette import
 #' @importMethodsFrom syntactic camelCase makeDimnames makeNames
