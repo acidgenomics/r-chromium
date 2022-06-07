@@ -92,6 +92,9 @@
 #' Directory path to Cell Ranger reference annotation data.
 #'
 #' @return `CellRanger`.
+#' 
+#' @seealso
+#' - https://support.10xgenomics.com/single-cell-gene-expression/
 #'
 #' @examples
 #' dir <- system.file("extdata", "cellranger_v3", package = "Chromium")
@@ -199,7 +202,7 @@ CellRanger <- # nolint
         counts <- .importCounts(matrixFiles)
         assert(hasValidDimnames(counts))
         ## Row data (genes/transcripts) ----------------------------------------
-        refJSON <- NULL
+        refJson <- NULL
         ## Prepare gene annotations as GRanges.
         if (isADirectory(refdataDir)) {
             ## nocov start
@@ -211,22 +214,20 @@ CellRanger <- # nolint
                 basename(refdataDir)
             ))
             ## JSON data.
-            refJSONFile <- file.path(refdataDir, "reference.json")
-            assert(isAFile(refJSONFile))
-            refJSON <- import(refJSONFile)
+            refJsonFile <- file.path(refdataDir, "reference.json")
+            assert(isAFile(refJsonFile))
+            refJson <- import(refJsonFile)
             ## Get the genome build from JSON metadata.
-            genomeBuild <- unlist(refJSON[["genomes"]])
+            genomeBuild <- unlist(refJson[["genomes"]])
             assert(isString(genomeBuild))
             ## Get the Ensembl release version from JSON metadata.
             ## e.g. "Homo_sapiens.GRCh38.93.filtered.gtf"
-            ensemblRelease <- refJSON[["input_gtf_files"]][[1L]]
-            ## FIXME Switch this to stringi.
-            ensemblRelease <- str_split(
-                string = ensemblRelease,
-                pattern = "\\.",
-                simplify = TRUE
-            )
-            ensemblRelease <- as.integer(ensemblRelease[1L, 3L])
+            ensemblRelease <-
+                as.integer(strsplit(
+                    x = refJson[["input_gtf_files"]][[1L]],
+                    split = ".",
+                    fixed = TRUE
+                )[[1L]][[3L]])
             assert(isInt(ensemblRelease))
             ## Convert the GTF file to GRanges.
             gffFile <- file.path(refdataDir, "genes", "genes.gtf")
@@ -288,9 +289,8 @@ CellRanger <- # nolint
             ## Define the grep pattern to use for sample ID extraction.
             pattern <- "^(.+)_[ACGT]+$"
             if (all(grepl(pattern, colnames(counts)))) {
-                ## FIXME Switch this to stringi.
-                match <- str_match(
-                    string = colnames(counts),
+                match <- stri_match_first_regex(
+                    str = colnames(counts),
                     pattern = pattern
                 )
                 samples <- unique(match[, 2L, drop = TRUE])
@@ -339,7 +339,7 @@ CellRanger <- # nolint
             "organism" = as.character(organism),
             "packageVersion" = .pkgVersion,
             "pipeline" = pipeline,
-            "refJson" = as.list(refJSON),
+            "refJson" = as.list(refJson),
             "refdataDir" = as.character(refdataDir),
             "sampleDirs" = sampleDirs,
             "sampleMetadataFile" = as.character(sampleMetadataFile),

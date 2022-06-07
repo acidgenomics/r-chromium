@@ -30,12 +30,6 @@ NULL
 #' isFlag isInt isScalar isString isSubset validNames validate validateClasses
 #' @importFrom methods as is new setClass setMethod setValidity validObject
 #' @importFrom rhdf5 h5dump h5read
+#' @importFrom stringi stri_match_first_regex
 #' @importFrom utils packageName packageVersion
-NULL
-
-
-
-## FIXME Switch this to stringi package.
-
-#' @importFrom stringr str_match str_split
 NULL

@@ -162,3 +162,8 @@ dir <- system.file("extdata", "cellranger_v3", package = "Chromium")
 x <- CellRanger(dir)
 print(x)
 }
+\seealso{
+\itemize{
+\item https://support.10xgenomics.com/single-cell-gene-expression/
+}
+}
