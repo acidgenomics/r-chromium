@@ -1,6 +1,7 @@
 #+TITLE: Chromium
 #+STARTUP: content
 * Development
+** TODO `sampleMetrics` metadata needs improved numeric class definitions.
 ** TODO Need to address new UTF-8 note.
     checking data for non-ASCII characters (5.3s)
     Note: found 116 marked UTF-8 strings
