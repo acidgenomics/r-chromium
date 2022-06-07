@@ -1,10 +1,10 @@
 ## 10X Chromium Cell Ranger v3 example output.
-## 
+##
 ## 5k Peripheral blood mononuclear cells (PBMCs) from a healthy donor with cell
 ## surface proteins (v3 chemistry).
-## 
+##
 ## Updated 2022-06-07.
-## 
+##
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 3.1.0/5k_pbmc_protein_v3
 
@@ -124,12 +124,12 @@ topGenes <-
     sort(decreasing = TRUE) |>
     head(n = 500L)
 genes <- sort(names(topGenes))
-top_cells <-
+topCells <-
     counts |>
     Matrix::colSums() |>
     sort(decreasing = TRUE) |>
     head(n = 100L)
-cells <- sort(names(top_cells))
+cells <- sort(names(topCells))
 ## Subset the original object dataset to contain only top genes and cells.
 object <- object[genes, cells]
 ## Report the size of each slot in bytes.
@@ -172,7 +172,7 @@ file.copy(
 )
 ## Prepare the sparse matrix.
 counts <- import(file = file.path(inputMatrixDir, "matrix.mtx.gz"))
-counts <- counts[seq_len(100), seq_len(100)]
+counts <- counts[seq_len(100L), seq_len(100L)]
 export(
     object = counts,
     con = file.path(outputMatrixDir, "matrix.mtx.gz")
@@ -189,7 +189,7 @@ export(
 )
 barcodes <- import(
     file = file.path(inputMatrixDir, "barcodes.tsv.gz"),
-    nMax = 100
+    nMax = 100L
 )
 export(
     object = barcodes,
