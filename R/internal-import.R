@@ -1,65 +1,66 @@
 #' Import counts from either HDF5 or MTX files.
+#' 
 #' @note Updated 2020-01-26.
 #' @noRd
-.importCounts <- function(
-    matrixFiles,
-    BPPARAM = BiocParallel::SerialParam()  # nolint
-) {
-    assert(allAreFiles(matrixFiles))
-    if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
-        fun <- .importCountsFromHDF5
-    } else if (all(grepl("\\.MTX", matrixFiles, ignore.case = TRUE))) {
-        fun <- .importCountsFromMTX
-    } else {
-        abort("Unexpected import failure.")  # nocov
-    }
-    alert(sprintf(
-        fmt = "Importing counts from '%s' %s.",
-        basename(matrixFiles[[1L]]),
-        ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
-    ))
-    ## This step seems to have issues when parsing files in parallel via CIFS.
-    list <- bpmapply(
-        sampleId = names(matrixFiles),
-        file = matrixFiles,
-        FUN = function(sampleId, file) {
-            counts <- fun(file)
-            ## Strip index when all barcodes end with "-1".
-            if (
-                allAreMatchingRegex(x = colnames(counts), pattern = "-1$")
-            ) {
-                colnames(counts) <- sub("-1", "", colnames(counts))
-            }
-            # Now move the multiplexed index name/number to the beginning,
-            # for more logical sorting and consistency with bcbioSingleCell.
-            colnames(counts) <- sub(
-                pattern = "^([ACGT]+)-(.+)$",
-                replacement = "\\2-\\1",
-                x = colnames(counts)
-            )
-            # Prefix cell barcodes with sample identifier when we're loading
-            # counts from multiple samples.
-            if (
-                length(matrixFiles) > 1L ||
-                allAreMatchingRegex(
-                    x = colnames(counts),
-                    pattern = "^([[:digit:]]+)-([ACGT]+)$"
+.importCounts <-
+    function(matrixFiles,
+             BPPARAM = BiocParallel::SerialParam() # nolint
+    ) {
+        assert(allAreFiles(matrixFiles))
+        if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
+            fun <- .importCountsFromHDF5
+        } else if (all(grepl("\\.MTX", matrixFiles, ignore.case = TRUE))) {
+            fun <- .importCountsFromMTX
+        } else {
+            abort("Unexpected import failure.") # nocov
+        }
+        alert(sprintf(
+            fmt = "Importing counts from '%s' %s.",
+            basename(matrixFiles[[1L]]),
+            ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
+        ))
+        ## This step has issues when parsing files in parallel via CIFS.
+        list <- bpmapply(
+            sampleId = names(matrixFiles),
+            file = matrixFiles,
+            FUN = function(sampleId, file) {
+                counts <- fun(file)
+                ## Strip index when all barcodes end with "-1".
+                if (
+                    allAreMatchingRegex(x = colnames(counts), pattern = "-1$")
+                ) {
+                    colnames(counts) <- sub("-1", "", colnames(counts))
+                }
+                # Now move the multiplexed index name/number to the beginning,
+                # for more logical sorting and consistency with bcbioSingleCell.
+                colnames(counts) <- sub(
+                    pattern = "^([ACGT]+)-(.+)$",
+                    replacement = "\\2-\\1",
+                    x = colnames(counts)
                 )
-            ) {
-                colnames(counts) <- paste(sampleId, colnames(counts), sep = "-")
-            }
-            ## Ensure dimnames are valid. Note that this may sanitize gene names
-            ## for some model systems, and or transgenes.
-            counts <- makeDimnames(counts)
-            counts
-        },
-        SIMPLIFY = FALSE,
-        USE.NAMES = TRUE,
-        BPPARAM = BPPARAM
-    )
-    # Bind the matrices.
-    do.call(what = cbind, args = list)
-}
+                # Prefix cell barcodes with sample identifier when we're loading
+                # counts from multiple samples.
+                if (
+                    length(matrixFiles) > 1L ||
+                    allAreMatchingRegex(
+                        x = colnames(counts),
+                        pattern = "^([[:digit:]]+)-([ACGT]+)$"
+                    )
+                ) {
+                    colnames(counts) <- paste(sampleId, colnames(counts), sep = "-")
+                }
+                ## Ensure dimnames are valid. Note that this may sanitize gene
+                ## names for some model systems, and or transgenes.
+                counts <- makeDimnames(counts)
+                counts
+            },
+            SIMPLIFY = FALSE,
+            USE.NAMES = TRUE,
+            BPPARAM = BPPARAM
+        )
+        # Bind the matrices.
+        do.call(what = cbind, args = list)
+    }
 
 
 
@@ -71,12 +72,12 @@
 #' @seealso `cellrangerRkit::get_matrix_from_h5()`
 #'
 #' @return `sparseMatrix`.
-#'   Cell barcodes in the columns, features (i.e. genes) in the rows.
+#' Cell barcodes in the columns, features (i.e. genes) in the rows.
 #'
 #' @examples
 #' ## > x <- .importCountsFromHDF5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
-.importCountsFromHDF5 <-  # nolint
+.importCountsFromHDF5 <- # nolint
     function(file) {
         assert(
             isAFile(file),
@@ -151,7 +152,7 @@
 #' @examples
 #' ## > x <- .importCountsFromMTX(file = "matrix.mtx.gz")
 #' ## > dim(x)
-.importCountsFromMTX <-  # nolint
+.importCountsFromMTX <-
     function(file) {
         assert(
             isAFile(file),
@@ -215,24 +216,25 @@
 #' Import sample-level metrics
 #' @note Updated 2019-08-22.
 #' @noRd
-.importSampleMetrics <- function(sampleDirs) {
-    files <- file.path(sampleDirs, "outs", "metrics_summary.csv")
-    list <- lapply(
-        X = files,
-        FUN = function(file) {
-            data <- withCallingHandlers(
-                expr = import(file),
-                message = function(m) {
-                    if (grepl("syntactic", m)) {
-                        invokeRestart("muffleMessage")
+.importSampleMetrics <-
+    function(sampleDirs) {
+        files <- file.path(sampleDirs, "outs", "metrics_summary.csv")
+        list <- lapply(
+            X = files,
+            FUN = function(file) {
+                data <- withCallingHandlers(
+                    expr = import(file),
+                    message = function(m) {
+                        if (grepl("syntactic", m)) {
+                            invokeRestart("muffleMessage")
+                        }
+                        m
                     }
-                    m
-                }
-            )
-        }
-    )
-    out <- DataFrame(do.call(what = rbind, args = list))
-    out <- camelCase(out, strict = TRUE)
-    rownames(out) <- names(sampleDirs)
-    out
-}
+                )
+            }
+        )
+        out <- DataFrame(do.call(what = rbind, args = list))
+        out <- camelCase(out, strict = TRUE)
+        rownames(out) <- names(sampleDirs)
+        out
+    }
