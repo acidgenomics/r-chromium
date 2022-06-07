@@ -23,9 +23,24 @@ Encoding: UTF-8
 LazyData: false
 Depends: R (>= 4.2)
 Imports:
+    AcidBase,
+    AcidCLI,
+    AcidExperiment,
+    AcidGenerics,
+    AcidGenomes,
+    AcidPlyr,
+    AcidSingleCell,
+    Matrix,
+    S4Vectors,
+    SingleCellExperiment,
+    SummarizedExperiment,
     goalie,
     methods,
-    rhdf5
+    pipette,
+    rhdf5,
+    stringi,
+    syntactic,
+    utils
 Suggests:
     testthat (>= 3.0.0)
 Roxygen: list(markdown = TRUE)

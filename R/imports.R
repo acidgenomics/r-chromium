@@ -35,5 +35,7 @@ NULL
 
 
 
-#' @importFrom stringr str_match str_split str_trunc
+## FIXME Switch this to stringi package.
+
+#' @importFrom stringr str_match str_split
 NULL
