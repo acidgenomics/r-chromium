@@ -3,7 +3,7 @@
 #' @importFrom AcidGenerics calculateMetrics camelCase droplevels2 leftJoin
 #' makeDimnames makeNames sampleData
 #' @importFrom S4Vectors mcols metadata metadata<-
-#' @importFrom SummarizedExperiment assay assays colData
+#' @importFrom SummarizedExperiment assay assays colData rowData rowRanges
 #' @importFrom pipette import
 #'
 #' @importMethodsFrom AcidExperiment calculateMetrics droplevels2 sampleData
@@ -17,8 +17,7 @@ NULL
 ## Standard functions ==========================================================
 
 #' @importFrom AcidBase metricsCols printString realpath standardizeCall
-#' @importFrom AcidCLI abort alert alertInfo alertSuccess alertWarning h1 h2
-#' txt ul
+#' @importFrom AcidCLI abort alert alertInfo alertSuccess alertWarning txt ul
 #' @importFrom AcidExperiment detectLanes importSampleData minimalSampleData
 #' @importFrom AcidGenomes emptyRanges makeGRangesFromEnsembl makeGRangesFromGFF
 #' @importFrom AcidSingleCell makeSingleCellExperiment mapCellsToSamples
