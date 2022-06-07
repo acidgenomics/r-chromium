@@ -20,18 +20,17 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v3"
-dataRawDir <- "data-raw"
-## Restrict to 2 MB.
 limit <- structure(2e6L, class = "object_size")
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
-dir <- initDir(file.path(dataRawDir, datasetName))
-unlink(dir, recursive = TRUE)
+dir <- initDir(datasetName)
+if (dir.exists(dir)) {
+    unlink2(dir)
+}
 sampleDir <- initDir(file.path(dir, "pbmc"))
 outsDir <- initDir(file.path(sampleDir, "outs"))
-counterDir <- file.path(sampleDir, "SC_RNA_COUNTER_CS")
-initDir(counterDir)
+counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
 file.create(file.path(counterDir, "empty"))
 ## Download the example files.
 prefix <- "5k_pbmc_protein_v3"
@@ -71,7 +70,6 @@ invisible(lapply(
 ## Extract the filtered MTX matrix files.
 tarfile <- file.path(dir, paste0(prefix, "_filtered_feature_bc_matrix.tar.gz"))
 untar(tarfile = tarfile, exdir = outsDir)
-stopifnot(identical(dir(outsDir), "filtered_feature_bc_matrix"))
 ## Copy the example outs files.
 files <- c(
     "filtered_feature_bc_matrix.h5",
@@ -90,7 +88,7 @@ invisible(lapply(
 ))
 ## Using Ensembl 93 GTF annotations.
 ## Alternatively, can use ensembldb here.
-gffFile <- file.path(dataRawDir, "Homo_sapiens.GRCh38.93.gtf.gz")
+gffFile <- "Homo_sapiens.GRCh38.93.gtf.gz"
 if (!file.exists(gffFile)) {
     download.file(
         url = paste(
@@ -114,7 +112,7 @@ object <- CellRanger(
 assignAndSaveData(
     name = datasetName,
     object = object,
-    dir = dataRawDir
+    dir = getwd()
 )
 
 ## Example object ==============================================================
@@ -151,6 +149,7 @@ inputMatrixDir <- file.path(
     "filtered_feature_bc_matrix"
 )
 outputDir <- file.path(
+    "..",
     "inst",
     "extdata",
     "cellranger_v3"
@@ -160,8 +159,7 @@ if (dir.exists(outputDir)) {
 }
 outputSampleDir <- initDir(file.path(outputDir, "pbmc"))
 outputOutsDir <- initDir(file.path(outputSampleDir, "outs"))
-outputCounterDir <- file.path(outputSampleDir, "SC_RNA_COUNTER_CS")
-initDir(outputCounterDir)
+outputCounterDir <- initDir(file.path(outputSampleDir, "SC_RNA_COUNTER_CS"))
 file.create(file.path(outputCounterDir, "empty"))
 outputMatrixDir <- initDir(file.path(
     outputOutsDir,
