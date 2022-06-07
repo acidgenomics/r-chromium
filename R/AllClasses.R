@@ -62,7 +62,7 @@ setValidity(
                 "refdataDir" = "character",
                 "sampleDirs" = "character",
                 "sampleMetadataFile" = "character",
-                "sessionInfo" = "session_info",
+                "sessionInfo" = "sessionInfo",
                 "umiType" = "character",
                 "wd" = "character"
             ),
@@ -81,29 +81,3 @@ setValidity(
         TRUE
     }
 )
-
-
-
-## nolint start
-##
-## #' Cell Ranger ATAC-seq data set
-## #'
-## #' Contains single-cell ATAC-seq data.
-## #'
-## #' @author Michael Steinbaugh
-## #' @export
-## #'
-## #' @examples
-## #' showClass("CellRangerATAC")
-## setClass(
-##     Class = "CellRangerATAC",
-##     contains = "SingleCellExperiment"
-## )
-## setValidity(
-##     Class = "CellRangerATAC",
-##     method = function(object) {
-##         TRUE
-##     }
-## )
-##
-## nolint end

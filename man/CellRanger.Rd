@@ -32,7 +32,7 @@ contain only whitelisted cellular barcodes.}
 Full Latin organism name (e.g. \code{"Homo sapiens"}).}
 
 \item{ensemblRelease}{\code{integer(1)}.
-Ensembl release version (e.g. \code{90}). We recommend setting this value if
+Ensembl release version (e.g. \code{100}). We recommend setting this value if
 possible, for improved reproducibility. When left unset, the latest release
 available via AnnotationHub/ensembldb is used. Note that the latest version
 available can vary, depending on the versions of AnnotationHub and
@@ -41,7 +41,7 @@ ensembldb in use.}
 \item{genomeBuild}{\code{character(1)}.
 Ensembl genome build assembly name (e.g. \code{"GRCh38"}). If set \code{NULL},
 defaults to the most recent build available.
-Note: don't pass in UCSC build IDs (e.g. \code{"hg38"}).}
+\emph{Note:} don't pass in UCSC build IDs (e.g. \code{"hg38"}).}
 
 \item{gffFile}{\code{character(1)}.
 GFF/GTF (General Feature Format) file.
@@ -86,10 +86,10 @@ Contains UMI droplet-based single-cell RNA-seq data.
 \details{
 Read \href{https://www.10xgenomics.com/software/}{10x Genomics Cell Ranger} output
 for a Chromium data set into a \code{SingleCellExperiment} object.
+
+Currently supports loading of a single genome.
 }
 \note{
-Currently supports loading of a single genome.
-
 Updated 2021-03-04.
 }
 \section{Directory structure for multiple samples}{
@@ -99,7 +99,9 @@ Cell Ranger can vary in its output directory structure, but we're requiring a
 single, consistent directory structure for datasets containing multiple
 samples that have not been aggregated into a single matrix with \code{aggr}.
 
-Cell Ranger v3 output:\preformatted{| <dir>/
+Cell Ranger v3 output:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{| <dir>/
 |-- <sampleName>/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
@@ -118,9 +120,11 @@ Cell Ranger v3 output:\preformatted{| <dir>/
 |-------- matrix.mtx.gz
 |------ raw_feature_bc_matrix.h5
 |------ web_summary.html
-}
+}\if{html}{\out{</div>}}
 
-Cell Ranger v2 output:\preformatted{| <dir>/
+Cell Ranger v2 output:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{| <dir>/
 |-- <sampleName>/
 |---- SC_RNA_COUNTER_CS/
 |---- outs/
@@ -140,7 +144,7 @@ Cell Ranger v2 output:\preformatted{| <dir>/
 |---------- genes.tsv
 |---------- matrix.mtx
 |------ raw_gene_bc_matrices_h5.h5
-}
+}\if{html}{\out{</div>}}
 }
 
 \section{Sample metadata}{

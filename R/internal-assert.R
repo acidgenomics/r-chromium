@@ -1,4 +1,5 @@
 #' Does the directory contain Cell Ranger aggr output?
+#' 
 #' @note Updated 2019-08-22.
 #' @noRd
 .isAggregate <- function(dir) {
@@ -12,9 +13,10 @@
 #' @note Updated 2019-08-22.
 #'
 #' @param paths `character`.
-#'   Directory paths. Parameterized.
+#' Directory paths. Parameterized.
+#' 
 #' @param name `character(1)`.
-#'   Subdirectory name.
+#' Subdirectory name.
 #'
 #' @examples
 #' .hasSubdir(path = "sample_0001", name = "SC_RNA_COUNTER_CS")
@@ -41,6 +43,7 @@
 
 
 #' Does the dataset contain a minimal, single directory structure?
+#' 
 #' @note Updated 2019-08-22.
 #' @noRd
 .isMinimalSample <- function(dir) {

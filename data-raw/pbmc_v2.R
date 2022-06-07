@@ -80,7 +80,6 @@ invisible(lapply(
             to = file.path(outs_dir, file),
             overwrite = TRUE
         )
-        
     }
 ))
 ## Using Ensembl 84 GTF annotations.

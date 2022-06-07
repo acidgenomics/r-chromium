@@ -1,6 +1,4 @@
-context("Cell Ranger v2")
-
-dir <- system.file("extdata/cellranger_v2", package = "Chromium")
+dir <- system.file("extdata", "cellranger_v2", package = .pkgName)
 
 test_that("MTX : Fast mode", {
     x <- CellRanger(dir = dir)
@@ -9,7 +7,7 @@ test_that("MTX : Fast mode", {
 
 test_that("MTX : User-defined sample metadata", {
     sampleMetadataFile <-
-        system.file("extdata/cellranger_v2.csv", package = "Chromium")
+        system.file("extdata", "cellranger_v2.csv", package = .pkgName)
     object <- CellRanger(
         dir = dir,
         sampleMetadataFile = sampleMetadataFile
@@ -39,9 +37,7 @@ test_that("HDF5", {
 
 
 
-context("Cell Ranger v3")
-
-dir <- system.file("extdata/cellranger_v3", package = "Chromium")
+dir <- system.file("extdata", "cellranger_v3", package = .pkgName)
 
 test_that("MTX : Fast mode", {
     object <- CellRanger(dir)
@@ -50,7 +46,7 @@ test_that("MTX : Fast mode", {
 
 test_that("MTX : User-defined sample metadata", {
     sampleMetadataFile <-
-        system.file("extdata/cellranger_v3.csv", package = "Chromium")
+        system.file("extdata", "cellranger_v3.csv", package = .pkgName)
     object <- CellRanger(
         dir = dir,
         sampleMetadataFile = sampleMetadataFile

@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.1.9.9000
-Date: 2021-09-03
+Version: 0.2.0.9000
+Date: 2022-06-06
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -21,20 +21,14 @@ BugReports: https://github.com/acidgenomics/r-chromium/issues/
 License: AGPL-3
 Encoding: UTF-8
 LazyData: false
-Depends:
-    R (>= 4.0),
-    basejump (>= 0.14.21.9000)
+Depends: R (>= 4.2)
 Imports:
-    BiocParallel (>= 1.26.0),
-    goalie (>= 0.5.4),
+    BiocParallel,
+    goalie,
     methods,
-    rhdf5 (>= 2.36.0)
+    rhdf5
 Suggests:
-    testthat
-biocViews:
-    DataImport,
-    RNASeq,
-    SingleCell
+    testthat (>= 3.0.0)
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0
 Additional_repositories: https://r.acidgenomics.com
