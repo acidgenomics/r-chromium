@@ -1,11 +1,13 @@
+## FIXME This is generating "Active theme colors not available" warning.
+
+
+
 #' Import counts from either HDF5 or MTX files.
 #' 
-#' @note Updated 2020-01-26.
+#' @note Updated 2022-06-07.
 #' @noRd
 .importCounts <-
-    function(matrixFiles,
-             BPPARAM = BiocParallel::SerialParam() # nolint
-    ) {
+    function(matrixFiles) {
         assert(allAreFiles(matrixFiles))
         if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
             fun <- .importCountsFromHDF5
@@ -15,15 +17,14 @@
             abort("Unexpected import failure.") # nocov
         }
         alert(sprintf(
-            fmt = "Importing counts from '%s' %s.",
+            fmt = "Importing counts from {.file %s} %s.",
             basename(matrixFiles[[1L]]),
             ngettext(n = length(matrixFiles), msg1 = "file", msg2 = "files")
         ))
-        ## This step has issues when parsing files in parallel via CIFS.
-        list <- bpmapply(
+        list <- Map(
             sampleId = names(matrixFiles),
             file = matrixFiles,
-            FUN = function(sampleId, file) {
+            f = function(sampleId, file) {
                 counts <- fun(file)
                 ## Strip index when all barcodes end with "-1".
                 if (
@@ -47,16 +48,14 @@
                         pattern = "^([[:digit:]]+)-([ACGT]+)$"
                     )
                 ) {
-                    colnames(counts) <- paste(sampleId, colnames(counts), sep = "-")
+                    colnames(counts) <-
+                        paste(sampleId, colnames(counts), sep = "-")
                 }
                 ## Ensure dimnames are valid. Note that this may sanitize gene
                 ## names for some model systems, and or transgenes.
                 counts <- makeDimnames(counts)
                 counts
-            },
-            SIMPLIFY = FALSE,
-            USE.NAMES = TRUE,
-            BPPARAM = BPPARAM
+            }
         )
         # Bind the matrices.
         do.call(what = cbind, args = list)
@@ -131,7 +130,7 @@
 #' Import Cell Ranger count matrix from MTX file
 #'
 #' @note Data import using HDF5 file is now recommended over this approach.
-#' @note Updated 2019-08-21.
+#' @note Updated 2022-06-07.
 #' @noRd
 #'
 #' @section Matrix Market Exchange (MEX/MTX) format:
@@ -167,7 +166,7 @@
             ignore.case = TRUE
         ))
         ## Count matrix.
-        counts <- import(file)
+        counts <- import(file, quiet = TRUE)
         assert(is(counts, "sparseMatrix"))
         ## Row names.
         ## Legacy v2 output uses "genes" instead of "features".
@@ -185,7 +184,8 @@
         rownames <- import(
             file = rownamesFile,
             format = "tsv",
-            colnames = FALSE
+            colnames = FALSE,
+            quiet = TRUE
         )
         rownames <- rownames[[1L]]
         ## Column names.
@@ -199,7 +199,8 @@
         ## Note that `barcodes.tsv` is NOT tab delimited.
         colnames <- import(
             file = colnamesFile,
-            format = "lines"
+            format = "lines",
+            quiet = TRUE
         )
         ## Return.
         assert(
