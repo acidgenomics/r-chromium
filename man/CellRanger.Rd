@@ -158,7 +158,7 @@ Ensembl release.
 }
 
 \examples{
-dir <- system.file("extdata/cellranger_v3", package = "Chromium")
+dir <- system.file("extdata", "cellranger_v3", package = "Chromium")
 x <- CellRanger(dir)
 print(x)
 }

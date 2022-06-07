@@ -1,7 +1,3 @@
-## FIXME This is generating "Active theme colors not available" warning.
-
-
-
 #' Import counts from either HDF5 or MTX files.
 #' 
 #' @note Updated 2022-06-07.

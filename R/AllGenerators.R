@@ -100,7 +100,7 @@
 #' @return `CellRanger`.
 #'
 #' @examples
-#' dir <- system.file("extdata/cellranger_v3", package = "Chromium")
+#' dir <- system.file("extdata", "cellranger_v3", package = "Chromium")
 #' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- # nolint
@@ -206,7 +206,6 @@ CellRanger <- # nolint
         counts <- .importCounts(matrixFiles)
         assert(hasValidDimnames(counts))
         ## Row data (genes/transcripts) ----------------------------------------
-        h2("Feature metadata")
         refJSON <- NULL
         ## Prepare gene annotations as GRanges.
         if (isADirectory(refdataDir)) {
@@ -289,7 +288,6 @@ CellRanger <- # nolint
             sampleMetrics <- .importSampleMetrics(sampleDirs)
         }
         ## Column data ---------------------------------------------------------
-        h2("Column data")
         colData <- DataFrame(row.names = colnames(counts))
         ## Generate automatic sample metadata, if necessary.
         if (is.null(sampleData)) {
@@ -329,7 +327,6 @@ CellRanger <- # nolint
             hasRownames(colData)
         )
         ## Metadata ------------------------------------------------------------
-        h2("Metadata")
         interestingGroups <- camelCase(interestingGroups, strict = TRUE)
         assert(isSubset(interestingGroups, colnames(sampleData)))
         metadata <- list(
