@@ -33,18 +33,7 @@ counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
 file.create(file.path(counterDir, "empty"))
 ## Download the example files.
 prefix <- "pbmc4k"
-files <- paste0(
-    prefix, "_",
-    c(
-        ## "filtered_gene_bc_matrices_h5.h5",  # 403 (2019-08-22)
-        "filtered_gene_bc_matrices.tar.gz",
-        "metrics_summary.csv",
-        "molecule_info.h5",
-        "raw_gene_bc_matrices_h5.h5",
-        "raw_gene_bc_matrices.tar.gz"
-    )
-)
-url <- pasteURL(
+urlStem <- pasteURL(
     "cf.10xgenomics.com",
     "samples",
     "cell-exp",
@@ -52,27 +41,48 @@ url <- pasteURL(
     prefix,
     protocol = "http"
 )
-invisible(lapply(
-    X = files,
-    FUN = function(file, dir, url) {
-        destfile <- file.path(dir, file)
-        if (!file.exists(destfile)) {
-            download.file(
-                url = file.path(url, file),
-                destfile = destfile
-            )
-        }
-    },
-    dir = dir,
-    url = url
-))
-## Extract the filtered MTX matrix files.
-tarfile <- file.path(dir, paste0(prefix, "_filtered_gene_bc_matrices.tar.gz"))
+urls <- paste(
+    urlStem,
+    paste0(
+        prefix, "_",
+        c(
+            ## "filtered_gene_bc_matrices_h5.h5",  # 403 (2019-08-22)
+            "filtered_gene_bc_matrices.tar.gz",
+            "metrics_summary.csv",
+            "molecule_info.h5",
+            "raw_gene_bc_matrices_h5.h5",
+            "raw_gene_bc_matrices.tar.gz"
+        )
+    ),
+    sep = "/"
+)
+files <- vapply(
+    X = urls,
+    pkg = .pkgName,
+    FUN = cacheURL,
+    FUN.VALUE = character(1L),
+    USE.NAMES = FALSE
+)
+tarfile <- grep(
+    pattern = "_filtered_gene_bc_matrices\\.tar\\.gz$",
+    x = files,
+    value = TRUE
+)
 untar(tarfile = tarfile, exdir = outsDir)
 ## Copy the example outs files.
-files <- c("metrics_summary.csv", "molecule_info.h5")
 invisible(lapply(
-    X = files,
+    X = unlist(Map(
+        f = grep,
+        pattern = c(
+            "_metrics_summary\\.csv$",
+            "_molecule_info\\.h5$"
+        ),
+        MoreArgs = list(
+            "x" = files,
+            "value" = TRUE
+        ),
+        USE.NAMES = FALSE
+    )),
     FUN = function(file) {
         file.copy(
             from = file.path(dir, paste0(prefix, "_", file)),
@@ -83,21 +93,18 @@ invisible(lapply(
 ))
 ## Using Ensembl 84 GTF annotations.
 ## Note that ensembldb only supports back to 87.
-gffFile <- "Homo_sapiens.GRCh38.84.gtf.gz"
-if (!file.exists(gffFile)) {
-    download.file(
-        url = paste(
-            "ftp://ftp.ensembl.org",
-            "pub",
-            "release-84",
-            "gtf",
-            "homo_sapiens",
-            basename(gffFile),
-            sep = "/"
-        ),
-        destfile = gffFile
-    )
-}
+gffFile <- cacheURL(
+    url = pasteURL(
+        "ftp.ensembl.org",
+        "pub",
+        "release-84",
+        "gtf",
+        "homo_sapiens",
+        "Homo_sapiens.GRCh38.84.gtf.gz",
+        protocol = "ftp"
+    ),
+    pkg = .pkgName
+)
 object <- CellRanger(
     dir = dir,
     organism = "Homo sapiens",
