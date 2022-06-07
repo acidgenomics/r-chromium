@@ -191,11 +191,13 @@
         )
         colnamesFile <- file.path(path, colnamesFile)
         assert(isAFile(colnamesFile))
-        ## Note that `barcodes.tsv` is NOT tab delimited.
+        ## Note that `barcodes.tsv` is source code lines, not tab delimited.
         colnames <- import(
             file = colnamesFile,
-            format = "lines"
+            format = "tsv",
+            colnames = FALSE
         )
+        colnames <- colnames[[1L]]
         ## Return.
         assert(
             identical(length(rownames), nrow(counts)),
