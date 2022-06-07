@@ -2,7 +2,6 @@
 
 #' @importFrom AcidGenerics calculateMetrics camelCase droplevels2 leftJoin
 #' makeDimnames makeNames sampleData
-#' @importFrom BiocParallel bplapply bpmapply bpparam
 #' @importFrom S4Vectors mcols metadata metadata<-
 #' @importFrom SummarizedExperiment assay assays colData
 #' @importFrom pipette import
@@ -23,7 +22,6 @@ NULL
 #' @importFrom AcidExperiment detectLanes importSampleData minimalSampleData
 #' @importFrom AcidGenomes emptyRanges makeGRangesFromEnsembl makeGRangesFromGFF
 #' @importFrom AcidSingleCell makeSingleCellExperiment mapCellsToSamples
-#' @importFrom BiocParallel SerialParam
 #' @importFrom Matrix sparseMatrix
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment

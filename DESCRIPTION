@@ -23,7 +23,6 @@ Encoding: UTF-8
 LazyData: false
 Depends: R (>= 4.2)
 Imports:
-    BiocParallel,
     goalie,
     methods,
     rhdf5

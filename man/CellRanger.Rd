@@ -16,8 +16,7 @@ CellRanger(
   censorSamples = NULL,
   sampleMetadataFile = NULL,
   transgeneNames = NULL,
-  interestingGroups = "sampleName",
-  BPPARAM = BiocParallel::bpparam()
+  interestingGroups = "sampleName"
 )
 }
 \arguments{
@@ -67,15 +66,6 @@ Vector indicating which assay rows denote transgenes (e.g. EGFP, TDTOMATO).}
 \item{interestingGroups}{\code{character}.
 Groups of interest to use for visualization.
 Corresponds to factors describing the columns of the object.}
-
-\item{BPPARAM}{\code{bpparamClass}.
-BiocParallel parameter to specify the desired processor configuration.\cr
-We recommend using one of the following:
-\itemize{
-\item \link[BiocParallel:register]{bpparam}.
-\item \link[BiocParallel:SerialParam-class]{SerialParam}.
-\item \link[BiocParallel:MulticoreParam-class]{MulticoreParam}.
-}}
 }
 \value{
 \code{CellRanger}.
@@ -90,7 +80,7 @@ for a Chromium data set into a \code{SingleCellExperiment} object.
 Currently supports loading of a single genome.
 }
 \note{
-Updated 2021-03-04.
+Updated 2022-06-07.
 }
 \section{Directory structure for multiple samples}{
 

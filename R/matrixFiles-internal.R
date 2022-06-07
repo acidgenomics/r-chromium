@@ -121,18 +121,15 @@
 
 #' Find all matrix files for a data set
 #' 
-#' @note Updated 2019-08-22.
+#' @note Updated 2022-06-07.
 #' @noRd
 .matrixFiles <-
     function(sampleDirs,
-             filtered,
-             BPPARAM = BiocParallel::SerialParam() # nolint
-    ) {
-        list <- bplapply(
+             filtered) {
+        list <- lapply(
             X = sampleDirs,
             FUN = .findMatrixFile,
-            filtered = filtered,
-            BPPARAM = BPPARAM
+            filtered = filtered
         )
         ## Note that `unlist()` call drops attributes on the file paths.
         pipeline <- vapply(

@@ -6,7 +6,7 @@
 
 #' @export
 #' @inherit CellRanger-class title description
-#' @note Updated 2021-03-04.
+#' @note Updated 2022-06-07.
 #'
 #' @details
 #' Read [10x Genomics Cell Ranger](https://www.10xgenomics.com/software/) output
@@ -115,8 +115,7 @@ CellRanger <- # nolint
              censorSamples = NULL,
              sampleMetadataFile = NULL,
              transgeneNames = NULL,
-             interestingGroups = "sampleName",
-             BPPARAM = BiocParallel::bpparam() # nolint
+             interestingGroups = "sampleName"
     ) {
         assert(
             isADirectory(dir),
@@ -130,13 +129,10 @@ CellRanger <- # nolint
             isAny(censorSamples, classes = c("character", "NULL")),
             isAFile(sampleMetadataFile, nullOK = TRUE),
             isCharacter(transgeneNames, nullOK = TRUE),
-            isCharacter(interestingGroups),
-            identical(attr(class(BPPARAM), "package"), "BiocParallel")
+            isCharacter(interestingGroups)
         )
-        h1("Chromium")
         alert("Importing Chromium single-cell RNA-seq run.")
         ## Run info ------------------------------------------------------------
-        h2("Run info")
         level <- "genes"
         dir <- realpath(dir)
         if (isADirectory(refdataDir)) {
@@ -146,7 +142,6 @@ CellRanger <- # nolint
         lanes <- detectLanes(sampleDirs)
         assert(isInt(lanes) || identical(lanes, integer()))
         ## Sample metadata -----------------------------------------------------
-        h2("Sample metadata")
         allSamples <- TRUE
         sampleData <- NULL
         ## Get the sample data.
@@ -200,20 +195,15 @@ CellRanger <- # nolint
             allSamples <- FALSE
         }
         ## Assays (counts) -----------------------------------------------------
-        h2("Counts")
         matrixFiles <- .matrixFiles(
             sampleDirs = sampleDirs,
-            filtered = filtered,
-            BPPARAM = BPPARAM
+            filtered = filtered
         )
         ## Get the pipeline from the matrix file attributes.
         pipeline <- attr(matrixFiles, "pipeline")
         assert(isString(pipeline) || identical(pipeline, NA_character_))
         attr(matrixFiles, "pipeline") <- NULL
-        counts <- .importCounts(
-            matrixFiles = matrixFiles,
-            BPPARAM = BPPARAM
-        )
+        counts <- .importCounts(matrixFiles)
         assert(hasValidDimnames(counts))
         ## Row data (genes/transcripts) ----------------------------------------
         h2("Feature metadata")
@@ -285,7 +275,6 @@ CellRanger <- # nolint
         }
         assert(is(rowRanges, "GenomicRanges"))
         ## Metrics -------------------------------------------------------------
-        h2("Metrics")
         ## Note that "molecule_info.h5" file contains additional information
         ## that may be useful for quality control metric calculations.
         aggregation <- NULL
