@@ -92,7 +92,7 @@
 #' Directory path to Cell Ranger reference annotation data.
 #'
 #' @return `CellRanger`.
-#' 
+#'
 #' @seealso
 #' - https://support.10xgenomics.com/single-cell-gene-expression/
 #'
