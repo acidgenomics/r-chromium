@@ -8,6 +8,8 @@
 ## https://support.10xgenomics.com/single-cell-gene-expression/datasets/
 ## 3.1.0/5k_pbmc_protein_v3
 
+## FIXME Rework using BiocFileCache approach.
+
 ## nolint start
 suppressPackageStartupMessages({
     library(devtools)
