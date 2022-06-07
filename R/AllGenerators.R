@@ -1,3 +1,9 @@
+## FIXME Seeing this warning pop up reproducibly:
+## → Importing /Users/mike/git/monorepo/r-packages/r-chromium/data-raw/pbmc_v2/pbmc/outs/filtered_gene_bc_matrices/GRCh38/matrix.mtx using Matrix::`readMM()`.
+## Warning in (function ()  : Active theme colors not available.
+##             Calls: CellRanger ... tryCatchOne -> doTryCatch -> .localOrRemoteFile -> assert
+
+
 #' @export
 #' @inherit CellRanger-class title description
 #' @note Updated 2021-03-04.
