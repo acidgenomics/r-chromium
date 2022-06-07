@@ -62,7 +62,7 @@ setValidity(
                 "refdataDir" = "character",
                 "sampleDirs" = "character",
                 "sampleMetadataFile" = "character",
-                "sessionInfo" = "sessionInfo",
+                # > "sessionInfo" = "sessionInfo",
                 "umiType" = "character",
                 "wd" = "character"
             ),
