@@ -178,7 +178,7 @@
         ## v2: id, name
         ## v3: id, name, expression type
         rownames <- import(
-            file = rownamesFile,
+            con = rownamesFile,
             format = "tsv",
             colnames = FALSE
         )
@@ -193,7 +193,7 @@
         assert(isAFile(colnamesFile))
         ## Note that `barcodes.tsv` is source code lines, not tab delimited.
         colnames <- import(
-            file = colnamesFile,
+            con = colnamesFile,
             format = "tsv",
             colnames = FALSE
         )
@@ -221,7 +221,7 @@
             X = files,
             FUN = function(file) {
                 withCallingHandlers(
-                    expr = import(file = file),
+                    expr = import(file),
                     message = function(m) {
                         if (grepl("syntactic", m)) {
                             invokeRestart("muffleMessage")
