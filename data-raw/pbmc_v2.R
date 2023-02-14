@@ -158,14 +158,14 @@ file.copy(
     from = file.path(outsDir, "metrics_summary.csv"),
     to = file.path(outputOutsDir, "metrics_summary.csv")
 )
-counts <- import(file = file.path(inputMatrixDir, "matrix.mtx"))
+counts <- import(file.path(inputMatrixDir, "matrix.mtx"))
 counts <- counts[seq_len(100L), seq_len(100L)]
 export(
     object = counts,
     con = file.path(outputMatrixDir, "matrix.mtx")
 )
 genes <- import(
-    file = file.path(inputMatrixDir, "genes.tsv"),
+    con = file.path(inputMatrixDir, "genes.tsv"),
     colnames = FALSE,
     nMax = 100L
 )
@@ -176,12 +176,12 @@ export(
     colnames = FALSE
 )
 barcodes <- import(
-    file = file.path(inputMatrixDir, "barcodes.tsv"),
+    con = file.path(inputMatrixDir, "barcodes.tsv"),
     nMax = 100L
 )
 stopifnot(identical(nrow(barcodes), 100L))
 export(
     object = barcodes,
-    file = file.path(outputMatrixDir, "barcodes.tsv"),
+    con = file.path(outputMatrixDir, "barcodes.tsv"),
     colnames = FALSE
 )

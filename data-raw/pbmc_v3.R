@@ -162,14 +162,14 @@ file.copy(
     overwrite = TRUE
 )
 ## Prepare the sparse matrix.
-counts <- import(file = file.path(inputMatrixDir, "matrix.mtx.gz"))
+counts <- import(file.path(inputMatrixDir, "matrix.mtx.gz"))
 counts <- counts[seq_len(100L), seq_len(100L)]
 export(
     object = counts,
     con = file.path(outputMatrixDir, "matrix.mtx.gz")
 )
 features <- import(
-    file = file.path(inputMatrixDir, "features.tsv.gz"),
+    con = file.path(inputMatrixDir, "features.tsv.gz"),
     colnames = FALSE,
     nMax = 100L
 )
@@ -180,7 +180,7 @@ export(
     colnames = FALSE
 )
 barcodes <- import(
-    file = file.path(inputMatrixDir, "barcodes.tsv.gz"),
+    con = file.path(inputMatrixDir, "barcodes.tsv.gz"),
     nMax = 100L
 )
 expect_identical(nrow(barcodes), 100L)
