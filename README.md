@@ -1,5 +1,7 @@
 # Chromium
 
+[![Install with Bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/r-chromium/README.html)
+
 Toolkit for 10X Genomics Chromium single cell data.
 
 ## Installation
