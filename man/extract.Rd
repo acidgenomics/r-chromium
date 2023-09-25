@@ -41,8 +41,8 @@ For more information:
 Extract genes by row and cells by column.
 }
 \details{
-Refer to \code{\link[basejump:reexports]{cell2sample()}} and
-\code{\link[basejump:reexports]{selectSamples()}} if sample-level extraction is
+Refer to \code{\link[basejump:cell2sample]{cell2sample()}} and
+\code{\link[basejump:selectSamples]{selectSamples()}} if sample-level extraction is
 desired. Note that \code{sampleId} is slotted into
 \code{\link[SummarizedExperiment:SummarizedExperiment-class]{colData()}} and defines the cell-to-sample
 mappings.

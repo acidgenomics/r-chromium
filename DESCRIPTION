@@ -1,8 +1,8 @@
 Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
-Version: 0.2.1
-Date: 2023-02-14
+Version: 0.2.2.9000
+Date: 2023-09-25
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -37,7 +37,6 @@ Imports:
     goalie (>= 0.6.8),
     pipette (>= 0.10.3),
     rhdf5 (>= 2.42.0),
-    stringi (>= 1.7.12),
     syntactic (>= 0.6.4),
     methods,
     utils
