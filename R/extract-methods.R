@@ -1,18 +1,16 @@
 #' @name extract
 #' @author Michael Steinbaugh
 #' @inherit base::Extract title params references
-#' @note Updated 2022-06-07.
+#' @note Updated 2023-09-25.
 #'
 #' @inheritParams AcidRoxygen::params
 #'
 #' @description Extract genes by row and cells by column.
 #'
 #' @details
-#' Refer to [`cell2sample()`][basejump::cell2sample] and
-#' [`selectSamples()`][basejump::selectSamples] if sample-level extraction is
-#' desired. Note that `sampleId` is slotted into
-#' [`colData()`][SummarizedExperiment::colData] and defines the cell-to-sample
-#' mappings.
+#' Refer to `cell2sample()` and `selectSamples()` if sample-level extraction is
+#' desired. Note that `sampleId` is slotted into `colData()` and defines the
+#' cell-to-sample mappings.
 #'
 #' Unfiltered cellular barcode distributions for the entire dataset, including
 #' cells not kept in the matrix will be dropped in favor of the `nCount` column

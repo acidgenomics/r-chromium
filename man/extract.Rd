@@ -41,18 +41,16 @@ For more information:
 Extract genes by row and cells by column.
 }
 \details{
-Refer to \code{\link[basejump:cell2sample]{cell2sample()}} and
-\code{\link[basejump:selectSamples]{selectSamples()}} if sample-level extraction is
-desired. Note that \code{sampleId} is slotted into
-\code{\link[SummarizedExperiment:SummarizedExperiment-class]{colData()}} and defines the cell-to-sample
-mappings.
+Refer to \code{cell2sample()} and \code{selectSamples()} if sample-level extraction is
+desired. Note that \code{sampleId} is slotted into \code{colData()} and defines the
+cell-to-sample mappings.
 
 Unfiltered cellular barcode distributions for the entire dataset, including
 cells not kept in the matrix will be dropped in favor of the \code{nCount} column
 of \code{colData}.
 }
 \note{
-Updated 2022-06-07.
+Updated 2023-09-25.
 }
 \examples{
 data(pbmc_v3)
