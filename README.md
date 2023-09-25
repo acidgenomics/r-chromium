@@ -1,6 +1,6 @@
 # Chromium
 
-[![Install with Bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/r-chromium/README.html)
+[![Install with Bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg)](http://bioconda.github.io/recipes/r-chromium/README.html) ![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)
 
 Toolkit for 10X Genomics Chromium single cell data.
 
@@ -33,20 +33,6 @@ conda activate "$name"
 R
 ```
 
-### [Docker][] method
-
-```sh
-image='acidgenomics/r-packages:chromium'
-workdir='/mnt/work'
-docker pull "$image"
-docker run -it \
-    --volume="${PWD}:${workdir}" \
-    --workdir="$workdir" \
-    "$image" \
-    R
-```
-
 [bioconda]: https://bioconda.github.io/
 [conda]: https://conda.io/
-[docker]: https://www.docker.com/
 [r]: https://www.r-project.org/
