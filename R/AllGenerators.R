@@ -290,10 +290,7 @@ CellRanger <- # nolint
             ## Define the grep pattern to use for sample ID extraction.
             pattern <- "^(.+)_[ACGT]+$"
             if (all(grepl(pattern, colnames(counts)))) {
-                match <- stri_match_first_regex(
-                    str = colnames(counts),
-                    pattern = pattern
-                )
+                match <- strMatch(x = colnames(counts), pattern = pattern)
                 samples <- unique(match[, 2L, drop = TRUE])
             } else if (hasLength(sampleDirs, n = 1L)) {
                 samples <- names(sampleDirs)

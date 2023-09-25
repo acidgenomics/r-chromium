@@ -27,6 +27,7 @@ NULL
 ## Standard functions ==========================================================
 
 #' @importFrom AcidBase metricsCols printString realpath standardizeCall
+#' strMatch
 #' @importFrom AcidCLI abort alert alertInfo alertSuccess alertWarning txt ul
 #' @importFrom AcidExperiment detectLanes importSampleData minimalSampleData
 #' @importFrom AcidGenomes emptyRanges makeGRangesFromEnsembl makeGRangesFromGFF
