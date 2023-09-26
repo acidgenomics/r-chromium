@@ -8,7 +8,7 @@
 #' @description Extract genes by row and cells by column.
 #'
 #' @details
-#' Refer to `cell2sample()` and `selectSamples()` if sample-level extraction is
+#' Refer to `cellToSample()` and `selectSamples()` if sample-level extraction is
 #' desired. Note that `sampleId` is slotted into `colData()` and defines the
 #' cell-to-sample mappings.
 #'
