@@ -30,7 +30,7 @@ NULL
 #' strMatch
 #' @importFrom AcidCLI abort alert alertInfo alertSuccess alertWarning txt ul
 #' @importFrom AcidExperiment detectLanes importSampleData minimalSampleData
-#' @importFrom AcidGenomes emptyRanges makeGRangesFromEnsembl makeGRangesFromGFF
+#' @importFrom AcidGenomes emptyRanges makeGRangesFromEnsembl makeGRangesFromGff
 #' @importFrom AcidSingleCell makeSingleCellExperiment mapCellsToSamples
 #' @importFrom Matrix sparseMatrix
 #' @importFrom S4Vectors DataFrame SimpleList
