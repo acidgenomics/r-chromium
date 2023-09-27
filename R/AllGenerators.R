@@ -116,15 +116,15 @@ CellRanger <- # nolint
         assert(
             isADirectory(dir),
             isFlag(filtered),
-            isString(organism, nullOK = TRUE),
-            isInt(ensemblRelease, nullOK = TRUE),
-            isString(genomeBuild, nullOK = TRUE),
-            isString(gffFile, nullOK = TRUE),
-            isADirectory(refdataDir, nullOK = TRUE),
+            isString(organism, nullOk = TRUE),
+            isInt(ensemblRelease, nullOk = TRUE),
+            isString(genomeBuild, nullOk = TRUE),
+            isString(gffFile, nullOk = TRUE),
+            isADirectory(refdataDir, nullOk = TRUE),
             isAny(samples, classes = c("character", "NULL")),
             isAny(censorSamples, classes = c("character", "NULL")),
-            isAFile(sampleMetadataFile, nullOK = TRUE),
-            isCharacter(transgeneNames, nullOK = TRUE),
+            isAFile(sampleMetadataFile, nullOk = TRUE),
+            isCharacter(transgeneNames, nullOk = TRUE),
             isCharacter(interestingGroups)
         )
         alert("Importing Chromium single-cell RNA-seq run.")
@@ -232,12 +232,12 @@ CellRanger <- # nolint
             ## Convert the GTF file to GRanges.
             gffFile <- file.path(refdataDir, "genes", "genes.gtf")
             assert(isString(gffFile))
-            rowRanges <- makeGRangesFromGFF(gffFile)
+            rowRanges <- makeGRangesFromGff(gffFile)
             ## nocov end
         } else if (isString(gffFile)) {
             ## This step is necessary for generating v2 working example. Note
             ## that this works with a remote URL.
-            rowRanges <- makeGRangesFromGFF(
+            rowRanges <- makeGRangesFromGff(
                 file = gffFile,
                 level = "genes",
                 ignoreVersion = TRUE

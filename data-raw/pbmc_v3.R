@@ -32,7 +32,7 @@ sampleDir <- initDir(file.path(dir, "pbmc"))
 outsDir <- initDir(file.path(sampleDir, "outs"))
 counterDir <- initDir(file.path(sampleDir, "SC_RNA_COUNTER_CS"))
 file.create(file.path(counterDir, "empty"))
-urlStem <- pasteURL(
+urlStem <- pasteUrl(
     "cf.10xgenomics.com",
     "samples",
     "cell-exp",
@@ -58,7 +58,7 @@ urls <- paste(
 files <- vapply(
     X = urls,
     pkg = .pkgName,
-    FUN = cacheURL,
+    FUN = cacheUrl,
     FUN.VALUE = character(1L),
     USE.NAMES = FALSE
 )
@@ -83,8 +83,8 @@ file.copy(
     from = files[["molecule_info.h5"]],
     to = file.path(outsDir, "molecule_info.h5")
 )
-gffFile <- cacheURL(
-    url = pasteURL(
+gffFile <- cacheUrl(
+    url = pasteUrl(
         "ftp.ensembl.org",
         "pub",
         "release-93",
