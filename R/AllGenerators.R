@@ -1,6 +1,6 @@
 #' @export
 #' @inherit CellRanger-class title description
-#' @note Updated 2022-06-07.
+#' @note Updated 2023-09-28.
 #'
 #' @details
 #' Read [10x Genomics Cell Ranger](https://www.10xgenomics.com/software/) output
@@ -134,7 +134,7 @@ CellRanger <- # nolint
         if (isADir(refdataDir)) {
             refdataDir <- realpath(refdataDir) ## nocov
         }
-        sampleDirs <- .sampleDirs(dir)
+        sampleDirs <- .sampleDirs(dir = dir, filtered = filtered)
         lanes <- detectLanes(sampleDirs)
         assert(isInt(lanes) || identical(lanes, integer()))
         ## Sample metadata -----------------------------------------------------

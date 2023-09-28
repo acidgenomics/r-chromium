@@ -75,7 +75,7 @@
             )
             matDir <- list.files(
                 path = dir,
-                pattern = pattern,
+                pattern = matDirPattern,
                 full.names = TRUE,
                 recursive = FALSE
             )
