@@ -1,3 +1,5 @@
+## FIXME Need to reorganize testdata here for pbmc_v2 and pbmc_v3.
+
 dir <- system.file("extdata", "cellranger_v2", package = .pkgName)
 
 test_that("MTX : Fast mode", {
@@ -28,9 +30,8 @@ test_that("MTX : AnnotationHub", {
     expect_s4_class(object, "CellRanger")
 })
 
-test_that("HDF5", {
-    skip_on_appveyor()
-    dir <- file.path("cache", "pbmc_v2")
+test_that("HDF5 v2", {
+    dir <- file.path(cacheDir, "pbmc_v2")
     object <- CellRanger(dir)
     expect_s4_class(object, "CellRanger")
 })
@@ -42,7 +43,7 @@ test_that("MTX : Fast mode", {
     expect_s4_class(object, "CellRanger")
 })
 
-test_that("MTX : User-defined sample metadata", {
+test_that("v3 MTX : User-defined sample metadata", {
     sampleMetadataFile <-
         system.file("extdata", "cellranger_v3.csv", package = .pkgName)
     object <- CellRanger(
@@ -56,9 +57,8 @@ test_that("MTX : User-defined sample metadata", {
     )
 })
 
-test_that("HDF5", {
-    skip_on_appveyor()
-    dir <- file.path("cache", "pbmc_v3")
+test_that("v3 HDF5", {
+    dir <- file.path(cacheDir, "pbmc_v3")
     object <- CellRanger(dir)
     expect_s4_class(object, "CellRanger")
 })
