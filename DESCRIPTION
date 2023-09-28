@@ -35,9 +35,9 @@ Imports:
     SingleCellExperiment (>= 1.22.0),
     SummarizedExperiment (>= 1.30.0),
     goalie (>= 0.7.0),
-    pipette (>= 0.10.3),
-    rhdf5 (>= 2.42.0),
-    syntactic (>= 0.6.4),
+    pipette (>= 0.14.0),
+    rhdf5 (>= 2.44.0),
+    syntactic (>= 0.6.7),
     methods,
     utils
 Suggests:
