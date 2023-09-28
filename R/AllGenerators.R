@@ -114,13 +114,13 @@ CellRanger <- # nolint
              transgeneNames = NULL,
              interestingGroups = "sampleName") {
         assert(
-            isADirectory(dir),
+            isADir(dir),
             isFlag(filtered),
             isString(organism, nullOk = TRUE),
             isInt(ensemblRelease, nullOk = TRUE),
             isString(genomeBuild, nullOk = TRUE),
             isString(gffFile, nullOk = TRUE),
-            isADirectory(refdataDir, nullOk = TRUE),
+            isADir(refdataDir, nullOk = TRUE),
             isAny(samples, classes = c("character", "NULL")),
             isAny(censorSamples, classes = c("character", "NULL")),
             isAFile(sampleMetadataFile, nullOk = TRUE),
@@ -131,7 +131,7 @@ CellRanger <- # nolint
         ## Run info ------------------------------------------------------------
         level <- "genes"
         dir <- realpath(dir)
-        if (isADirectory(refdataDir)) {
+        if (isADir(refdataDir)) {
             refdataDir <- realpath(refdataDir) ## nocov
         }
         sampleDirs <- .sampleDirs(dir)
@@ -204,7 +204,7 @@ CellRanger <- # nolint
         ## Row data (genes/transcripts) ----------------------------------------
         refJson <- NULL
         ## Prepare gene annotations as GRanges.
-        if (isADirectory(refdataDir)) {
+        if (isADir(refdataDir)) {
             ## nocov start
             alertInfo(sprintf(
                 fmt = paste0(

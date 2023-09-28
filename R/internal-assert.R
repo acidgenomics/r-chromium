@@ -1,16 +1,16 @@
 #' Does the directory contain Cell Ranger aggr output?
 #'
-#' @note Updated 2019-08-22.
+#' @note Updated 2023-09-28.
 #' @noRd
 .isAggregate <- function(dir) {
-    isADirectory(file.path(dir, "SC_RNA_AGGREGATOR_CS"))
+    isADir(file.path(dir, "SC_RNA_AGGREGATOR_CS"))
 }
 
 
 
 #' Does a given directory path contain a subdirectory name?
 #'
-#' @note Updated 2019-08-22.
+#' @note Updated 2023-09-28.
 #'
 #' @param paths `character`.
 #' Directory paths. Parameterized.
@@ -24,13 +24,13 @@
 #' @noRd
 .hasSubdir <- function(paths, name) {
     assert(
-        allAreDirectories(paths),
+        allAreDirs(paths),
         isString(name)
     )
     out <- vapply(
         X = paths,
         FUN = function(path, name) {
-            dir.exists(file.path(path, name))
+            isADir(file.path(path, name))
         },
         FUN.VALUE = logical(1L),
         USE.NAMES = FALSE,

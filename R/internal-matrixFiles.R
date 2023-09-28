@@ -25,23 +25,38 @@
 #'
 #' Doesn't apply if there's only a single matrix file in the directory.
 #'
-#' @note Updated 2019-08-22.
+#' @note Updated 2023-09-28.
 #' @noRd
 .findMatrixFile <-
     function(dir, filtered = TRUE) {
         assert(
-            isADirectory(dir),
+            isADir(dir),
             isFlag(filtered)
         )
         dir <- realpath(dir)
         ## Simple mode ---------------------------------------------------------
         ## For minimal examples and data downloaded from 10X website.
-        if (!dir.exists(file.path(dir, "outs"))) {
+        if (!isADir(file.path(dir, "outs"))) {
             file <- list.files(
                 path = dir,
                 pattern = "\\.(h5|mtx)(\\.gz)?",
                 full.names = TRUE
             )
+            ## v2 datasets:
+            ## [1] "*_filtered_gene_bc_matrices.tar.gz"
+            ## [2] "*_molecule_info.h5"                
+            ## [3] "*_raw_gene_bc_matrices_h5.h5"      
+            ## [4] "*_raw_gene_bc_matrices.tar.gz"
+
+            ## v3 datasets:
+            ## [1] "*_v3_filtered_feature_bc_matrix.h5"    
+            ## [2] "*_v3_filtered_feature_bc_matrix.tar.gz"
+            ## [3] "*_v3_molecule_info.h5"                 
+            ## [4] "*_v3_raw_feature_bc_matrix.h5"         
+            ## [5] "*_raw_feature_bc_matrix.tar.gz"
+            
+            ## FIXME Need to handle case where user has downloaded multiple
+            ## files to the same directory...need to improve this.
             if (isAFile(file)) {
                 return(file)
             }
@@ -49,7 +64,7 @@
         ## Standard Cell Ranger output -----------------------------------------
         ## Recurse into `outs/` directory by default.
         dir <- file.path(dir, "outs")
-        assert(isADirectory(dir))
+        assert(isADir(dir))
         if (isTRUE(filtered)) {
             prefix <- "filtered"
         } else {
@@ -95,9 +110,7 @@
         )) {
             file <- file.path(dir, filestem, "matrix.mtx.gz")
             attr(file, "pipeline") <- "Cell Ranger v3 MTX"
-        } else if (isTRUE(
-            dir.exists(file.path(dir, filestem))
-        )) {
+        } else if (isADir(file.path(dir, filestem))) {
             ## Get the genome build from the first sample directory.
             genomeBuild <- list.dirs(
                 path = file.path(dir, filestem),

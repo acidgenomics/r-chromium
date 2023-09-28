@@ -17,7 +17,9 @@
         ## Check for single sample mode, used for 10X example datasets.
         if (isAFile(tryCatch(
             expr = .findMatrixFile(dir),
-            error = function(e) NULL
+            error = function(e) {
+                NULL
+            }
         ))) {
             dir <- realpath(dir)
             names(dir) <- makeNames(basename(dir))
@@ -51,7 +53,7 @@
             )
         )
         dirs <- dirs[keep]
-        assert(allAreDirectories(dirs))
+        assert(allAreDirs(dirs))
         names(dirs) <- makeNames(basename(dirs))
         alertInfo(sprintf(
             fmt = "%d %s detected:",

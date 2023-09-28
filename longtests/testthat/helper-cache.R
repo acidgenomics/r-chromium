@@ -27,3 +27,119 @@ lst <- AcidDevTools::cacheTestFiles(
 )
 cacheDir <- lst[["cacheDir"]]
 rm(lst)
+dirs <- c(
+    "pbmc_v2_hdf5" = file.path(cacheDir, "pbmc_v2_hdf5"),
+    "pbmc_v2_mtx" = file.path(cacheDir, "pbmc_v2_mtx"),
+    "pbmc_v3_hdf5" = file.path(cacheDir, "pbmc_v3_hdf5"),
+    "pbmc_v3_mtx" = file.path(cacheDir, "pbmc_v3_mtx")
+)
+if (!goalie::isADir(dirs[["pbmc_v2_hdf5"]])) {
+    AcidBase::initDir(dirs[["pbmc_v2_hdf5"]])
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "pbmc4k_raw_gene_bc_matrices_h5.h5"
+        ),
+        to = file.path(
+            dirs[["pbmc_v2_hdf5"]],
+            "pbmc4k_raw_gene_bc_matrices_h5.h5"
+        )
+    )
+}
+if (!goalie::isADir(dirs[["pbmc_v2_mtx"]])) {
+    AcidBase::initDir(dirs[["pbmc_v2_mtx"]])
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "pbmc4k_filtered_gene_bc_matrices.tar.gz"
+        ),
+        to = file.path(
+            dirs[["pbmc_v2_mtx"]],
+            "pbmc4k_filtered_gene_bc_matrices.tar.gz"
+        )
+    )
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "pbmc4k_raw_gene_bc_matrices.tar.gz"
+        ),
+        to = file.path(
+            dirs[["pbmc_v2_mtx"]],
+            "pbmc4k_raw_gene_bc_matrices.tar.gz"
+        )
+    )
+    utils::untar(
+        tarfile = file.path(
+            dirs[["pbmc_v2_mtx"]],
+            "pbmc4k_filtered_gene_bc_matrices.tar.gz"
+        ),
+        exdir = dirs[["pbmc_v2_mtx"]]
+    )
+    utils::untar(
+        tarfile = file.path(
+            dirs[["pbmc_v2_mtx"]],
+            "pbmc4k_raw_gene_bc_matrices.tar.gz"
+        ),
+        exdir = dirs[["pbmc_v2_mtx"]]
+    )
+}
+if (!goalie::isADir(dirs[["pbmc_v3_hdf5"]])) {
+    AcidBase::initDir(dirs[["pbmc_v3_hdf5"]])
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5"
+        ),
+        to = file.path(
+            dirs[["pbmc_v3_hdf5"]],
+            "5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5"
+        )
+    )
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "5k_pbmc_protein_v3_raw_feature_bc_matrix.h5"
+        ),
+        to = file.path(
+            dirs[["pbmc_v3_hdf5"]],
+            "5k_pbmc_protein_v3_raw_feature_bc_matrix.h5"
+        )
+    )
+}
+if (!goalie::isADir(dirs[["pbmc_v3_mtx"]])) {
+    AcidBase::initDir(dirs[["pbmc_v3_mtx"]])
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "5k_pbmc_protein_v3_filtered_feature_bc_matrix.tar.gz"
+        ),
+        to = file.path(
+            dirs[["pbmc_v3_mtx"]],
+            "5k_pbmc_protein_v3_filtered_feature_bc_matrix.tar.gz"
+        )
+    )
+    file.copy(
+        from = file.path(
+            cacheDir,
+            "5k_pbmc_protein_v3_raw_feature_bc_matrix.tar.gz"
+        ),
+        to = file.path(
+            dirs[["pbmc_v3_mtx"]],
+            "5k_pbmc_protein_v3_raw_feature_bc_matrix.tar.gz"
+        )
+    )
+    utils::untar(
+        tarfile = file.path(
+            dirs[["pbmc_v3_mtx"]],
+            "5k_pbmc_protein_v3_filtered_feature_bc_matrix.tar.gz"
+        ),
+        exdir = dirs[["pbmc_v3_mtx"]]
+    )
+    utils::untar(
+        tarfile = file.path(
+            dirs[["pbmc_v3_mtx"]],
+            "5k_pbmc_protein_v3_raw_feature_bc_matrix.tar.gz"
+        ),
+        exdir = dirs[["pbmc_v3_mtx"]]
+    )
+}
