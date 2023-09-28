@@ -2,7 +2,7 @@ Package: Chromium
 Title: 10X Genomics Chromium
 Description: Toolkit for 10X Genomics Chromium single cell data.
 Version: 0.2.2.9000
-Date: 2023-09-27
+Date: 2023-09-28
 Authors@R: c(
     person(
         "Michael", "Steinbaugh",
@@ -21,28 +21,31 @@ BugReports: https://github.com/acidgenomics/r-chromium/issues/
 License: AGPL-3
 Encoding: UTF-8
 LazyData: false
-Depends: R (>= 4.2)
+Depends: R (>= 4.3)
 Imports:
-    AcidBase (>= 0.6.12),
-    AcidCLI (>= 0.2.7),
-    AcidExperiment (>= 0.4.5),
-    AcidGenerics (>= 0.6.6),
-    AcidGenomes (>= 0.4.7),
-    AcidPlyr (>= 0.3.6),
-    AcidSingleCell (>= 0.3.4),
-    Matrix (>= 1.5.1),
-    S4Vectors (>= 0.36.0),
-    SingleCellExperiment (>= 1.20.0),
-    SummarizedExperiment (>= 1.28.0),
-    goalie (>= 0.6.8),
+    AcidBase (>= 0.7.0),
+    AcidCLI (>= 0.2.8),
+    AcidExperiment (>= 0.5.0),
+    AcidGenerics (>= 0.6.13),
+    AcidGenomes (>= 0.6.13),
+    AcidPlyr (>= 0.4.3),
+    AcidSingleCell (>= 0.3.7),
+    Matrix (>= 1.6.1),
+    S4Vectors (>= 0.38.0),
+    SingleCellExperiment (>= 1.22.0),
+    SummarizedExperiment (>= 1.30.0),
+    goalie (>= 0.7.0),
     pipette (>= 0.10.3),
     rhdf5 (>= 2.42.0),
     syntactic (>= 0.6.4),
     methods,
     utils
 Suggests:
-    testthat (>= 3.1.6)
+    AcidDevTools (>= 0.7.0),
+    testthat (>= 3.1.10)
 Additional_repositories: https://r.acidgenomics.com
 Config/testthat/edition: 3
+Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+biocViews: SingleCell
