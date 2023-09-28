@@ -44,13 +44,9 @@
 
 #' Does the dataset contain a minimal, single directory structure?
 #'
-#' @note Updated 2019-08-22.
+#' @note Updated 2023-09-28.
 #' @noRd
 .isMinimalSample <- function(dir) {
-    files <- list.files(
-        path = dir,
-        pattern = "\\.(h5|mtx)(\\.gz)?",
-        recursive = FALSE
-    )
-    isString(files)
+    ok <- isAFile(file.path(dir, "outs", "metrics_summary.csv"))
+    unname(!ok)
 }
