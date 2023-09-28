@@ -281,8 +281,6 @@ CellRanger <- # nolint
             summary <- import(file.path(dir, "outs", "summary.json"))
             summary <- as(summary, "SimpleList")
         } else if (!.isMinimalSample(dir)) {
-            ## FIXME Our `isMinimalSample check fails for 10X MTX example...
-            ## need to rework so we don't hit this.
             sampleMetrics <- .importSampleMetrics(sampleDirs)
         }
         ## Column data ---------------------------------------------------------

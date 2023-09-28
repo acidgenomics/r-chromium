@@ -38,7 +38,7 @@
         ## Simple mode ---------------------------------------------------------
         ## For minimal examples and data downloaded from 10X website.
         if (!isADir(outsDir)) {
-            ## First, look to see if the input contains a supported HD5 or MTX
+            ## First, look to see if the input contains a supported HDF5 or MTX
             ## file directly.
             matFilePattern <- paste0(
                 "^.+_",
@@ -53,7 +53,8 @@
                 path = dir,
                 pattern = matFilePattern,
                 full.names = TRUE,
-                recursive = FALSE
+                recursive = FALSE,
+                ignore.case = TRUE
             )
             if (isAFile(matFile)) {
                 return(matFile)
@@ -77,14 +78,16 @@
                 path = dir,
                 pattern = matDirPattern,
                 full.names = TRUE,
-                recursive = FALSE
+                recursive = FALSE,
+                ignore.case = FALSE
             )
             if (isADir(matDir)) {
                 matFile <- list.files(
                     path = matDir,
                     pattern = "^matrix\\.mtx(\\.gz)?$",
                     full.names = TRUE,
-                    recursive = TRUE
+                    recursive = TRUE,
+                    ignore.case = TRUE
                 )
                 if (isAFile(matFile)) {
                     return(matFile)
@@ -104,7 +107,8 @@
             path = dir,
             pattern = paste0("^", prefix, "_"),
             recursive = FALSE,
-            full.names = FALSE
+            full.names = FALSE,
+            ignore.case = FALSE
         )
         assert(hasLength(files))
         ## Get the Cell Ranger version, based on the file names.

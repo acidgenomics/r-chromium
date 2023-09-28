@@ -8,8 +8,6 @@ test_that("v2 : HDF5", {
     )
 })
 
-## FIXME This is failing because of no metrics summary...need to rework.
-
 test_that("v2 : MTX", {
     dir <- dirs[["pbmc_v2_mtx"]]
     object <- CellRanger(dir, filtered = TRUE)
