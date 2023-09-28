@@ -1,3 +1,7 @@
+## FIXME Need to pass filtered through here.
+
+
+
 #' Determine which subdirectories contain sample files.
 #'
 #' Checks for the presence of nested `SC_RNA_COUNTER_CS` directories.
@@ -13,10 +17,14 @@
 #'
 #' @noRd
 .sampleDirs <-
-    function(dir) {
+    function(dir, filtered) {
+        assert(
+            isADir(dir),
+            isFlag(filtered)
+        )
         ## Check for single sample mode, used for 10X example datasets.
         if (isAFile(tryCatch(
-            expr = .findMatrixFile(dir),
+            expr = .findMatrixFile(dir = dir, filtered = filtered),
             error = function(e) {
                 NULL
             }
@@ -30,7 +38,10 @@
             full.names = TRUE,
             recursive = FALSE
         ))
-        assert(hasLength(dirs))
+        assert(
+            hasLength(dirs),
+            msg = sprintf("Failed to detect samples in {.dir %s}.", dir)
+        )
         ## Must contain `SC_RNA_COUNTER_CS` subdirectory.
         subdir <- "SC_RNA_COUNTER_CS"
         keep <- .hasSubdir(paths = dirs, name = subdir)
