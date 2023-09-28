@@ -13,9 +13,16 @@ lst <- AcidDevTools::cacheTestFiles(
     pkg = .pkgName,
     files = c(
         ## pbmc_v2.
+        "pbmc4k_filtered_gene_bc_matrices.tar.gz",
+        "pbmc4k_molecule_info.h5",
         "pbmc4k_raw_gene_bc_matrices_h5.h5",
+        "pbmc4k_raw_gene_bc_matrices.tar.gz",
         ## pbmc_v3.
-        "5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5"
+        "5k_pbmc_protein_v3_filtered_feature_bc_matrix.h5",
+        "5k_pbmc_protein_v3_filtered_feature_bc_matrix.tar.gz",
+        "5k_pbmc_protein_v3_molecule_info.h5",
+        "5k_pbmc_protein_v3_raw_feature_bc_matrix.h5",
+        "5k_pbmc_protein_v3_raw_feature_bc_matrix.tar.gz"
     )
 )
 cacheDir <- lst[["cacheDir"]]
