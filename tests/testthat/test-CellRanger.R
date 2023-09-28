@@ -1,64 +1,69 @@
-## FIXME Need to reorganize testdata here for pbmc_v2 and pbmc_v3.
+lst <- list(
+    "v2" = list(
+        "dir" = system.file(
+            "extdata", "cellranger_v2",
+            package = .pkgName,
+            mustWork = TRUE
+        ),
+        "sampleMetadataFile" = system.file(
+            "extdata", "cellranger_v2.csv",
+            package = .pkgName,
+            mustWork = TRUE
+        )
+    ),
+    "v3" = list(
+        "dir" = system.file(
+            "extdata", "cellranger_v3",
+            package = .pkgName,
+            mustWork = TRUE
+        ),
+        "sampleMetadataFile" = system.file(
+            "extdata", "cellranger_v3.csv",
+            package = .pkgName,
+            mustWork = TRUE
+        )
+    )
+)
 
-dir <- system.file("extdata", "cellranger_v2", package = .pkgName)
-
-test_that("MTX : Fast mode", {
-    x <- CellRanger(dir = dir)
+test_that("v2 : MTX : Fast mode", {
+    x <- CellRanger(dir = lst[["v2"]][["dir"]])
     expect_s4_class(x, "CellRanger")
 })
 
-test_that("MTX : User-defined sample metadata", {
-    sampleMetadataFile <-
-        system.file("extdata", "cellranger_v2.csv", package = .pkgName)
+test_that("v2 : MTX : User-defined sample metadata", {
     object <- CellRanger(
-        dir = dir,
-        sampleMetadataFile = sampleMetadataFile
+        dir = lst[["v2"]][["dir"]],
+        sampleMetadataFile = lst[["v2"]][["sampleMetadataFile"]]
     )
     expect_s4_class(object, "CellRanger")
     expect_identical(
-        levels(colData(object)[["sampleName"]]),
-        "pbmc4k"
+        object = levels(colData(object)[["sampleName"]]),
+        expected = "pbmc4k"
     )
 })
 
-test_that("MTX : AnnotationHub", {
+test_that("v2 : MTX : AnnotationHub", {
     object <- CellRanger(
-        dir = dir,
+        dir = lst[["v2"]][["dir"]],
         organism = "Homo sapiens",
         ensemblRelease = 87L
     )
     expect_s4_class(object, "CellRanger")
 })
 
-test_that("HDF5 v2", {
-    dir <- file.path(cacheDir, "pbmc_v2")
-    object <- CellRanger(dir)
-    expect_s4_class(object, "CellRanger")
-})
-
-dir <- system.file("extdata", "cellranger_v3", package = .pkgName)
-
-test_that("MTX : Fast mode", {
-    object <- CellRanger(dir)
+test_that("v3 : MTX : Fast mode", {
+    object <- CellRanger(lst[["v3"]][["dir"]])
     expect_s4_class(object, "CellRanger")
 })
 
 test_that("v3 MTX : User-defined sample metadata", {
-    sampleMetadataFile <-
-        system.file("extdata", "cellranger_v3.csv", package = .pkgName)
     object <- CellRanger(
-        dir = dir,
-        sampleMetadataFile = sampleMetadataFile
+        dir = lst[["v3"]][["dir"]],
+        sampleMetadataFile = lst[["v3"]][["sampleMetadataFile"]]
     )
     expect_s4_class(object, "CellRanger")
     expect_identical(
-        levels(colData(object)[["sampleName"]]),
-        "5k_pbmc_protein_v3"
+        object = levels(colData(object)[["sampleName"]]),
+        expected = "5k_pbmc_protein_v3"
     )
-})
-
-test_that("v3 HDF5", {
-    dir <- file.path(cacheDir, "pbmc_v3")
-    object <- CellRanger(dir)
-    expect_s4_class(object, "CellRanger")
 })
