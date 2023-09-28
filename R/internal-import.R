@@ -5,10 +5,10 @@
 .importCounts <-
     function(matrixFiles) {
         assert(allAreFiles(matrixFiles))
-        if (all(grepl("\\.H5", matrixFiles, ignore.case = TRUE))) {
-            fun <- .importCountsFromHDF5
-        } else if (all(grepl("\\.MTX", matrixFiles, ignore.case = TRUE))) {
-            fun <- .importCountsFromMTX
+        if (all(grepl("\\.h5", matrixFiles, ignore.case = TRUE))) {
+            fun <- .importCountsFromHdf5
+        } else if (all(grepl("\\.mtx", matrixFiles, ignore.case = TRUE))) {
+            fun <- .importCountsFromMtx
         } else {
             abort("Unexpected import failure.") # nocov
         }
@@ -70,13 +70,13 @@
 #' Cell barcodes in the columns, features (i.e. genes) in the rows.
 #'
 #' @examples
-#' ## > x <- .importCountsFromHDF5(file = "filtered_feature_bc_matrix.h5")
+#' ## > x <- .importCountsFromHdf5(file = "filtered_feature_bc_matrix.h5")
 #' ## > dim(x)
-.importCountsFromHDF5 <- # nolint
+.importCountsFromHdf5 <- # nolint
     function(file) {
         assert(
             isAFile(file),
-            grepl(pattern = "\\.H5", x = file, ignore.case = TRUE)
+            grepl(pattern = "\\.h5", x = file, ignore.case = TRUE)
         )
         names <- names(h5dump(file, load = FALSE))
         assert(isString(names))
@@ -145,13 +145,13 @@
 #' - `genes.tsv`: Gene identifiers.
 #'
 #' @examples
-#' ## > x <- .importCountsFromMTX(file = "matrix.mtx.gz")
+#' ## > x <- .importCountsFromMtx(file = "matrix.mtx.gz")
 #' ## > dim(x)
-.importCountsFromMTX <-
+.importCountsFromMtx <-
     function(file) {
         assert(
             isAFile(file),
-            grepl(pattern = "\\.MTX", x = file, ignore.case = TRUE)
+            grepl(pattern = "\\.mtx", x = file, ignore.case = TRUE)
         )
         path <- dirname(realpath(file))
         files <- sort(list.files(
@@ -170,7 +170,8 @@
         rownamesFile <- grep(
             pattern = "^(features|genes)\\.tsv(\\.gz)?$",
             x = files,
-            value = TRUE
+            value = TRUE,
+            ignore.case = TRUE
         )
         rownamesFile <- file.path(path, rownamesFile)
         assert(isAFile(rownamesFile))
@@ -187,7 +188,8 @@
         colnamesFile <- grep(
             pattern = "^barcodes\\.tsv(\\.gz)?$",
             x = files,
-            value = TRUE
+            value = TRUE,
+            ignore.case = TRUE
         )
         colnamesFile <- file.path(path, colnamesFile)
         assert(isAFile(colnamesFile))
