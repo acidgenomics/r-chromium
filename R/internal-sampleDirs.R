@@ -1,13 +1,9 @@
-## FIXME Need to pass filtered through here.
-
-
-
 #' Determine which subdirectories contain sample files.
 #'
 #' Checks for the presence of nested `SC_RNA_COUNTER_CS` directories.
 #'
 #' @note `aggr` returns `SC_RNA_AGGREGATOR_CS/` directory.
-#' @note Updated 2021-09-03.
+#' @note Updated 2023-09-28.
 #'
 #' @param dir Cell Ranger output directory.
 #'
