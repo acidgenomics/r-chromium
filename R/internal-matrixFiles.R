@@ -37,26 +37,20 @@
         ## Simple mode ---------------------------------------------------------
         ## For minimal examples and data downloaded from 10X website.
         if (!isADir(file.path(dir, "outs"))) {
+            pattern <- paste0(
+                "^.+_",
+                ifelse(
+                    test = filtered,
+                    yes = "filtered",
+                    no = "raw"
+                ),
+                "_.+\\.(h5|mtx)(\\.gz)?$"
+            )
             file <- list.files(
                 path = dir,
-                pattern = "\\.(h5|mtx)(\\.gz)?",
+                pattern,
                 full.names = TRUE
             )
-            ## v2 datasets:
-            ## [1] "*_filtered_gene_bc_matrices.tar.gz"
-            ## [2] "*_molecule_info.h5"                
-            ## [3] "*_raw_gene_bc_matrices_h5.h5"      
-            ## [4] "*_raw_gene_bc_matrices.tar.gz"
-
-            ## v3 datasets:
-            ## [1] "*_v3_filtered_feature_bc_matrix.h5"    
-            ## [2] "*_v3_filtered_feature_bc_matrix.tar.gz"
-            ## [3] "*_v3_molecule_info.h5"                 
-            ## [4] "*_v3_raw_feature_bc_matrix.h5"         
-            ## [5] "*_raw_feature_bc_matrix.tar.gz"
-            
-            ## FIXME Need to handle case where user has downloaded multiple
-            ## files to the same directory...need to improve this.
             if (isAFile(file)) {
                 return(file)
             }
