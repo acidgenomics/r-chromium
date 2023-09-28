@@ -28,16 +28,19 @@
 #' @note Updated 2023-09-28.
 #' @noRd
 .findMatrixFile <-
-    function(dir, filtered = TRUE) {
+    function(dir, filtered) {
         assert(
             isADir(dir),
             isFlag(filtered)
         )
         dir <- realpath(dir)
+        outsDir <- file.path(dir, "outs")
         ## Simple mode ---------------------------------------------------------
         ## For minimal examples and data downloaded from 10X website.
-        if (!isADir(file.path(dir, "outs"))) {
-            pattern <- paste0(
+        if (!isADir(outsDir)) {
+            ## First, look to see if the input contains a supported HD5 or MTX
+            ## file directly.
+            matFilePattern <- paste0(
                 "^.+_",
                 ifelse(
                     test = filtered,
@@ -46,19 +49,52 @@
                 ),
                 "_.+\\.(h5|mtx)(\\.gz)?$"
             )
-            file <- list.files(
+            matFile <- list.files(
                 path = dir,
-                pattern,
-                full.names = TRUE
+                pattern = matFilePattern,
+                full.names = TRUE,
+                recursive = FALSE
             )
-            if (isAFile(file)) {
-                return(file)
+            if (isAFile(matFile)) {
+                return(matFile)
             }
+            matDirPattern <- paste0(
+                "^",
+                ifelse(
+                    test = filtered,
+                    yes = "filtered",
+                    no = "raw"
+                ),
+                "_(",
+                paste(
+                    "feature_bc_matrix",
+                    "gene_bc_matrices",
+                    sep = "|"
+                ),
+                ")$"
+            )
+            matDir <- list.files(
+                path = dir,
+                pattern = pattern,
+                full.names = TRUE,
+                recursive = FALSE
+            )
+            if (isADir(matDir)) {
+                matFile <- list.files(
+                    path = matDir,
+                    pattern = "^matrix\\.mtx(\\.gz)?$",
+                    full.names = TRUE,
+                    recursive = TRUE
+                )
+                if (isAFile(matFile)) {
+                    return(matFile)
+                }
+            }
+            abort(sprintf("Failed to detect matrix in {.dir %s}.", dir))
         }
         ## Standard Cell Ranger output -----------------------------------------
         ## Recurse into `outs/` directory by default.
-        dir <- file.path(dir, "outs")
-        assert(isADir(dir))
+        dir <- outsDir
         if (isTRUE(filtered)) {
             prefix <- "filtered"
         } else {
