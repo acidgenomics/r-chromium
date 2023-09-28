@@ -35,10 +35,10 @@ NULL
 #' @importFrom Matrix sparseMatrix
 #' @importFrom S4Vectors DataFrame SimpleList
 #' @importFrom SingleCellExperiment SingleCellExperiment
-#' @importFrom goalie allAreDirectories allAreFiles allAreMatchingRegex
+#' @importFrom goalie allAreDirs allAreFiles allAreMatchingRegex
 #' areDisjointSets areSetEqual assert hasLength hasNames hasRownames
-#' hasValidDimnames hasValidNames isADirectory isAFile isAny isCharacter
-#' isFlag isInt isScalar isString isSubset validNames validate validateClasses
+#' hasValidDimnames hasValidNames isADir isAFile isAny isCharacter isFlag isInt
+#' isScalar isString isSubset validNames validate validateClasses
 #' @importFrom methods as is new setClass setMethod setValidity validObject
 #' @importFrom rhdf5 h5dump h5read
 #' @importFrom utils packageName packageVersion
