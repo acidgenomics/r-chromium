@@ -212,25 +212,13 @@
 
 #' Import sample-level metrics
 #'
-#' @note Updated 2022-06-07.
+#' @note Updated 2023-09-28.
 #' @noRd
 .importSampleMetrics <-
     function(sampleDirs) {
         files <- file.path(sampleDirs, "outs", "metrics_summary.csv")
-        list <- lapply(
-            X = files,
-            FUN = function(file) {
-                withCallingHandlers(
-                    expr = import(file),
-                    message = function(m) {
-                        if (grepl("syntactic", m)) {
-                            invokeRestart("muffleMessage")
-                        }
-                        m
-                    }
-                )
-            }
-        )
+        assert(allAreFiles(files))
+        list <- lapply(X = files, FUN = import)
         out <- do.call(what = rbind, args = list)
         ## Ensure we sanitize marked UTF-8 strings.
         out <- lapply(
