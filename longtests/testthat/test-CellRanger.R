@@ -1,6 +1,6 @@
 test_that("v2 : HDF5", {
     dir <- dirs[["pbmc_v2_hdf5"]]
-    CellRanger(dir, filtered = FALSE)
+    object <- CellRanger(dir, filtered = FALSE)
     expect_s4_class(object, "CellRanger")
     expect_error(
         object = CellRanger(dir, filtered = TRUE),
