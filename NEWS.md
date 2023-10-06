@@ -1,8 +1,18 @@
 # Release notes
 
+## Chromium 0.3.0 (2023-10-06)
+
+Major changes:
+
+- Improved single sample detection, used in unit tests.
+- Bumping version due to potential breaking changes in Acid Genomics
+  dependency packages.
+- Now enforcing strict camel case for all function names.
+- Removed stringi dependency, in favor of AcidBase variants.
+
 ## Chromium 0.2.1 (2023-02-14)
 
-Minor changes
+Minor changes:
 
 - Updated package dependencies to Bioconductor 3.16.
 - Updated internal calls to pipette `import`, which now uses `con` instead
