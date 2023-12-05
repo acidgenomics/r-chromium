@@ -27,7 +27,7 @@ Imports:
     AcidCLI (>= 0.2.8),
     AcidExperiment (>= 0.5.0),
     AcidGenerics (>= 0.6.13),
-    AcidGenomes (>= 0.6.0),
+    AcidGenomes (>= 0.7.1),
     AcidPlyr (>= 0.4.3),
     AcidSingleCell (>= 0.3.7),
     Matrix (>= 1.6.1),

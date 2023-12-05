@@ -20,7 +20,7 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v3"
-limit <- structure(2e6L, class = "object_size")
+limit <- structure(2e6L, class = "object_size") # nolint
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
@@ -40,6 +40,7 @@ urlStem <- pasteUrl(
     "5k_pbmc_protein_v3",
     protocol = "http"
 )
+## nolint start
 urls <- paste(
     urlStem,
     paste0(
@@ -55,6 +56,7 @@ urls <- paste(
     ),
     sep = "/"
 )
+## nolint end
 files <- vapply(
     X = urls,
     pkg = .pkgName,
