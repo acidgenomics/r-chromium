@@ -19,7 +19,7 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v2"
-limit <- structure(2e6L, class = "object_size")
+limit <- structure(2e6L, class = "object_size") # nolint
 
 ## Complete dataset ============================================================
 dir <- initDir(datasetName)
@@ -38,6 +38,7 @@ urlStem <- pasteUrl(
     "pbmc4k",
     protocol = "http"
 )
+## nolint start
 urls <- paste(
     urlStem,
     paste0(
@@ -53,6 +54,7 @@ urls <- paste(
     ),
     sep = "/"
 )
+## nolint end
 files <- vapply(
     X = urls,
     pkg = .pkgName,
