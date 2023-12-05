@@ -132,7 +132,7 @@ CellRanger <- # nolint
         level <- "genes"
         dir <- realpath(dir)
         if (isADir(refdataDir)) {
-            refdataDir <- realpath(refdataDir) ## nocov
+            refdataDir <- realpath(refdataDir)
         }
         sampleDirs <- .sampleDirs(dir = dir, filtered = filtered)
         lanes <- detectLanes(sampleDirs)
@@ -205,7 +205,6 @@ CellRanger <- # nolint
         refJson <- NULL
         ## Prepare gene annotations as GRanges.
         if (isADir(refdataDir)) {
-            ## nocov start
             alertInfo(sprintf(
                 fmt = paste0(
                     "Using 10X Genomics reference data ",
@@ -233,7 +232,6 @@ CellRanger <- # nolint
             gffFile <- file.path(refdataDir, "genes", "genes.gtf")
             assert(isString(gffFile))
             rowRanges <- makeGRangesFromGff(gffFile)
-            ## nocov end
         } else if (isString(gffFile)) {
             ## This step is necessary for generating v2 working example. Note
             ## that this works with a remote URL.
