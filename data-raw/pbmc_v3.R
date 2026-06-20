@@ -20,7 +20,8 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v3"
-limit <- structure(2e6L, class = "object_size")
+limit <- 2e6L
+class(limit) <- "object_size"
 
 ## Complete dataset ============================================================
 ## Create the example dataset directory structure.
@@ -40,7 +41,7 @@ urlStem <- pasteUrl(
     "5k_pbmc_protein_v3",
     protocol = "http"
 )
-urls <- paste(
+urls <- file.path(
     urlStem,
     paste0(
         "5k_pbmc_protein_v3_",
@@ -52,8 +53,7 @@ urls <- paste(
             "raw_feature_bc_matrix.h5",
             "raw_feature_bc_matrix.tar.gz"
         )
-    ),
-    sep = "/"
+    )
 )
 files <- vapply(
     X = urls,

@@ -112,16 +112,20 @@
         )
         assert(hasLength(files))
         ## Get the Cell Ranger version, based on the file names.
-        if (isTRUE(any(grepl(
-            pattern = paste0("^", prefix, "_feature_bc_matrix$"),
-            x = files
-        )))) {
+        if (
+            isTRUE(any(grepl(
+                pattern = paste0("^", prefix, "_feature_bc_matrix$"),
+                x = files
+            )))
+        ) {
             version <- "3"
             filestem <- paste0(prefix, "_feature_bc_matrix")
-        } else if (isTRUE(any(grepl(
-            pattern = paste0("^", prefix, "_gene_bc_matrices$"),
-            x = files
-        )))) {
+        } else if (
+            isTRUE(any(grepl(
+                pattern = paste0("^", prefix, "_gene_bc_matrices$"),
+                x = files
+            )))
+        ) {
             version <- "2"
             filestem <- paste0(prefix, "_gene_bc_matrices")
         } else {
@@ -129,19 +133,25 @@
         }
         version <- numeric_version(version)
         ## Currently preferring HDF5 over MTX.
-        if (isTRUE(
-            file.exists(file.path(dir, paste0(filestem, ".h5")))
-        )) {
+        if (
+            isTRUE(
+                file.exists(file.path(dir, paste0(filestem, ".h5")))
+            )
+        ) {
             file <- file.path(dir, paste0(filestem, ".h5"))
             attr(file, "pipeline") <- "Cell Ranger v3 HDF5"
-        } else if (isTRUE(
-            file.exists(file.path(dir, paste0(filestem, "_h5.h5")))
-        )) {
+        } else if (
+            isTRUE(
+                file.exists(file.path(dir, paste0(filestem, "_h5.h5")))
+            )
+        ) {
             file <- file.path(dir, paste0(filestem, "_h5.h5"))
             attr(file, "pipeline") <- "Cell Ranger v2 HDF5"
-        } else if (isTRUE(
-            file.exists(file.path(dir, filestem, "matrix.mtx.gz"))
-        )) {
+        } else if (
+            isTRUE(
+                file.exists(file.path(dir, filestem, "matrix.mtx.gz"))
+            )
+        ) {
             file <- file.path(dir, filestem, "matrix.mtx.gz")
             attr(file, "pipeline") <- "Cell Ranger v3 MTX"
         } else if (isADir(file.path(dir, filestem))) {
@@ -165,14 +175,12 @@
     }
 
 
-
 #' Find all matrix files for a data set
 #'
 #' @note Updated 2022-06-07.
 #' @noRd
 .matrixFiles <-
-    function(sampleDirs,
-             filtered) {
+    function(sampleDirs, filtered) {
         list <- lapply(
             X = sampleDirs,
             FUN = .findMatrixFile,

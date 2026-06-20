@@ -7,7 +7,6 @@
 }
 
 
-
 #' Does a given directory path contain a subdirectory name?
 #'
 #' @note Updated 2023-09-28.
@@ -39,7 +38,6 @@
     names(out) <- basename(paths)
     out
 }
-
 
 
 #' Does the dataset contain a minimal, single directory structure?

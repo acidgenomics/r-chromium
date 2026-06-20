@@ -19,12 +19,14 @@
             isFlag(filtered)
         )
         ## Check for single sample mode, used for 10X example datasets.
-        if (isAFile(tryCatch(
-            expr = .findMatrixFile(dir = dir, filtered = filtered),
-            error = function(e) {
-                NULL
-            }
-        ))) {
+        if (
+            isAFile(tryCatch(
+                expr = .findMatrixFile(dir = dir, filtered = filtered),
+                error = function(e) {
+                    NULL
+                }
+            ))
+        ) {
             dir <- realpath(dir)
             names(dir) <- makeNames(basename(dir))
             return(dir)
