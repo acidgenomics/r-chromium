@@ -19,7 +19,8 @@ suppressPackageStartupMessages({
 
 load_all()
 datasetName <- "pbmc_v2"
-limit <- structure(2e6L, class = "object_size")
+limit <- 2e6L
+class(limit) <- "object_size"
 
 ## Complete dataset ============================================================
 dir <- initDir(datasetName)
@@ -38,7 +39,7 @@ urlStem <- pasteUrl(
     "pbmc4k",
     protocol = "http"
 )
-urls <- paste(
+urls <- file.path(
     urlStem,
     paste0(
         "pbmc4k_",
@@ -50,8 +51,7 @@ urls <- paste(
             "raw_gene_bc_matrices_h5.h5",
             "raw_gene_bc_matrices.tar.gz"
         )
-    ),
-    sep = "/"
+    )
 )
 files <- vapply(
     X = urls,

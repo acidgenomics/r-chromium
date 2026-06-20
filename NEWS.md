@@ -1,5 +1,16 @@
 # Release notes
 
+## Chromium 0.3.1 (2026-06-19)
+
+License changes:
+
+- Relicensed from AGPL-3 to Apache 2.0.
+
+Minor changes:
+
+- Modernized tooling: removed per-package `.lintr` in favour of global
+  `~/.lintr`; added `air.toml`; migrated to roxygen2 8.0.
+
 ## Chromium 0.3.0 (2023-10-06)
 
 Major changes:
