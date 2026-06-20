@@ -26,7 +26,12 @@
                 if (
                     allAreMatchingRegex(x = colnames(counts), pattern = "-1$")
                 ) {
-                    colnames(counts) <- sub("-1", "", colnames(counts))
+                    colnames(counts) <- sub(
+                        "-1",
+                        "",
+                        colnames(counts),
+                        fixed = TRUE
+                    )
                 }
                 # Now move the multiplexed index name/number to the beginning,
                 # for more logical sorting and consistency with bcbioSingleCell.
@@ -56,7 +61,6 @@
         # Bind the matrices.
         do.call(what = cbind, args = list)
     }
-
 
 
 #' Import Cell Ranger count matrix from HDF5 file
@@ -120,7 +124,6 @@
         colnames(counts) <- as.character(colnames)
         counts
     }
-
 
 
 #' Import Cell Ranger count matrix from MTX file
@@ -209,7 +212,6 @@
         colnames(counts) <- as.character(colnames)
         counts
     }
-
 
 
 #' Import sample-level metrics

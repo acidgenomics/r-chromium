@@ -101,18 +101,20 @@
 #' x <- CellRanger(dir)
 #' print(x)
 CellRanger <- # nolint
-    function(dir,
-             filtered = TRUE,
-             organism = NULL,
-             ensemblRelease = NULL,
-             genomeBuild = NULL,
-             gffFile = NULL,
-             refdataDir = NULL,
-             samples = NULL,
-             censorSamples = NULL,
-             sampleMetadataFile = NULL,
-             transgeneNames = NULL,
-             interestingGroups = "sampleName") {
+    function(
+        dir,
+        filtered = TRUE,
+        organism = NULL,
+        ensemblRelease = NULL,
+        genomeBuild = NULL,
+        gffFile = NULL,
+        refdataDir = NULL,
+        samples = NULL,
+        censorSamples = NULL,
+        sampleMetadataFile = NULL,
+        transgeneNames = NULL,
+        interestingGroups = "sampleName"
+    ) {
         assert(
             isADir(dir),
             isFlag(filtered),
