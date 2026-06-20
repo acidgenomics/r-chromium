@@ -9,5 +9,8 @@
 ChromiumTestsURL <- # nolint
     paste0(
         "https://r.acidgenomics.com/testdata/chromium/",
-        "v", .pkgVersion$major, ".", .pkgVersion$minor # nolint
+        "v",
+        .pkgVersion$major,
+        ".",
+        .pkgVersion$minor # nolint
     )

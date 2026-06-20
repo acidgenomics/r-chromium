@@ -2,6 +2,8 @@
 % Please edit documentation in R/package.R
 \docType{package}
 \name{Chromium-package}
+\alias{Chromium}
+\alias{Chromium-package}
 \title{Chromium}
 \description{
 Toolkit for 10X Genomics Chromium single cell data.
@@ -17,6 +19,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Michael Steinbaugh \email{mike@steinbaugh.com} (\href{https://orcid.org/0000-0002-2403-2221}{ORCID})
+
+Authors:
+\itemize{
+  \item Michael Steinbaugh \email{mike@steinbaugh.com} (\href{https://orcid.org/0000-0002-2403-2221}{ORCID})
+}
 
 Other contributors:
 \itemize{

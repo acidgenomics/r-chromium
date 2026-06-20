@@ -8,7 +8,7 @@
 An object of class \code{CellRanger} with 500 rows and 100 columns.
 }
 \usage{
-pbmc_v2
+data(pbmc_v2)
 }
 \description{
 Peripheral blood mononuclear cells (PBMCs).

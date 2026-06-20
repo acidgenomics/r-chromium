@@ -40,7 +40,6 @@
 NULL
 
 
-
 ## This approach is adapted from bcbioSingleCell method.
 ## Updated 2022-06-07.
 `extract,CellRanger` <- # nolint
@@ -79,7 +78,6 @@ NULL
         sce <- droplevels2(sce)
         new(Class = "CellRanger", sce)
     }
-
 
 
 #' @rdname extract

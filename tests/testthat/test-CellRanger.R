@@ -1,24 +1,28 @@
 lst <- list(
     "v2" = list(
         "dir" = system.file(
-            "extdata", "cellranger_v2",
+            "extdata",
+            "cellranger_v2",
             package = .pkgName,
             mustWork = TRUE
         ),
         "sampleMetadataFile" = system.file(
-            "extdata", "cellranger_v2.csv",
+            "extdata",
+            "cellranger_v2.csv",
             package = .pkgName,
             mustWork = TRUE
         )
     ),
     "v3" = list(
         "dir" = system.file(
-            "extdata", "cellranger_v3",
+            "extdata",
+            "cellranger_v3",
             package = .pkgName,
             mustWork = TRUE
         ),
         "sampleMetadataFile" = system.file(
-            "extdata", "cellranger_v3.csv",
+            "extdata",
+            "cellranger_v3.csv",
             package = .pkgName,
             mustWork = TRUE
         )
