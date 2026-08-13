@@ -15,7 +15,7 @@ Authors@R: c(
         role = c("cph", "fnd")
     ))
 URL:
-    https://r.acidgenomics.com/packages/chromium/,
+    https://r.acidgenomics.com/chromium/,
     https://github.com/acidgenomics/r-chromium/
 BugReports: https://github.com/acidgenomics/r-chromium/issues/
 License: Apache License (>= 2)

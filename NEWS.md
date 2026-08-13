@@ -1,5 +1,3 @@
-# Release notes
-
 ## Chromium 0.3.1 (2026-06-19)
 
 License changes:
